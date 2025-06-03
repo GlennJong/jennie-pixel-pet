@@ -1,0 +1,134 @@
+{
+  "frames": {
+    "normal_0": {
+      "frame": {
+        "h": 32,
+        "w": 32,
+        "x": 0,
+        "y": 0
+      },
+      "rotated": false,
+      "sourceSize": {
+        "h": 32,
+        "w": 32
+      },
+      "spriteSourceSize": {
+        "h": 32,
+        "w": 32,
+        "x": 0,
+        "y": 0
+      },
+      "trimmed": false
+    },
+    "normal_1": {
+      "frame": {
+        "h": 32,
+        "w": 32,
+        "x": 32,
+        "y": 0
+      },
+      "rotated": false,
+      "sourceSize": {
+        "h": 32,
+        "w": 32
+      },
+      "spriteSourceSize": {
+        "h": 32,
+        "w": 32,
+        "x": 0,
+        "y": 0
+      },
+      "trimmed": false
+    },
+    "attack_0": {
+      "frame": {
+        "h": 32,
+        "w": 32,
+        "x": 0,
+        "y": 32
+      },
+      "rotated": false,
+      "sourceSize": {
+        "h": 32,
+        "w": 32
+      },
+      "spriteSourceSize": {
+        "h": 32,
+        "w": 32,
+        "x": 0,
+        "y": 0
+      },
+      "trimmed": false
+    },
+    "attack_1": {
+      "frame": {
+        "h": 32,
+        "w": 32,
+        "x": 32,
+        "y": 32
+      },
+      "rotated": false,
+      "sourceSize": {
+        "h": 32,
+        "w": 32
+      },
+      "spriteSourceSize": {
+        "h": 32,
+        "w": 32,
+        "x": 0,
+        "y": 0
+      },
+      "trimmed": false
+    },
+    "damage_0": {
+      "frame": {
+        "h": 32,
+        "w": 32,
+        "x": 0,
+        "y": 32
+      },
+      "rotated": false,
+      "sourceSize": {
+        "h": 32,
+        "w": 32
+      },
+      "spriteSourceSize": {
+        "h": 32,
+        "w": 32,
+        "x": 0,
+        "y": 0
+      },
+      "trimmed": false
+    },
+    "damage_1": {
+      "frame": {
+        "h": 32,
+        "w": 32,
+        "x": 32,
+        "y": 32
+      },
+      "rotated": false,
+      "sourceSize": {
+        "h": 32,
+        "w": 32
+      },
+      "spriteSourceSize": {
+        "h": 32,
+        "w": 32,
+        "x": 0,
+        "y": 0
+      },
+      "trimmed": false
+    }
+  },
+  "meta": {
+    "app": "https://github.com/piskelapp/piskel/",
+    "format": "RGBA8888",
+    "image": "New Piskel.png",
+    "size": {
+      "h": 64,
+      "w": 64
+    },
+    "version": "1.0"
+  }
+}

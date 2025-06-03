@@ -1,0 +1,39 @@
+{
+  "name": "jennie-tamagotchi",
+  "version": "1.0.2",
+  "keywords": [
+    "phaser",
+    "phaser3",
+    "react",
+    "vite",
+    "typescript"
+  ],
+  "scripts": {
+    "dev": "vite --config vite.config.js",
+    "format": "prettier . --write",
+    "build": "vite build --config vite.config.js"
+  },
+  "dependencies": {
+    "phaser": "^3.80.1",
+    "phaser3-rex-plugins": "^1.80.4",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "socket.io-client": "^4.7.5"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.55",
+    "@types/react-dom": "^18.2.19",
+    "@typescript-eslint/eslint-plugin": "^7.1.0",
+    "@typescript-eslint/parser": "^7.1.0",
+    "@vitejs/plugin-react": "^4.2.1",
+    "eslint": "^8.57.0",
+    "eslint-config-prettier": "^10.1.5",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-react-refresh": "^0.4.5",
+    "prettier": "^3.5.3",
+    "terser": "^5.28.1",
+    "typescript": "^5.3.3",
+    "vite": "^5.1.4",
+    "vite-plugin-mkcert": "^1.17.5"
+  }
+}

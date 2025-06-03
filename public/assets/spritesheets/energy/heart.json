@@ -1,0 +1,94 @@
+{
+  "frames": {
+    "heart_4": {
+      "frame": {
+        "h": 24,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "rotated": false,
+      "sourceSize": {
+        "h": 24,
+        "w": 24
+      },
+      "spriteSourceSize": {
+        "h": 24,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "trimmed": false
+    },
+    "heart_3": {
+      "frame": {
+        "h": 24,
+        "w": 24,
+        "x": 24,
+        "y": 0
+      },
+      "rotated": false,
+      "sourceSize": {
+        "h": 24,
+        "w": 24
+      },
+      "spriteSourceSize": {
+        "h": 24,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "trimmed": false
+    },
+    "heart_2": {
+      "frame": {
+        "h": 24,
+        "w": 24,
+        "x": 48,
+        "y": 0
+      },
+      "rotated": false,
+      "sourceSize": {
+        "h": 24,
+        "w": 24
+      },
+      "spriteSourceSize": {
+        "h": 24,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "trimmed": false
+    },
+    "heart_1": {
+      "frame": {
+        "h": 24,
+        "w": 24,
+        "x": 72,
+        "y": 0
+      },
+      "rotated": false,
+      "sourceSize": {
+        "h": 24,
+        "w": 24
+      },
+      "spriteSourceSize": {
+        "h": 24,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "trimmed": false
+    }
+  },
+  "meta": {
+    "app": "https://github.com/piskelapp/piskel/",
+    "format": "RGBA8888",
+    "image": "heart.png",
+    "size": {
+      "h": 24,
+      "w": 96
+    },
+    "version": "1.0"
+  }
+}

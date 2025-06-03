@@ -1,0 +1,950 @@
+{
+  "tamagotchi_room": {
+    "key": "tamagotchi_room",
+    "preload": {
+      "png": "tamagotchi/room.png",
+      "json": "tamagotchi/room.json"
+    },
+    "decoration_config": {
+      "left": {}
+    },
+    "decoration": [
+      {
+        "left": "room_left_1",
+        "right": "room_right_1",
+        "front": "room_front_1",
+        "back": "room_back_1"
+      },
+      {
+        "left": "room_left_2",
+        "right": "room_right_2",
+        "front": "room_front_2",
+        "back": "room_back_2"
+      },
+      {
+        "left": "room_left_2",
+        "right": "room_right_3",
+        "front": "room_front_3",
+        "back": "room_back_3"
+      },
+      {
+        "left": "room_left_2",
+        "right": "room_right_4",
+        "front": "room_front_3",
+        "back": "room_back_4"
+      }
+    ],
+    "recorder": { "prefix": "recorder", "qty": 1, "freq": 1, "repeat": -1 },
+    "window": { "prefix": "window", "qty": 1, "freq": 1, "repeat": -1 }
+  },
+  "battle_currycat_opponent": {
+    "key": "battle_currycat_opponent",
+    "preload": {
+      "png": "battle/currycat.png",
+      "json": "battle/currycat.json"
+    },
+    "animations": [
+      { "prefix": "idle", "qty": 1, "freq": 1, "repeat": -1 },
+      { "prefix": "sp", "qty": 17, "freq": 8, "repeat": 0 }
+    ],
+    "battle": {
+      "base": {
+        "max_hp": 60,
+        "name": "CurryCat"
+      },
+      "actions": {
+        "attack": {
+          "animation": "attack",
+          "piority": 1,
+          "dialogs": [
+            {
+              "dialog": [
+                {
+                  "face": {
+                    "key": "battle_currycat_opponent",
+                    "frame": "avatar-normal"
+                  },
+                  "text": "攻擊!"
+                }
+              ],
+              "piority": 2
+            }
+          ],
+          "effect": {
+            "type": "damage",
+            "target": "self",
+            "value": 20
+          }
+        },
+        "sp1": {
+          "animation": "sp",
+          "piority": 80,
+          "dialogs": [
+            {
+              "dialog": [
+                {
+                  "face": {
+                    "key": "battle_currycat_opponent",
+                    "frame": "avatar-normal"
+                  },
+                  "text": "咖哩扮起來!"
+                }
+              ],
+              "piority": 2
+            }
+          ],
+          "effect": {
+            "type": "damage",
+            "target": "self",
+            "value": 10
+          }
+        },
+        "sp2": {
+          "animation": "sp",
+          "piority": 20,
+          "dialogs": [
+            {
+              "dialog": [
+                {
+                  "face": {
+                    "key": "battle_currycat_opponent",
+                    "frame": "avatar-normal"
+                  },
+                  "text": "咖哩就是要拌！"
+                }
+              ],
+              "piority": 2
+            }
+          ],
+          "effect": {
+            "type": "recover",
+            "target": "opponent",
+            "value": 20
+          }
+        }
+      },
+      "reactions": {
+        "damage": {
+          "animation": "damage",
+          "dialogs": [
+            {
+              "dialog": [
+                {
+                  "face": {
+                    "key": "battle_currycat_opponent",
+                    "frame": "avatar-damage"
+                  },
+                  "text": "喵喵喵喵喵!"
+                }
+              ],
+              "piority": 2
+            }
+          ]
+        },
+        "recover": {
+          "animation": "recover",
+          "dialogs": [
+            {
+              "dialog": [
+                {
+                  "face": {
+                    "key": "battle_currycat_opponent",
+                    "frame": "avatar-recover"
+                  },
+                  "text": "喵～"
+                }
+              ],
+              "piority": 2
+            }
+          ]
+        }
+      },
+      "results": {
+        "win": {
+          "dialogs": [
+            {
+              "dialog": [
+                {
+                  "face": {
+                    "key": "battle_currycat_opponent",
+                    "frame": "avatar-normal"
+                  },
+                  "text": "win!"
+                }
+              ],
+              "piority": 2
+            }
+          ]
+        },
+        "lose": {
+          "dialogs": [
+            {
+              "dialog": [
+                {
+                  "face": {
+                    "key": "battle_currycat_opponent",
+                    "frame": "avatar-normal"
+                  },
+                  "text": "lose!"
+                }
+              ],
+              "piority": 2
+            }
+          ]
+        }
+      }
+    }
+  },
+  "battle_beibei_opponent": {
+    "key": "battle_beibei_opponent",
+    "preload": {
+      "png": "battle/beibei.png",
+      "json": "battle/beibei.json"
+    },
+    "animations": [
+      {
+        "prefix": "idle",
+        "qty": 9,
+        "freq": 8,
+        "repeat": -1,
+        "repeat_delay": 1000
+      },
+      { "prefix": "sp", "qty": 5, "freq": 8, "repeat": 0 }
+    ],
+    "battle": {
+      "base": {
+        "max_hp": 60,
+        "name": "貝貝"
+      },
+      "actions": {
+        "attack": {
+          "animation": "attack",
+          "piority": 80,
+          "dialogs": [
+            {
+              "dialog": [
+                {
+                  "face": {
+                    "key": "battle_beibei_opponent",
+                    "frame": "face-normal"
+                  },
+                  "text": "attack!"
+                }
+              ],
+              "piority": 2
+            }
+          ],
+          "effect": {
+            "type": "damage",
+            "target": "self",
+            "value": 20
+          }
+        },
+        "sp1": {
+          "animation": "sp",
+          "piority": 80,
+          "dialogs": [
+            {
+              "dialog": [
+                {
+                  "face": {
+                    "key": "battle_beibei_opponent",
+                    "frame": "face-normal"
+                  },
+                  "text": "attack!"
+                }
+              ],
+              "piority": 2
+            }
+          ],
+          "effect": {
+            "type": "recover",
+            "target": "self",
+            "value": 10
+          }
+        },
+        "sp2": {
+          "animation": "sp",
+          "piority": 20,
+          "dialogs": [
+            {
+              "dialog": [
+                {
+                  "face": {
+                    "key": "battle_beibei_opponent",
+                    "frame": "face-normal"
+                  },
+                  "text": "sp2!"
+                }
+              ],
+              "piority": 2
+            }
+          ],
+          "effect": {
+            "type": "damage",
+            "target": "self",
+            "value": 20
+          }
+        }
+      },
+      "reactions": {
+        "damage": {
+          "animation": "damage",
+          "dialogs": [
+            {
+              "dialog": [
+                {
+                  "face": {
+                    "key": "battle_beibei_opponent",
+                    "frame": "face-damage"
+                  },
+                  "text": "get damage!"
+                }
+              ],
+              "piority": 2
+            }
+          ]
+        },
+        "recover": {
+          "animation": "recover",
+          "dialogs": [
+            {
+              "dialog": [
+                {
+                  "face": {
+                    "key": "battle_beibei_opponent",
+                    "frame": "face-recover"
+                  },
+                  "text": "get recover!"
+                }
+              ],
+              "piority": 2
+            }
+          ]
+        }
+      },
+      "results": {
+        "win": {
+          "dialogs": [
+            {
+              "dialog": [
+                {
+                  "face": {
+                    "key": "battle_beibei_opponent",
+                    "frame": "face-normal"
+                  },
+                  "text": "win!"
+                }
+              ],
+              "piority": 2
+            }
+          ]
+        },
+        "lose": {
+          "dialogs": [
+            {
+              "dialog": [
+                {
+                  "face": {
+                    "key": "battle_beibei_opponent",
+                    "frame": "face-normal"
+                  },
+                  "text": "lose!"
+                }
+              ],
+              "piority": 2
+            }
+          ]
+        }
+      }
+    }
+  },
+  "battle_shangshang_opponent": {
+    "key": "battle_shangshang_opponent",
+    "preload": {
+      "png": "battle/shangshang.png",
+      "json": "battle/shangshang.json"
+    },
+    "animations": [
+      {
+        "prefix": "idle",
+        "qty": 6,
+        "freq": 8,
+        "repeat": -1,
+        "repeat_delay": 1000
+      },
+      { "prefix": "sp", "qty": 9, "freq": 8, "repeat": 0 }
+    ],
+    "battle": {
+      "base": {
+        "max_hp": 60,
+        "name": "貝貝"
+      },
+      "actions": {
+        "attack": {
+          "animation": "attack",
+          "piority": 80,
+          "dialogs": [
+            {
+              "dialog": [
+                {
+                  "face": {
+                    "key": "battle_shangshang_opponent",
+                    "frame": "avatar_normal"
+                  },
+                  "text": "attack!"
+                }
+              ],
+              "piority": 2
+            }
+          ],
+          "effect": {
+            "type": "damage",
+            "target": "self",
+            "value": 20
+          }
+        },
+        "sp1": {
+          "animation": "sp",
+          "piority": 80,
+          "dialogs": [
+            {
+              "dialog": [
+                {
+                  "face": {
+                    "key": "battle_shangshang_opponent",
+                    "frame": "avatar_angry"
+                  },
+                  "text": "attack!"
+                }
+              ],
+              "piority": 2
+            }
+          ],
+          "effect": {
+            "type": "recover",
+            "target": "self",
+            "value": 10
+          }
+        },
+        "sp2": {
+          "animation": "sp",
+          "piority": 20,
+          "dialogs": [
+            {
+              "dialog": [
+                {
+                  "face": {
+                    "key": "battle_shangshang_opponent",
+                    "frame": "avatar_angry"
+                  },
+                  "text": "sp2!"
+                }
+              ],
+              "piority": 2
+            }
+          ],
+          "effect": {
+            "type": "damage",
+            "target": "self",
+            "value": 20
+          }
+        }
+      },
+      "reactions": {
+        "damage": {
+          "animation": "damage",
+          "dialogs": [
+            {
+              "dialog": [
+                {
+                  "face": {
+                    "key": "battle_shangshang_opponent",
+                    "frame": "avatar_sad"
+                  },
+                  "text": "get damage!"
+                }
+              ],
+              "piority": 2
+            }
+          ]
+        },
+        "recover": {
+          "animation": "recover",
+          "dialogs": [
+            {
+              "dialog": [
+                {
+                  "face": {
+                    "key": "battle_shangshang_opponent",
+                    "frame": "avatar_normal"
+                  },
+                  "text": "get recover!"
+                }
+              ],
+              "piority": 2
+            }
+          ]
+        }
+      },
+      "results": {
+        "win": {
+          "dialogs": [
+            {
+              "dialog": [
+                {
+                  "face": {
+                    "key": "battle_shangshang_opponent",
+                    "frame": "avatar_angry"
+                  },
+                  "text": "win!"
+                }
+              ],
+              "piority": 2
+            }
+          ]
+        },
+        "lose": {
+          "dialogs": [
+            {
+              "dialog": [
+                {
+                  "face": {
+                    "key": "battle_shangshang_opponent",
+                    "frame": "avatar_sad"
+                  },
+                  "text": "lose!"
+                }
+              ],
+              "piority": 2
+            }
+          ]
+        }
+      }
+    }
+  },
+  "battle_jennie_opponent": {
+    "key": "battle_jennie_opponent",
+    "preload": {
+      "png": "battle/jennie.png",
+      "json": "battle/jennie.json"
+    },
+    "animations": [
+      {
+        "prefix": "idle",
+        "qty": 7,
+        "freq": 8,
+        "repeat": -1,
+        "repeat_delay": 1000
+      },
+      { "prefix": "sp", "qty": 16, "freq": 8, "repeat": 0 }
+    ],
+    "battle": {
+      "base": {
+        "max_hp": 60,
+        "name": "貝貝"
+      },
+      "actions": {
+        "attack": {
+          "animation": "attack",
+          "piority": 80,
+          "dialogs": [
+            {
+              "dialog": [
+                {
+                  "face": {
+                    "key": "battle_jennie_opponent",
+                    "frame": "avatar_normal"
+                  },
+                  "text": "attack!"
+                }
+              ],
+              "piority": 2
+            }
+          ],
+          "effect": {
+            "type": "damage",
+            "target": "self",
+            "value": 20
+          }
+        },
+        "sp1": {
+          "animation": "sp",
+          "piority": 80,
+          "dialogs": [
+            {
+              "dialog": [
+                {
+                  "face": {
+                    "key": "battle_jennie_opponent",
+                    "frame": "avatar_angry"
+                  },
+                  "text": "attack!"
+                }
+              ],
+              "piority": 2
+            }
+          ],
+          "effect": {
+            "type": "recover",
+            "target": "self",
+            "value": 10
+          }
+        },
+        "sp2": {
+          "animation": "sp",
+          "piority": 20,
+          "dialogs": [
+            {
+              "dialog": [
+                {
+                  "face": {
+                    "key": "battle_jennie_opponent",
+                    "frame": "avatar_angry"
+                  },
+                  "text": "sp2!"
+                }
+              ],
+              "piority": 2
+            }
+          ],
+          "effect": {
+            "type": "damage",
+            "target": "self",
+            "value": 20
+          }
+        }
+      },
+      "reactions": {
+        "damage": {
+          "animation": "damage",
+          "dialogs": [
+            {
+              "dialog": [
+                {
+                  "face": {
+                    "key": "battle_jennie_opponent",
+                    "frame": "avatar_sad"
+                  },
+                  "text": "get damage!"
+                }
+              ],
+              "piority": 2
+            }
+          ]
+        },
+        "recover": {
+          "animation": "recover",
+          "dialogs": [
+            {
+              "dialog": [
+                {
+                  "face": {
+                    "key": "battle_jennie_opponent",
+                    "frame": "avatar_normal"
+                  },
+                  "text": "get recover!"
+                }
+              ],
+              "piority": 2
+            }
+          ]
+        }
+      },
+      "results": {
+        "win": {
+          "dialogs": [
+            {
+              "dialog": [
+                {
+                  "face": {
+                    "key": "battle_jennie_opponent",
+                    "frame": "avatar_angry"
+                  },
+                  "text": "win!"
+                }
+              ],
+              "piority": 2
+            }
+          ]
+        },
+        "lose": {
+          "dialogs": [
+            {
+              "dialog": [
+                {
+                  "face": {
+                    "key": "battle_jennie_opponent",
+                    "frame": "avatar_sad"
+                  },
+                  "text": "lose!"
+                }
+              ],
+              "piority": 2
+            }
+          ]
+        }
+      }
+    }
+  },
+  "battle_afk_self": {
+    "key": "battle_afk_self",
+    "preload": {
+      "png": "battle/afk.png",
+      "json": "battle/afk.json"
+    },
+    "animations": [
+      {
+        "prefix": "idle",
+        "qty": 1,
+        "freq": 1,
+        "repeat": -1,
+        "repeat_delay": 1000
+      }
+    ],
+    "battle": {
+      "base": {
+        "max_hp": 60,
+        "name": "AFK君"
+      },
+      "actions": {
+        "attack": {
+          "animation": "attack",
+          "piority": 80,
+          "dialogs": [
+            {
+              "dialog": [
+                {
+                  "face": {
+                    "key": "battle_afk_self",
+                    "frame": "face-normal"
+                  },
+                  "text": "attack!"
+                }
+              ],
+              "piority": 2
+            }
+          ],
+          "effect": {
+            "type": "damage",
+            "target": "opponent",
+            "value": 20
+          }
+        }
+      },
+      "reactions": {
+        "damage": {
+          "frame": "face-damage",
+          "animation": "damage",
+          "dialogs": [
+            {
+              "dialog": [
+                {
+                  "face": {
+                    "key": "battle_afk_self",
+                    "frame": "face-normal"
+                  },
+                  "text": "get damage!"
+                }
+              ],
+              "piority": 2
+            }
+          ]
+        },
+        "recover": {
+          "frame": "face-normal",
+          "animation": "recover",
+          "dialogs": [
+            {
+              "dialog": [
+                {
+                  "face": {
+                    "key": "battle_afk_self",
+                    "frame": "face-normal"
+                  },
+                  "text": "get recover!"
+                }
+              ],
+              "piority": 2
+            }
+          ]
+        }
+      },
+      "results": {
+        "win": {
+          "dialogs": [
+            {
+              "dialog": [
+                {
+                  "face": {
+                    "key": "battle_afk_self",
+                    "frame": "face-normal"
+                  },
+                  "text": "win!"
+                }
+              ],
+              "piority": 2
+            }
+          ]
+        },
+        "lose": {
+          "dialogs": [
+            {
+              "dialog": [
+                {
+                  "face": {
+                    "key": "battle_afk_self",
+                    "frame": "face-normal"
+                  },
+                  "text": "lose!"
+                }
+              ],
+              "piority": 2
+            }
+          ]
+        }
+      }
+    }
+  },
+  "tamagotchi_afk": {
+    "key": "tamagotchi_afk",
+    "preload": {
+      "png": "tamagotchi/afk.png",
+      "json": "tamagotchi/afk.json"
+    },
+    "animations": [
+      { "prefix": "born", "qty": 7, "freq": 8, "repeat": 0 },
+      { "prefix": "egg", "qty": 2, "freq": 1, "repeat": -1 },
+      { "prefix": "walk-left", "qty": 6, "freq": 8, "repeat": 4 },
+      { "prefix": "walk-right", "qty": 6, "freq": 8, "repeat": 4 },
+      {
+        "prefix": "drink",
+        "qty": 7,
+        "freq": 4,
+        "repeat": 0,
+        "repeat_delay": 1000
+      },
+      {
+        "prefix": "write",
+        "qty": 13,
+        "freq": 8,
+        "repeat": 0,
+        "repeat_delay": 1000
+      },
+      { "prefix": "lay-down", "qty": 4, "freq": 8, "repeat": 0 },
+      { "prefix": "wake-up", "qty": 5, "freq": 8, "repeat": 0 },
+      { "prefix": "sleep", "qty": 5, "freq": 2, "repeat": -1 },
+      { "prefix": "idle-left", "qty": 2, "freq": 1, "repeat": -1 },
+      { "prefix": "idle-right", "qty": 2, "freq": 1, "repeat": -1 },
+      { "prefix": "stare-left", "qty": 6, "freq": 4, "repeat": 0 },
+      { "prefix": "stare-right", "qty": 6, "freq": 4, "repeat": 0 },
+      { "prefix": "wink-left", "qty": 3, "freq": 4, "repeat": 0 },
+      { "prefix": "wink-right", "qty": 3, "freq": 4, "repeat": 0 }
+    ],
+    "unavailable_actions": {
+      "egg": {
+        "animation": "egg"
+      },
+      "born": {
+        "animation": "born"
+      }
+    },
+    "idle_actions": {
+      "idle": {
+        "animation": "idle",
+        "piority": 10,
+        "has_direction": true
+      },
+      "stare": {
+        "animation": "stare",
+        "piority": 6,
+        "has_direction": true
+      },
+      "walk": {
+        "animation": "walk",
+        "piority": 4,
+        "is_move": true,
+        "has_direction": true
+      },
+      "wink": {
+        "animation": "wink",
+        "piority": 8,
+        "has_direction": true
+      }
+    },
+    "functional_action": {
+      "drink": {
+        "animation": "drink",
+        "point": 20,
+        "dialogs": [
+          {
+            "dialog": [
+              {
+                "face": {
+                  "key": "tamagotchi_character_afk",
+                  "frame": "face-normal"
+                },
+                "text": "中文字在這裡 drink dialog {{user_name}}!"
+              }
+            ],
+            "piority": 2
+          }
+        ]
+      },
+      "battle": {
+        "animation": "drink",
+        "point": 0,
+        "dialogs": [
+          {
+            "dialog": [
+              {
+                "face": {
+                  "key": "tamagotchi_character_afk",
+                  "frame": "face-normal"
+                },
+                "text": "battle dialog {{user_name}}!"
+              }
+            ],
+            "piority": 2
+          }
+        ]
+      },
+      "write": {
+        "animation": "write",
+        "point": 20,
+        "dialogs": [
+          {
+            "dialog": [
+              {
+                "face": {
+                  "key": "tamagotchi_character_afk",
+                  "frame": "face-normal"
+                },
+                "text": "write dialog {{user_name}}!"
+              }
+            ],
+            "piority": 2
+          }
+        ]
+      },
+      "sleep": {
+        "animation": "sleep",
+        "point": 0,
+        "dialogs": [
+          {
+            "dialog": [
+              {
+                "face": {
+                  "key": "tamagotchi_character_afk",
+                  "frame": "face-normal"
+                },
+                "text": "sleep dialog {{user_name}}!"
+              }
+            ],
+            "piority": 2
+          }
+        ]
+      }
+    }
+  }
+}
