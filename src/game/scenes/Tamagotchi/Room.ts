@@ -44,7 +44,8 @@ export default class Room extends Scene {
 
     sceneStarter(this);
 
-    EventBus.emit('current-scene-ready', this);
+    // interact from outside
+    EventBus.on('message', this.handleCatchTwitchMessage);
   }
 
   private dialogue: PrimaryDialogue | undefined;
@@ -98,7 +99,18 @@ export default class Room extends Scene {
 
     const _run = async () => {
       const { action, user } = currentActionQuene;
-      const result = this.tamagotchi?.runFuntionalAction(action);
+
+      let currentAction = action;
+      
+      if (
+        action === 'battle' ||
+        action === 'battle-shangshang' || 
+        action === 'battle-beibei'
+      ) {
+        currentAction = 'battle';
+      }
+      
+      const result = this.tamagotchi?.runFuntionalAction(currentAction);
 
       if (result) {
         const currentDialog = result.dialog.map((_item) => {
@@ -112,9 +124,32 @@ export default class Room extends Scene {
         await this.dialogue?.runDialog(currentDialog);
 
         // Special move for battle
-        if (action === 'battle') {
-          const opponent = ['currycat', 'jennie'].includes(user) ? user : 'beibei';
-          sceneConverter(this, 'Battle', { opponent });
+
+        if (
+          action === 'battle' ||
+          action === 'battle-shangshang' || 
+          action === 'battle-beibei'
+        ) {
+          let opponent;
+          if (action === 'battle-shangshang') {
+            opponent = 'shangshang';
+          } else if (action === 'battle-beibei') {
+            opponent = 'beibei';
+          } else if (action === 'battle') {
+            opponent = 'andy';
+          }
+
+          if (user === 'curry_cat') {
+            opponent = 'currycat';
+          } else if (user === 'touching0212') {
+            opponent = 'touching';
+          } else if (user === 'bloloblolo') {
+            opponent = 'bbb';
+          }
+          
+          if (opponent) {
+            sceneConverter(this, 'Battle', { opponent });
+          }
         }
 
         // Finish action and remove from queue
@@ -135,8 +170,28 @@ export default class Room extends Scene {
   private keyboardflipFlop = { left: false, right: false, space: false };
 
   private async handleHeaderAction(action: string) {
-    const user = 'currycat';
+    const user = 'jennie';
     this.functionalActionQuene.push({ user, action });
+  }
+
+  private handleCatchTwitchMessage = async ({ user, message } : { user: string, message: string }) => {
+    let action;
+    if (message === '上上打招呼') {
+      action = 'battle-shangshang'
+    }
+    if (message === '貝貝打招呼') {
+      action = 'battle-beibei'
+    }
+    else if (message === '補充水分') {
+      action = 'drink'
+    }
+    else if (message === '提醒大家存檔') {
+      action = 'write'
+    }
+
+    if (action) {
+      this.functionalActionQuene.push({ user, action });
+    }
   }
 
   update(time: number) {

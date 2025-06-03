@@ -37,7 +37,7 @@ type TamagotchiCharacterProps = {
 };
 
 const defaultIdlePrefix = 'idle'; // TODO: idle right
-const defaultHp = 2;
+const defaultHp = 100;
 const defaultRecoverHpByTime = 60;
 const defaultDecreaseHpByTime = 1;
 const defaultXSec = 5;

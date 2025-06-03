@@ -3,20 +3,14 @@ import {
   getTwitchLoginStateFromQueryString,
   getTwitchUserProfile,
   openTwitchOauthLogin,
-  subscribeMessageForWs,
-  TwitchOauthLoginState,
-  TwitchUserState,
+  subscribeMessageForWs
 } from "./methods";
 import { TWITCH_WS_URL } from "./constants";
+import { TwitchOauthLoginState, TwitchUserState, TwitchWsMessagePayload } from "./types";
 
 // constants
 const client_id = import.meta.env["VITE_TWITCH_CLIENT_ID"];
 const redirect_uri = import.meta.env["VITE_TWITCH_OAUTH_REDIRECT_URI"];
-
-type UserMessage = {
-  user: string;
-  message: string;
-};
 
 type WsEventHandler<T> =
   | {
@@ -28,11 +22,9 @@ type WsEventHandler<T> =
   | undefined;
 
 function useTwitchOauth() {
-  const [twitchState, setTwitchState] = useState<
-    TwitchOauthLoginState & TwitchUserState
-  >();
-  const [receivedMsg, setReceivedMsg] = useState<UserMessage[]>();
-  const receivedMsgRef = useRef<UserMessage[]>([]);
+  const [twitchState, setTwitchState] = useState<TwitchOauthLoginState & TwitchUserState>();
+  const [receivedMsg, setReceivedMsg] = useState<TwitchWsMessagePayload[]>();
+  const receivedMsgRef = useRef<TwitchWsMessagePayload[]>([]);
   const websocketRef = useRef<WebSocket>();
   const isWsConnectedRef = useRef<boolean>(false);
 
@@ -56,7 +48,7 @@ function useTwitchOauth() {
     openTwitchOauthLogin(client_id, redirect_uri);
   }
 
-  function startWebsocket(events: WsEventHandler<UserMessage> = {}) {
+  function startWebsocket(events: WsEventHandler<TwitchWsMessagePayload> = {}) {
     const { onOpen, onClose, onMessage, onError } = events;
     if (!twitchState) return;
 
@@ -74,13 +66,14 @@ function useTwitchOauth() {
       const data = JSON.parse(event.data);
 
       if (isWsConnectedRef.current) {
+        // channel.read.redemptions
+        // channel.chat.message
         if (data.metadata.subscription_type === "channel.chat.message") {
+          
           const newMsg = data.payload;
 
           onMessage && onMessage(newMsg);
-
           receivedMsgRef.current = [...receivedMsgRef.current, newMsg];
-
           setReceivedMsg([...receivedMsgRef.current]);
         }
       } else {
@@ -102,17 +95,10 @@ function useTwitchOauth() {
     websocketRef.current = ws;
   }
 
-  function finishWebsocket() {
-    if (websocketRef.current) {
-      // do something to close ws.
-    }
-  }
-
   return {
     twitchState,
     startOauthConnect,
     startWebsocket,
-    finishWebsocket,
     messages: receivedMsg,
   };
 }

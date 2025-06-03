@@ -1,25 +1,11 @@
-import { parseQueryString } from "../provider/common";
-import { fetchGet, fetchPost } from "../provider/fetch";
-import { TWITCH_EVENT_SUBSCRIBE_URL, TWITCH_USER_URL } from "./constants";
-
-export type TwitchOauthLoginState = {
-  access_token: string;
-  scope: string;
-  token_type: string;
-};
-
-export type TwitchUserState = {
-  id: string;
-  broadcaster_type: string;
-  created_at: string;
-  description: string;
-  display_name: string;
-  login: string;
-  offline_image_url: string;
-  profile_image_url: string;
-  type: string;
-  view_count: number;
-};
+import { parseQueryString } from "../utils/common";
+import { fetchGet, fetchPost } from "../utils/fetch";
+import {
+  TWITCH_EVENT_SUBSCRIBE_URL,
+  TWITCH_OAUTH_URL,
+  TWITCH_USER_URL,
+} from "./constants";
+import { TwitchOauthLoginState, TwitchUserState } from "./types";
 
 // Basic methods
 export function openTwitchOauthLogin(client_id: string, redirect_uri: string) {
@@ -31,7 +17,7 @@ export function openTwitchOauthLogin(client_id: string, redirect_uri: string) {
     "channel:read:redemptions",
   ].join("+");
   const params = `response_type=token&force_verify=true&client_id=${client_id}&redirect_uri=${redirect_uri}&scope=${scope}`;
-  window.location.href = `https://id.twitch.tv/oauth2/authorize?${params}`;
+  window.location.href = `${TWITCH_OAUTH_URL}?${params}`;
 }
 
 export function getTwitchLoginStateFromQueryString():
