@@ -68,6 +68,7 @@ export default class BattleCharacter extends Character {
   public hp: { current: number; max: number } = { current: 0, max: 0 };
   private actions: { [key: string]: TAction };
   private reactions: { [key: string]: TReaction };
+  private common: { [key: string]: TDialogItem };
   private results: { [key: string]: TResult };
   private role: 'self' | 'opponent';
   public board: StatusBoard;
@@ -114,6 +115,7 @@ export default class BattleCharacter extends Character {
     this.avaliableActions = Object.keys(battle.actions);
     this.actions = battle.actions;
     this.reactions = battle.reactions;
+    this.common = battle.common;
     this.results = battle.results;
 
     // define current action
@@ -252,6 +254,20 @@ export default class BattleCharacter extends Character {
       ...currentResult,
       dialog: selectFromPiority(dialogs).dialog,
     };
+  }
+
+  public runStart() {
+    const startDialog = this.common['start'];
+    if (!startDialog) return;
+
+    return selectFromPiority(startDialog).dialog;
+  }
+
+  public runFinish() {
+    const finisgDialog = this.common['finish'];
+    if (!finisgDialog) return;
+
+    return selectFromPiority(finisgDialog).dialog;
   }
 
   public getRandomAction() {

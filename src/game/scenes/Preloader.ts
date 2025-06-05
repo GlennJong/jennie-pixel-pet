@@ -29,9 +29,12 @@ export class Preloader extends Scene {
     this.load.json('config', 'config.json');
     this.load.on('filecomplete-json-config', (_key: unknown, _type: unknown, data) => {
       const {
+        battle_default_opponent,
         battle_beibei_opponent,
         battle_shangshang_opponent,
         battle_jennie_opponent,
+        battle_bbb_opponent,
+        battle_touching_opponent,
         battle_currycat_opponent,
         battle_afk_self,
         tamagotchi_room,
@@ -40,6 +43,11 @@ export class Preloader extends Scene {
       this.config = data;
 
       // Battle Character
+      this.load.atlas(
+        battle_default_opponent.key,
+        battle_default_opponent.preload.png,
+        battle_default_opponent.preload.json,
+      );
       this.load.atlas(
         battle_beibei_opponent.key,
         battle_beibei_opponent.preload.png,
@@ -54,6 +62,16 @@ export class Preloader extends Scene {
         battle_jennie_opponent.key,
         battle_jennie_opponent.preload.png,
         battle_jennie_opponent.preload.json,
+      );
+      this.load.atlas(
+        battle_bbb_opponent.key,
+        battle_bbb_opponent.preload.png,
+        battle_bbb_opponent.preload.json,
+      );
+      this.load.atlas(
+        battle_touching_opponent.key,
+        battle_touching_opponent.preload.png,
+        battle_touching_opponent.preload.json,
       );
       this.load.atlas(
         battle_currycat_opponent.key,
@@ -77,10 +95,6 @@ export class Preloader extends Scene {
         tamagotchi_afk.preload.png,
         tamagotchi_afk.preload.json,
       );
-
-      //  Load the assets for the game - Replace with your own assets
-      this.load.image('logo', 'logo.png');
-      this.load.image('star', 'star.png');
 
       // Tamagotchi
       // this.load.image('tamagotchi_header_frame', 'tamagotchi/header-frame.png');
@@ -116,8 +130,6 @@ export class Preloader extends Scene {
       this.load.image('battle_background', 'battle/background.png');
       this.load.atlas('battle_board', 'battle/board.png', 'battle/board.json');
       this.load.atlas('battle_afk', 'battle/afk.png', 'battle/afk.json');
-      // this.load.atlas('battle_beibei', 'battle/beibei.png', 'battle/beibei.json');
-      // this.load.atlas('battle_opponent', 'battle/opponent.png', 'battle/opponent.json');
 
       // Dialogue
       this.load.atlas(
@@ -126,58 +138,10 @@ export class Preloader extends Scene {
         'dialogue/frame.json',
       );
 
-      this.load.atlas(
-        'person',
-        'spritesheets/person/motions.png',
-        'spritesheets/person/motions.json',
-      );
-      this.load.atlas(
-        'default',
-        'spritesheets/default/motions.png',
-        'spritesheets/default/motions.json',
-      );
-      this.load.atlas(
-        'default-battle',
-        'spritesheets/default/battle.png',
-        'spritesheets/default/battle.json',
-      );
-      this.load.atlas(
-        'heart',
-        'spritesheets/energy/heart.png',
-        'spritesheets/energy/heart.json',
-      );
-      this.load.atlas(
-        'battery',
-        'spritesheets/energy/battery.png',
-        'spritesheets/energy/battery.json',
-      );
-      // this.load.atlas('header-icons', 'spritesheets/header/icons.png', 'spritesheets/header/icons.json');
-
-      this.load.atlas(
-        'battle-character-1',
-        'spritesheets/battle-character-1/character.png',
-        'spritesheets/battle-character-1/character.json',
-      );
-      this.load.atlas(
-        'battle-character-2',
-        'spritesheets/battle-character-2/character.png',
-        'spritesheets/battle-character-2/character.json',
-      );
-      this.load.atlas(
-        'status-board-hp',
-        'spritesheets/status-board/hp.png',
-        'spritesheets/status-board/hp.json',
-      );
-
       this.load.image('background-room', 'background-room.png');
       this.load.image('transition-cover', 'transition-cover.png');
-      this.load.image('happy_1', 'spritesheets/default/1.png');
-      this.load.image('happy_2', 'spritesheets/default/2.png');
       this.load.atlas('frame', 'ui/frame.png', 'ui/frame.json');
 
-      // this.load.image('star', 'star.png');
-      this.load.image('star_up', 'star.png');
-      this.load.image('star_reverse', 'star.png');
     });
   }
 

@@ -57,14 +57,14 @@ export class HeaderCoin extends Phaser.GameObjects.Container {
   private targetValue?: number;
 
   public setValue(value: number) {
-    if (this.targetValue) return; // return when value still running
+    // if (this.targetValue) return; // return when value still running
 
     const resultValue = value <= 0 ? 0 : value;
     this.targetValue = resultValue;
   }
 
   public addValue(value: number) {
-    if (this.targetValue) return; // return when value still running
+    // if (this.targetValue) return; // return when value still running
 
     const sum = this.value + value;
     const resultValue = sum <= 0 ? 0 : sum;
@@ -73,7 +73,7 @@ export class HeaderCoin extends Phaser.GameObjects.Container {
   }
 
   public update() {
-    if (!this.targetValue) return; // return when value still running
+    if (typeof this.targetValue === 'undefined') return;
 
     if (this.targetValue > this.value) {
       this.value += 1;

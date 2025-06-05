@@ -1,5 +1,4 @@
 import Phaser, { Scene } from 'phaser';
-import { canvas } from '../../constants';
 import { PrimaryDialogue } from '../../components/PrimaryDialogue';
 
 import BattleCharacter from './BattleCharacter';
@@ -7,30 +6,6 @@ import {
   sceneConverter,
   sceneStarter,
 } from '../../components/CircleSceneTransition';
-
-const contents = [
-  {
-    icon: { key: 'tamagotchi_character_afk', frame: 'face-normal' },
-    text: 'READY TO BATTLE!',
-  },
-];
-const contents2 = [
-  {
-    icon: { key: 'tamagotchi_character_afk', frame: 'face-normal' },
-    text: '挑戰者是CurryCat!',
-  },
-];
-
-const finishDialogs = [
-  {
-    icon: { key: 'tamagotchi_character_afk', frame: 'face-normal' },
-    text: '挑戰結束!',
-  },
-  {
-    icon: { key: 'tamagotchi_character_afk', frame: 'face-angry' },
-    text: '回到我的小房間!',
-  },
-];
 
 type TProcess = {
   from: 'self' | 'opponent';
@@ -44,6 +19,8 @@ export default class Battle extends Scene {
   self: BattleCharacter;
   opponent: BattleCharacter;
   dialogue: PrimaryDialogue;
+
+  storage: any;
 
   constructor() {
     super('Battle');
@@ -74,18 +51,15 @@ export default class Battle extends Scene {
   }
 
   private handleInitGameScene(scene: Phaser.Scene, data) {
-    // this.background = scene.make.image({
-    //     key: 'battle_background',
-    //     x: canvas.width/2,
-    //     y: canvas.height/2,
-    // });
+    this.storage = data || {};
 
-    console.log({data})
+    // define opponent
+    const opponent = this.storage?.opponent || 'default';
     
     // init characters
     this.opponent = new BattleCharacter(
       scene,
-      `battle_${data.opponent}_opponent`,
+      `battle_${opponent}_opponent`,
       'opponent',
       {},
     );
@@ -107,7 +81,8 @@ export default class Battle extends Scene {
   }
 
   private generateRandomBattleProcess(): TProcess[] {
-    const step = Math.floor(Math.random() * 10) + 10;
+    // const step = Math.floor(Math.random() * 10) + 10;
+    const step = 999;
     const result: TProcess[] = [];
 
     for (let i = 0; i < step; i++) {
@@ -127,12 +102,12 @@ export default class Battle extends Scene {
       const actionCharacter = from === 'self' ? this.self : this.opponent;
 
       const currentAction = actionCharacter.getRandomAction();
-
+      
       const actionResult = actionCharacter.runAction(currentAction);
       if (!actionResult) return;
-
+      
       const { effect, dialog: actionDialog } = actionResult;
-
+      
       if (!effect) return;
 
       const { type, target, value } = effect;
@@ -154,6 +129,8 @@ export default class Battle extends Scene {
 
         sufferCharacter.runResult('lose');
         const loseResult = sufferCharacter.runResult('lose');
+
+        
         if (!loseResult) return;
         const { dialog: loserDialog } = loseResult;
         await this.dialogue.runDialog(loserDialog);
@@ -171,10 +148,11 @@ export default class Battle extends Scene {
   }
 
   private async handleFinishGame() {
-    await this.dialogue.runDialog(finishDialogs);
+    const selfFinishDialog = this.self.runFinish();
+    await this.dialogue.runDialog(selfFinishDialog);
     sceneConverter(this.scene.scene, 'Room', {
-      hp: this.self.hp.current,
-      mp: 100,
+      ...this.storage,
+      battle: this.self.hp.current > 0 ? 'win' : 'lose',
     });
   }
 
@@ -187,17 +165,19 @@ export default class Battle extends Scene {
     await this.self.openingCharacter();
 
     // run battle introduce
-    await this.dialogue.runDialog(contents);
+    const selfStartDialog = this.self.runStart();
+    await this.dialogue.runDialog(selfStartDialog);
 
     // run opponent opening animation
     this.opponent.character.setAlpha(1);
     await this.opponent.openingCharacter();
 
+    const opponentStartDialog = this.opponent.runStart();
+    await this.dialogue.runDialog(opponentStartDialog);
+
     // show status board for both
     this.self.board.setAlpha(1);
     this.opponent.board.setAlpha(1);
 
-    // run battle introduce
-    await this.dialogue.runDialog(contents2);
   }
 }

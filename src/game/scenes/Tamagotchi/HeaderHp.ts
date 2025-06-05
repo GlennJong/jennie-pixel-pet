@@ -123,7 +123,7 @@ export class HeaderHp extends Phaser.GameObjects.Container {
   }
 
   public setValue(value: number) {
-    if (typeof this.targetValue !== 'undefined') return; // return when value still running
+    // if (typeof this.targetValue !== 'undefined') return; // return when value still running
 
     const resultValue = value;
     this.targetValue = resultValue;

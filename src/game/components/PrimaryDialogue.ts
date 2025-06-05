@@ -108,7 +108,7 @@ export class PrimaryDialogue extends Phaser.GameObjects.Container {
 
     const face = scene.make.sprite({
       key: "tamagotchi_character_afk",
-      frame: "face-sad",
+      frame: "face_normal",
     });
 
     // 3. Create textBox

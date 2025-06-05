@@ -1,6 +1,6 @@
 import { EventBus } from '../../EventBus';
 import Phaser, { Scene } from 'phaser';
-import { canvas } from '../../constants';
+import { canvas, tamagotchi } from '../../constants';
 import { PrimaryDialogue } from '../../components/PrimaryDialogue';
 import { Header } from './Header';
 import { TamagotchiCharacter } from './TamagotchiCharacter';
@@ -16,6 +16,10 @@ type TInheritData = {
 
 const WINDOW_POSITION = { x: 80, y: 32 };
 const RECORDER_POSITION = { x: 26, y: 62 }
+const DEFAULT_STATUS = {
+  coin: 10,
+  level: 1
+}
 
 const DEFAULT_TAMAGOTCHI = {
   x: 80,
@@ -28,6 +32,13 @@ export default class Room extends Scene {
   camera: Phaser.Cameras.Scene2D.Camera | undefined;
   header: Header | undefined;
   keyboardInputer?: Phaser.Types.Input.Keyboard.CursorKeys;
+
+  storage: any;
+
+  private property: {
+    coin: number,
+    level: number,
+  } | undefined
 
   private tamagotchi: TamagotchiCharacter | undefined;
 
@@ -51,6 +62,9 @@ export default class Room extends Scene {
   private dialogue: PrimaryDialogue | undefined;
 
   private handleRenderScene(scene: Phaser.Scene, data: TInheritData) {
+    this.storage = data || {};
+
+    
     // Room Background
     const background = scene.make.image({
       key: 'tamagotchi_room',
@@ -79,14 +93,42 @@ export default class Room extends Scene {
     // Build Tamagotchi Charactor
     this.tamagotchi = new TamagotchiCharacter(scene, {
       ...DEFAULT_TAMAGOTCHI,
-      hp: data.hp,
+      hp: this.storage?.tamagotchi?.hp || undefined, // get hp from storage or not
       callbackFunctions: {
-        onHpChange: (value: number) => this.header?.setValue({ hp: value }),
+        onHpChange: async (value: number) => {
+          if (value === 0) {
+            this.property.coin -= 10;
+            this.header?.showHeader();
+            this.header?.setValue({ coin: this.property.coin });
+            await this.dialogue?.runDialog([
+              { face: {
+                  key: 'tamagotchi_character_afk',
+                  frame: 'face-normal'
+                },
+                text: '啊我死了... 要記得幫我補充能量...'
+              }
+            ]);
+            
+          }
+          this.header?.setValue({ hp: value })
+        },
       },
     });
 
+    // inherit room status
+    const currentStatus = this.storage?.status || DEFAULT_STATUS;
+    this.property = currentStatus;
+
     // apply hp
-    this.header.setValue({ hp: this.tamagotchi.status.hp });
+    this.header.setValue({ hp: this.tamagotchi.status.hp, coin: this.property?.coin });
+
+    // get more money after win battle
+    if (this.storage?.battle === 'win' && this.property) {
+      this.property.coin += 100;
+      this.header.setValue({ coin: this.property.coin });
+    }
+
+    // Add keboard inputer
     this.keyboardInputer = scene.input.keyboard?.createCursorKeys();
   }
 
@@ -98,7 +140,7 @@ export default class Room extends Scene {
     const currentActionQuene = this.functionalActionQuene[0];
 
     const _run = async () => {
-      const { action, user } = currentActionQuene;
+      const { action, user} = currentActionQuene;
 
       let currentAction = action;
       
@@ -124,7 +166,6 @@ export default class Room extends Scene {
         await this.dialogue?.runDialog(currentDialog);
 
         // Special move for battle
-
         if (
           action === 'battle' ||
           action === 'battle-shangshang' || 
@@ -132,11 +173,11 @@ export default class Room extends Scene {
         ) {
           let opponent;
           if (action === 'battle-shangshang') {
-            opponent = 'shangshang';
+            opponent = Math.random() > 0.5 ? 'shangshang' : 'default';
           } else if (action === 'battle-beibei') {
-            opponent = 'beibei';
+            opponent = Math.random() > 0.5 ? 'beibei' : 'default';
           } else if (action === 'battle') {
-            opponent = 'andy';
+            opponent = Math.random() > 0.5 ? 'jennie' : 'default';
           }
 
           if (user === 'curry_cat') {
@@ -146,9 +187,13 @@ export default class Room extends Scene {
           } else if (user === 'bloloblolo') {
             opponent = 'bbb';
           }
-          
+
           if (opponent) {
-            sceneConverter(this, 'Battle', { opponent });
+            sceneConverter(this, 'Battle', {
+              opponent,
+              tamagotchi: this.tamagotchi?.status,
+              property: this.property
+            });
           }
         }
 
@@ -170,7 +215,7 @@ export default class Room extends Scene {
   private keyboardflipFlop = { left: false, right: false, space: false };
 
   private async handleHeaderAction(action: string) {
-    const user = 'jennie';
+    const user = 'bloloblolo';
     this.functionalActionQuene.push({ user, action });
   }
 
@@ -231,8 +276,6 @@ export default class Room extends Scene {
 
       if (this.keyboardInputer['space'].isDown) {
         if (this.keyboardflipFlop.space) return;
-        // const currentSelector = this.header.currentSelector;
-        // this.header.currentSelector;
         if (this.header) {
           this.handleHeaderAction(this.header.currentSelector);
         }

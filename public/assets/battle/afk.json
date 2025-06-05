@@ -1,6 +1,6 @@
 {
   "frames": {
-    "face-attack": {
+    "face_angry": {
       "frame": {
         "x": 0,
         "y": 0,
@@ -20,7 +20,7 @@
         "h": 32
       }
     },
-    "face-damage": {
+    "face_sad": {
       "frame": {
         "x": 32,
         "y": 0,
@@ -40,7 +40,7 @@
         "h": 32
       }
     },
-    "face-normal": {
+    "face_normal": {
       "frame": {
         "x": 0,
         "y": 32,

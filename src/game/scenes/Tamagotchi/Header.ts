@@ -91,11 +91,11 @@ export class Header extends Phaser.GameObjects.Container {
     this.add(sleep);
     this.selectors['sleep'] = sleep;
 
-    const hp = new HeaderHp(scene, { x: 106, y: 13, value: 10 });
+    const hp = new HeaderHp(scene, { x: 106, y: 13, value: 0 });
     this.hp = hp;
     this.add(hp);
 
-    const coin = new HeaderCoin(scene, { x: 134, y: 13, value: 10 });
+    const coin = new HeaderCoin(scene, { x: 134, y: 13, value: 0 });
     this.coin = coin;
     this.add(coin);
 

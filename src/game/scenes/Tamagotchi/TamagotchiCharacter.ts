@@ -38,7 +38,7 @@ type TamagotchiCharacterProps = {
 
 const defaultIdlePrefix = 'idle'; // TODO: idle right
 const defaultHp = 100;
-const defaultRecoverHpByTime = 60;
+const defaultRecoverHpByTime = 2;
 const defaultDecreaseHpByTime = 1;
 const defaultXSec = 5;
 
@@ -72,6 +72,8 @@ export class TamagotchiCharacter extends Character {
 
     const { tamagotchi_afk } = scene.cache.json.get('config'); // get current character config
 
+    console.log({ tamagotchi_afk })
+    
     const characterProps = {
       ...props,
       animations: tamagotchi_afk.animations,
