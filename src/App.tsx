@@ -25,14 +25,14 @@ function App() {
       <div style={{ zIndex: 1, position: "relative" }}>
         {
           !twitchState &&
-          <button onClick={startOauthConnect}>Twitch login</button>
+          <button className="button" onClick={startOauthConnect}>Twitch login</button>
         }
         { (!isGameStart && twitchState) &&
-          <button onClick={handleClickConnectButton}>Start Connect</button>
+          <button className="button" onClick={handleClickConnectButton}>Start Connect</button>
         }
-        {/* { isGameStart && */}
+        { isGameStart &&
           <PhaserGame ref={phaserRef} currentActiveScene={undefined} />
-        {/* } */}
+        }
       </div>
     </div>
   );

@@ -215,7 +215,7 @@ export default class Room extends Scene {
   private keyboardflipFlop = { left: false, right: false, space: false };
 
   private async handleHeaderAction(action: string) {
-    const user = 'bloloblolo';
+    const user = 'jennie';
     this.functionalActionQuene.push({ user, action });
   }
 
