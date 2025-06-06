@@ -37,10 +37,11 @@ type TamagotchiCharacterProps = {
 };
 
 const defaultIdlePrefix = 'idle'; // TODO: idle right
-const defaultHp = 100;
+const defaultHp = 50;
 const defaultRecoverHpByTime = 2;
 const defaultDecreaseHpByTime = 1;
 const defaultXSec = 5;
+const defaultStartDelay = 5000;
 
 // TODO: low hp status...
 const defaultMoveDistance = 32;
@@ -67,13 +68,13 @@ export class TamagotchiCharacter extends Character {
     mp: 100,
   };
 
+  private isReady: boolean = false;
+
   constructor(scene: Phaser.Scene, props: TamagotchiCharacterProps) {
     const key = 'tamagotchi_afk'; // static character here
 
     const { tamagotchi_afk } = scene.cache.json.get('config'); // get current character config
 
-    console.log({ tamagotchi_afk })
-    
     const characterProps = {
       ...props,
       animations: tamagotchi_afk.animations,
@@ -118,6 +119,10 @@ export class TamagotchiCharacter extends Character {
 
     // defined callback function
     this.callbackFunctions = callbackFunctions;
+
+    setTimeout(() => {
+      this.isReady = true
+    }, defaultStartDelay)
   }
 
   private handleDefaultIdleAction() {
@@ -295,6 +300,7 @@ export class TamagotchiCharacter extends Character {
   private xSec = defaultXSec;
 
   public characterHandler(time: number) {
+    if (!this.isReady) return;
     // update position trigger at every frame
     if (this.isActing) {
       this.updatePosition();

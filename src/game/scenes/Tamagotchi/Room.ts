@@ -60,6 +60,7 @@ export default class Room extends Scene {
   }
 
   private dialogue: PrimaryDialogue | undefined;
+  private functionalActionQueue: { user: string; action: string }[] = [];
 
   private handleRenderScene(scene: Phaser.Scene, data: TInheritData) {
     this.storage = data || {};
@@ -128,16 +129,24 @@ export default class Room extends Scene {
       this.header.setValue({ coin: this.property.coin });
     }
 
+    if (this.storage?.queue) {
+      this.functionalActionQueue = this.storage.queue;
+    } 
+
     // Add keboard inputer
     this.keyboardInputer = scene.input.keyboard?.createCursorKeys();
+
+    
+    this.isFunctionalRunning = false; // TODO
   }
 
   private isFunctionalRunning: boolean = false;
-  private functionalActionQuene: { user: string; action: string }[] = [];
 
-  private handleFunctionalActionQuene = async () => {
+  
+
+  private handleFunctionalActionQueue = async () => {
     this.isFunctionalRunning = true;
-    const currentActionQuene = this.functionalActionQuene[0];
+    const currentActionQuene = this.functionalActionQueue[0];
 
     const _run = async () => {
       const { action, user} = currentActionQuene;
@@ -189,8 +198,10 @@ export default class Room extends Scene {
           }
 
           if (opponent) {
+            this.isFunctionalRunning = false;
             sceneConverter(this, 'Battle', {
               opponent,
+              queue: this.functionalActionQueue,
               tamagotchi: this.tamagotchi?.status,
               property: this.property
             });
@@ -198,7 +209,7 @@ export default class Room extends Scene {
         }
 
         // Finish action and remove from queue
-        this.functionalActionQuene.splice(0, 1);
+        this.functionalActionQueue.splice(0, 1);
         
       }
       this.isFunctionalRunning = false;
@@ -216,7 +227,7 @@ export default class Room extends Scene {
 
   private async handleHeaderAction(action: string) {
     const user = 'jennie';
-    this.functionalActionQuene.push({ user, action });
+    this.functionalActionQueue.push({ user, action });
   }
 
   private handleCatchTwitchMessage = async ({ user, message } : { user: string, message: string }) => {
@@ -235,14 +246,15 @@ export default class Room extends Scene {
     }
 
     if (action) {
-      this.functionalActionQuene.push({ user, action });
+      this.functionalActionQueue.push({ user, action });
     }
   }
 
   update(time: number) {
-    // if (this.functionalActionQuene.length !== 0 && !this.isFunctionalRunning) {
-    if (this.functionalActionQuene.length !== 0 && !this.isFunctionalRunning) {
-      this.handleFunctionalActionQuene();
+    // if (this.functionalActionQueue.length !== 0 && !this.isFunctionalRunning) {
+    // console.log(this.isFunctionalRunning);
+    if (this.functionalActionQueue.length !== 0 && !this.isFunctionalRunning) {
+      this.handleFunctionalActionQueue();
     }
 
     // movement controller

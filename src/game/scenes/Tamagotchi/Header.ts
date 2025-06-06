@@ -6,7 +6,7 @@ import { HeaderCoin } from './HeaderCoin';
 
 const defaultWidth = canvas.width;
 const defaultHeight = 25;
-const AUTO_HIDE_TIME = 5000;
+const AUTO_HIDE_TIME = 10000;
 
 const selectors = ['drink', 'battle', 'write', 'sleep'];
 

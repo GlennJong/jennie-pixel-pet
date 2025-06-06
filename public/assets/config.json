@@ -226,7 +226,7 @@
           "effect": {
             "type": "damage",
             "target": "self",
-            "value": 10
+            "value": 999
           }
         },
         "sp1": {
@@ -1505,7 +1505,7 @@
     "functional_action": {
       "drink": {
         "animation": "drink",
-        "point": 20,
+        "point": 10,
         "dialogs": [
           {
             "dialog": [
@@ -1514,7 +1514,7 @@
                   "key": "tamagotchi_character_afk",
                   "frame": "face_normal"
                 },
-                "text": "感謝{{user_name}}兌換\n補充喝水，為AFK增加了 20 點生命！"
+                "text": "感謝{{user_name}}兌換\n補充喝水，為AFK增加了 10 點生命！"
               }
             ],
             "piority": 2
@@ -1541,7 +1541,7 @@
       },
       "write": {
         "animation": "write",
-        "point": 20,
+        "point": 10,
         "dialogs": [
           {
             "dialog": [
@@ -1550,7 +1550,7 @@
                   "key": "tamagotchi_character_afk",
                   "frame": "face_normal"
                 },
-                "text": "感謝 {{user_name}} 兌換\n存檔紀錄，為AFK增加了 20 點生命！"
+                "text": "感謝 {{user_name}} 兌換\n存檔紀錄，為AFK增加了 10 點生命！"
               }
             ],
             "piority": 2
