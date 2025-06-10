@@ -14,7 +14,7 @@ export function openTwitchOauthLogin(client_id: string, redirect_uri: string) {
     "user:bot",
     "channel:bot",
     "channel:read:subscriptions",
-    "channel:read:redemptions",
+    "channel:read:redemptions"
   ].join("+");
   const params = `response_type=token&force_verify=true&client_id=${client_id}&redirect_uri=${redirect_uri}&scope=${scope}`;
   window.location.href = `${TWITCH_OAUTH_URL}?${params}`;
@@ -45,25 +45,30 @@ export async function getTwitchUserProfile(
   }
 }
 
+
 // Websocket methods
 export const subscribeMessageForWs = async (
+  type: string,
   ws_session_id: string,
   client_id: string,
   user_token: string,
   user_id: string,
 ) => {
   const url = TWITCH_EVENT_SUBSCRIBE_URL;
+
+  if (!type) return undefined;
+  
   const data = {
-    type: "channel.chat.message",
-    version: "1",
+    type,
+    version: '1',
     condition: { broadcaster_user_id: user_id, user_id: user_id },
-    transport: { method: "websocket", session_id: ws_session_id },
+    transport: { method: 'websocket', session_id: ws_session_id },
   };
 
   const header = {
-    "Content-Type": "application/json",
-    Authorization: `Bearer ${user_token}`,
-    "Client-Id": client_id,
+    'Content-Type': 'application/json',
+    'Authorization': `Bearer ${user_token}`,
+    'Client-Id': client_id,
   };
 
   try {
@@ -73,3 +78,20 @@ export const subscribeMessageForWs = async (
     return false;
   }
 };
+
+
+type TData = {
+  [key: string]: TData;
+} | string;
+
+export const _load = (path: string, data: TData ): string | undefined => {
+  let result = data;
+  const paths = path.split('.');
+  
+  paths.forEach(path => {
+    if (typeof result !== 'object' || !result[path]) return;
+    result = result[path];
+  })
+
+  return typeof result === 'object' ? JSON.stringify(result) : result;
+}

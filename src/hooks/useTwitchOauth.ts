@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import {
+  _load,
   getTwitchLoginStateFromQueryString,
   getTwitchUserProfile,
   openTwitchOauthLogin,
@@ -9,8 +10,11 @@ import { TWITCH_WS_URL } from "./constants";
 import { TwitchOauthLoginState, TwitchUserState, TwitchWsMessagePayload } from "./types";
 
 // constants
-const client_id = import.meta.env["VITE_TWITCH_CLIENT_ID"];
-const redirect_uri = import.meta.env["VITE_TWITCH_OAUTH_REDIRECT_URI"];
+const isDev = import.meta.env['VITE_ENV'] === 'dev';
+const client_id = import.meta.env['VITE_TWITCH_CLIENT_ID'];
+const redirect_uri = import.meta.env[ isDev ? 'VITE_DEV_TWITCH_OAUTH_REDIRECT_URI' : 'VITE_PRO_TWITCH_OAUTH_REDIRECT_URI'];
+
+type ConnectMode = 'chat' | 'channel_point';
 
 type WsEventHandler<T> =
   | {
@@ -48,10 +52,23 @@ function useTwitchOauth() {
     openTwitchOauthLogin(client_id, redirect_uri);
   }
 
-  function startWebsocket(events: WsEventHandler<TwitchWsMessagePayload> = {}) {
+  function startWebsocket(mode: ConnectMode, events: WsEventHandler<{ user?: string, content?: string }> = {}) {
     const { onOpen, onClose, onMessage, onError } = events;
-    if (!twitchState) return;
+    if (!twitchState || !mode) return;
 
+    const config = {
+      chat: {
+        type: 'channel.chat.message',
+        userKey: 'event.chatter_user_login',
+        contentKey: 'event.message.text'
+      },
+      channel_point: {
+        type: 'channel.channel_points_custom_reward_redemption.add',
+        userKey: 'event.user_login',
+        contentKey: 'event.reward.title'
+      }
+    }
+  
     const { access_token, id } = twitchState;
     const ws = new WebSocket(TWITCH_WS_URL);
     ws.onopen = () => {
@@ -66,19 +83,19 @@ function useTwitchOauth() {
       const data = JSON.parse(event.data);
 
       if (isWsConnectedRef.current) {
-        // channel.read.redemptions
-        // channel.chat.message
-        if (data.metadata.subscription_type === "channel.chat.message") {
-          
+        if (data.metadata.subscription_type === config[mode].type) {
           const newMsg = data.payload;
-
-          onMessage && onMessage(newMsg);
+          onMessage && onMessage({
+            user: _load(config[mode].userKey, newMsg),
+            content: _load(config[mode].contentKey, newMsg),
+          });
           receivedMsgRef.current = [...receivedMsgRef.current, newMsg];
           setReceivedMsg([...receivedMsgRef.current]);
         }
       } else {
         const session_id = data.payload.session.id;
         const isSubscribeSuccess = await subscribeMessageForWs(
+          config[mode].type,
           session_id,
           client_id,
           access_token,

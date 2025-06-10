@@ -15,7 +15,7 @@ const defaultAlign: { text: "left" | "center" | "right" } = {
 const typingMode = "page";
 
 const defaultSpeechSpeed = 50;
-const defaultStaticDelay = 1000;
+const defaultStaticDelay = 1500;
 const defaultDialogTransitionSpeed = 150;
 
 const defaultHeight = 40;
@@ -122,7 +122,7 @@ export class PrimaryDialogue extends Phaser.GameObjects.Container {
         top: textBoxSpacing,
         bottom: textBoxSpacing,
       },
-      resolution: 6,
+      resolution: 3,
       wrap: {
         mode: "word",
         width: textBoxWidth - textBoxSpacing * 2,

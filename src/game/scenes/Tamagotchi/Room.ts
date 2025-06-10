@@ -1,6 +1,6 @@
 import { EventBus } from '../../EventBus';
 import Phaser, { Scene } from 'phaser';
-import { canvas, tamagotchi } from '../../constants';
+import { canvas } from '../../constants';
 import { PrimaryDialogue } from '../../components/PrimaryDialogue';
 import { Header } from './Header';
 import { TamagotchiCharacter } from './TamagotchiCharacter';
@@ -35,6 +35,8 @@ export default class Room extends Scene {
 
   storage: any;
 
+  eventBus: any;
+
   private property: {
     coin: number,
     level: number,
@@ -56,7 +58,10 @@ export default class Room extends Scene {
     sceneStarter(this);
 
     // interact from outside
-    EventBus.on('message', this.handleCatchTwitchMessage);
+    if (!this.eventBus) {
+      this.eventBus = EventBus.on('queue', this.handleCatchTwitchMessage);
+    }
+    // console.log(result)
   }
 
   private dialogue: PrimaryDialogue | undefined;
@@ -104,7 +109,7 @@ export default class Room extends Scene {
             await this.dialogue?.runDialog([
               { face: {
                   key: 'tamagotchi_character_afk',
-                  frame: 'face-normal'
+                  frame: 'face_sad'
                 },
                 text: '啊我死了... 要記得幫我補充能量...'
               }
@@ -182,11 +187,11 @@ export default class Room extends Scene {
         ) {
           let opponent;
           if (action === 'battle-shangshang') {
-            opponent = Math.random() > 0.5 ? 'shangshang' : 'default';
+            opponent = Math.random() > 0.25 ? 'shangshang' : 'default';
           } else if (action === 'battle-beibei') {
-            opponent = Math.random() > 0.5 ? 'beibei' : 'default';
+            opponent = Math.random() > 0.25 ? 'beibei' : 'default';
           } else if (action === 'battle') {
-            opponent = Math.random() > 0.5 ? 'jennie' : 'default';
+            opponent = Math.random() > 0.25 ? 'jennie' : 'default';
           }
 
           if (user === 'curry_cat') {
@@ -198,18 +203,19 @@ export default class Room extends Scene {
           }
 
           if (opponent) {
-            this.isFunctionalRunning = false;
-            sceneConverter(this, 'Battle', {
+            await sceneConverter(this, 'Battle', {
               opponent,
               queue: this.functionalActionQueue,
               tamagotchi: this.tamagotchi?.status,
               property: this.property
             });
+            this.isFunctionalRunning = false;
           }
         }
 
         // Finish action and remove from queue
         this.functionalActionQueue.splice(0, 1);
+        // console.log('remove', this.functionalActionQueue)
         
       }
       this.isFunctionalRunning = false;
@@ -230,23 +236,32 @@ export default class Room extends Scene {
     this.functionalActionQueue.push({ user, action });
   }
 
-  private handleCatchTwitchMessage = async ({ user, message } : { user: string, message: string }) => {
-    let action;
-    if (message === '上上打招呼') {
-      action = 'battle-shangshang'
-    }
-    if (message === '貝貝打招呼') {
-      action = 'battle-beibei'
-    }
-    else if (message === '補充水分') {
-      action = 'drink'
-    }
-    else if (message === '提醒大家存檔') {
-      action = 'write'
-    }
+  private handleCatchTwitchMessage = async ({ user, content } : { user: string, content: string }) => {
+    const configs = [
+      { content: '上上打招呼', action: 'battle-shangshang' },
+      { content: '上上刷存在感', action: 'battle-shangshang' },
+      { content: '貝貝打招呼', action: 'battle-beibei' },
+      { content: '貝貝刷存在感', action: 'battle-beibei' },
+      { content: '補充水分', action: 'drink' },
+      { content: '提醒大家存檔', action: 'write' },
+    ];
+
+    const action = configs.find(_config => _config.content === content)?.action;
 
     if (action) {
       this.functionalActionQueue.push({ user, action });
+    }
+
+    // Extra for demo:
+    if (content === 'demo_dead') {
+      if (this.tamagotchi) {
+        this.tamagotchi.status.hp = 3
+      }
+    }
+    else if (content === 'demo_live') {
+      if (this.tamagotchi) {
+        this.tamagotchi.status.hp = 100
+      }
     }
   }
 

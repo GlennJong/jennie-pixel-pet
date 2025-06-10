@@ -73,7 +73,7 @@ export default class BattleCharacter extends Character {
   private role: 'self' | 'opponent';
   public board: StatusBoard;
   public avaliableActions: string[];
-  private shadow: Phaser.GameObjects.Arc;
+  // private shadow: Phaser.GameObjects.Arc;
 
   constructor(
     scene: Phaser.Scene,
@@ -98,14 +98,14 @@ export default class BattleCharacter extends Character {
     super(scene, key, characterProps);
 
     // set shadow
-    const { x, y, size } = defaultShadow[role];
-    const shadow = scene.add.circle(x, y, size, 0x000000).setVisible(false);
+    // const { x, y, size } = defaultShadow[role];
+    // const shadow = scene.add.circle(x, y, size, 0x000000).setVisible(false);
 
-    shadow.setAlpha(0.5);
-    shadow.setScale(1, 0.25);
-    shadow.setDepth(1);
+    // shadow.setAlpha(0.5);
+    // shadow.setScale(1, 0.25);
+    // shadow.setDepth(1);
 
-    this.shadow = shadow;
+    // this.shadow = shadow;
     this.character.setDepth(2);
 
     // define role
@@ -144,7 +144,7 @@ export default class BattleCharacter extends Character {
 
     this.character.setPosition(position.x + distance, position.y);
     await runTween(this.character, { x: position.x }, 1000);
-    this.shadow.setVisible(true);
+    // this.shadow.setVisible(true);
   }
 
   private handlePlayKeyFrameAnimation = async (key: string) => {

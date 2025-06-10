@@ -6,7 +6,6 @@ import {
   sceneConverter,
   sceneStarter,
 } from '../../components/CircleSceneTransition';
-import { EventBus } from '../../EventBus';
 
 type TProcess = {
   from: 'self' | 'opponent';
@@ -44,7 +43,6 @@ export default class Battle extends Scene {
     this.handleStartGameScene();
 
     sceneStarter(this);
-    EventBus.on('message', this.handleCatchTwitchMessage); // TODO
     
   }
 
@@ -54,25 +52,27 @@ export default class Battle extends Scene {
   }
 
   // TODO
-  private handleCatchTwitchMessage = async ({ user, message } : { user: string, message: string }) => {
-    let action;
-    if (message === '上上打招呼') {
-      action = 'battle-shangshang'
-    }
-    if (message === '貝貝打招呼') {
-      action = 'battle-beibei'
-    }
-    else if (message === '補充水分') {
-      action = 'drink'
-    }
-    else if (message === '提醒大家存檔') {
-      action = 'write'
-    }
+  // private handleCatchTwitchMessage = async ({ user, message } : { user: string, message: string }) => {
+  //   console.log('catch_battle')
 
-    if (action) {
-      this.storage.queue.push({ user, action }); // TODO
-    }
-  }
+  //   let action;
+  //   if (message === '上上打招呼') {
+  //     action = 'battle-shangshang'
+  //   }
+  //   if (message === '貝貝打招呼') {
+  //     action = 'battle-beibei'
+  //   }
+  //   else if (message === '補充水分') {
+  //     action = 'drink'
+  //   }
+  //   else if (message === '提醒大家存檔') {
+  //     action = 'write'
+  //   }
+
+  //   if (action) {
+  //     this.storage.queue.push({ user, action }); // TODO
+  //   }
+  // }
 
   private handleInitGameScene(scene: Phaser.Scene, data) {
     this.storage = data || {};
