@@ -6,6 +6,7 @@ import {
 } from "react";
 import StartGame from "./main";
 import { EventBus } from "./EventBus";
+import Console from "./Console";
 
 export interface PhaserGameRef {
   game: Phaser.Game | null;
@@ -61,6 +62,9 @@ export const PhaserGame = forwardRef<PhaserGameRef, PhaserGameProps>(
       };
     }, [currentActiveScene, ref]);
 
-    return <div id="game-container"></div>;
+    return (
+      <div id="game-container"></div>
+    )
+    ;
   },
 );

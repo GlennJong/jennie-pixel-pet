@@ -2,6 +2,7 @@ import { useRef, useState } from "react";
 import { PhaserGameRef, PhaserGame } from "./game/PhaserGame";
 import useTwitchOauth from "./hooks/useTwitchOauth";
 import { EventBus } from "./game/EventBus";
+import Console from "./game/Console";
 
 const isDev = import.meta.env['VITE_ENV'] === 'dev';
 
@@ -41,8 +42,12 @@ function App() {
         { (!isGameStart && twitchState) &&
           <button className="button" onClick={handleClickConnectButton}>Start Connect</button>
         }
-        { isGameStart &&
-          <PhaserGame ref={phaserRef} currentActiveScene={undefined} />
+        { twitchState &&
+          <Console>
+            { isGameStart &&
+              <PhaserGame ref={phaserRef} currentActiveScene={undefined} />
+            }
+          </Console>
         }
         { isDev && isGameStart &&
           <div style={{ position: 'fixed', bottom: 0, left: 0, width: '100%' }}>

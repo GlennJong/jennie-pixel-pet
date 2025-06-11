@@ -56,7 +56,7 @@ const config: Phaser.Types.Core.GameConfig = {
     ],
   },
   backgroundColor: '#000',
-  canvasStyle: `image-rendering: pixelated`,
+  canvasStyle: `display:block; image-rendering: pixelated`,
   scene: [
     Preloader,
     Tamagotchi,
