@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import './style.css';
 
-const Console = ({ children }) => {
+const Console = ({ children }: { children: React.ReactNode }) => {
   const [ isFilterOpen, setIsFilterOpen ] = useState(false);
   
   return (
@@ -17,7 +17,15 @@ const Console = ({ children }) => {
           </div>
         </div>
         <div className="buttons">
-          <button className="circle-btn" onClick={() => setIsFilterOpen(!isFilterOpen)}>retro</button>
+          <div className="circle-btn-wrapper">
+            <button className="circle-btn" disabled onClick={() => setIsFilterOpen(!isFilterOpen)}>save</button>
+          </div>
+          <div className="circle-btn-wrapper">
+            <button className="circle-btn" disabled onClick={() => setIsFilterOpen(!isFilterOpen)}>load</button>
+          </div>
+          <div className="circle-btn-wrapper">
+            <button className="circle-btn" onClick={() => setIsFilterOpen(!isFilterOpen)}>retro</button>
+          </div>
         </div>
       </div>
     </div>

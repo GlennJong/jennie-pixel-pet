@@ -18,7 +18,7 @@
 
 .console .base .monitor {
   padding: 36px;
-  background: #9a97a1;
+  background: linear-gradient(to bottom, #ebeff9 0%, #afb7c9 100%);
   position: relative;
   border-radius: 12px;
   box-shadow:  inset 0px 0px 0px 1px hsla(1200, 20%, 20%, .75), inset -1px -1px 0px 1px hsla(0, 0%, 100%, .5);
@@ -84,13 +84,22 @@
 }
 
 .console .base .buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
   margin-left: 24px;
   padding: 12px 24px;
-  border-radius: 6px 24px;
+  border-radius: 6px 36px;
   background: hsla(0, 0%, 0%, .2);
   box-shadow: 1px 1px 1px 0px hsla(0, 0%, 100%, .5);
 }
 
+
+.console .base .buttons .circle-btn-wrapper {
+  border-radius: 50%;
+  padding: 2px;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, .5), 1px 1px 0px 0px hsla(0, 0%, 100%, .3);
+}
 
 .console .base .buttons .circle-btn {
   display: block;
@@ -99,7 +108,7 @@
   border-radius: 50%;
   position: relative;
   border: 0;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.48);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.48);
   background: linear-gradient(to bottom, #ffffff 0%, #9da1aa 100%);
   color: rgba(0,0,0,0.36);
   text-shadow: 0 1px 1px white;
@@ -108,7 +117,6 @@
 
 .console .base .buttons .circle-btn:active {
   box-shadow: 0 0px 2px rgba(0,0,0,0.42);
-  /* background: linear-gradient(to bottom, #ffffff 0%, #9da1aa 100%); */
   text-shadow: 0 1px 1px rgba(255, 255, 255, 0.446);
   background: hsla(0, 0%, 60%, 1);
   transform: scale(0.99, 0.99);
@@ -128,7 +136,9 @@
   transform: translate(-50%, -50%);
 }
 
-
+.console .base .buttons .circle-btn:disabled {
+  opacity: .3;
+}
 
 .console .base .buttons .circle-btn:focus {
   outline: 0;

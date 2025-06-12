@@ -39,15 +39,24 @@ function App() {
           !twitchState &&
           <button className="button" onClick={startOauthConnect}>Twitch login</button>
         }
-        { (!isGameStart && twitchState) &&
-          <button className="button" onClick={handleClickConnectButton}>Start Connect</button>
-        }
         { twitchState &&
-          <Console>
-            { isGameStart &&
-              <PhaserGame ref={phaserRef} currentActiveScene={undefined} />
+          <div style={{ position: 'relative' }}>
+            { !isGameStart &&
+              <button
+                className="button"
+                onClick={handleClickConnectButton}
+                style={{ position: 'absolute', left: '50%', top: '50%', transform: 'translate(-50%, -50%)', zIndex: 2, boxShadow: '2px 4px 12px hsla(0, 0%, 0%, .33)' }}>
+                  Start Connect
+              </button>
             }
-          </Console>
+            <div style={{ opacity: !isGameStart ? 0.5 : 1, pointerEvents: isGameStart ? 'auto': 'none' }}>
+              <Console>
+                { isGameStart &&
+                  <PhaserGame ref={phaserRef} currentActiveScene={undefined} />
+                }
+              </Console>
+            </div>
+          </div>
         }
         { isDev && isGameStart &&
           <div style={{ position: 'fixed', bottom: 0, left: 0, width: '100%' }}>
