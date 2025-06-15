@@ -2,6 +2,7 @@ import Phaser, { Scene } from 'phaser';
 import { PrimaryDialogue } from '../../components/PrimaryDialogue';
 
 import BattleCharacter from './BattleCharacter';
+import { getGlobalData, setGlobalData } from '../../EventBus';
 import {
   sceneConverter,
   sceneStarter,
@@ -20,79 +21,32 @@ export default class Battle extends Scene {
   opponent: BattleCharacter;
   dialogue: PrimaryDialogue;
 
-  storage: any;
-
   constructor() {
     super('Battle');
   }
 
   preload() {
     this.load.setPath('assets');
-    // this.load.image('background-battle', 'background-battle.png');
-  }
-
-  init(data) {
-    this.handleInitGameScene(this, data);
   }
 
   create() {
     this.camera = this.cameras.main;
     this.camera.setBackgroundColor(0xeeeeee);
 
-    // init
-    this.handleStartGameScene();
+    const opponent = getGlobalData('battle_opponent') || 'default';
 
-    sceneStarter(this);
-    
-  }
-
-  update() {
-    this.self.characterHandler();
-    this.opponent.characterHandler();
-  }
-
-  // TODO
-  // private handleCatchTwitchMessage = async ({ user, message } : { user: string, message: string }) => {
-  //   console.log('catch_battle')
-
-  //   let action;
-  //   if (message === '上上打招呼') {
-  //     action = 'battle-shangshang'
-  //   }
-  //   if (message === '貝貝打招呼') {
-  //     action = 'battle-beibei'
-  //   }
-  //   else if (message === '補充水分') {
-  //     action = 'drink'
-  //   }
-  //   else if (message === '提醒大家存檔') {
-  //     action = 'write'
-  //   }
-
-  //   if (action) {
-  //     this.storage.queue.push({ user, action }); // TODO
-  //   }
-  // }
-
-  private handleInitGameScene(scene: Phaser.Scene, data) {
-    this.storage = data || {};
-
-    // define opponent
-    const opponent = this.storage?.opponent || 'default';
-    
+    console.log({ opponent })
     // init characters
     this.opponent = new BattleCharacter(
-      scene,
+      this,
       `battle_${opponent}_opponent`,
       'opponent',
-      {},
     );
 
     this.self = new BattleCharacter(
-      scene,
+      this,
       'battle_afk_self',
       'self',
-      {},
     );
 
     // default hide status board
@@ -100,8 +54,17 @@ export default class Battle extends Scene {
     this.opponent.board.setAlpha(0);
 
     // init dialogue
-    this.dialogue = new PrimaryDialogue(scene);
+    this.dialogue = new PrimaryDialogue(this);
     this.dialogue.setDepth(99);
+
+    sceneStarter(this);
+    this.handleStartGameScene();
+
+  }
+
+  update() {
+    this.self.characterHandler();
+    this.opponent.characterHandler();
   }
 
   private generateRandomBattleProcess(): TProcess[] {
@@ -174,10 +137,8 @@ export default class Battle extends Scene {
   private async handleFinishGame() {
     const selfFinishDialog = this.self.runFinish();
     await this.dialogue.runDialog(selfFinishDialog);
-    sceneConverter(this.scene.scene, 'Room', {
-      ...this.storage,
-      battle: this.self.hp.current > 0 ? 'win' : 'lose',
-    });
+    setGlobalData('battle_result', this.self.hp.current > 0 ? 'win' : 'lose');
+    sceneConverter(this, 'Tamagotchi');
   }
 
   private async openingCharacterMovement() {

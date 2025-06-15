@@ -1,5 +1,4 @@
 import 'phaser';
-import { GameOver } from './scenes/GameOver';
 import { AUTO, Game } from 'phaser';
 import { Preloader } from './scenes/Preloader';
 
@@ -18,25 +17,16 @@ import { canvas } from './constants';
 
 // Tamagotchi Scene
 import Tamagotchi from './scenes/Tamagotchi';
-import TamagotchiRoom from './scenes/Tamagotchi/Room';
 
 // Battle Scene
 import Battle from './scenes/Battle';
+import { MainScene } from './scenes/MainScene';
 
 const config: Phaser.Types.Core.GameConfig = {
   type: AUTO,
-  // type: Phaser.WEBGL,
   width: canvas.width,
   height: canvas.height,
   parent: 'game-container',
-  // scale: {
-  //     width: canvas.width,
-  //     height: canvas.height,
-  //     // parent: 'core',
-  //     // fullscreenTarget: 'core',
-  //     autoCenter: Phaser.Scale.CENTER_BOTH,
-  //     mode: Phaser.Scale.FIT,
-  // },
   zoom: 2,
   plugins: {
     global: [
@@ -59,10 +49,9 @@ const config: Phaser.Types.Core.GameConfig = {
   canvasStyle: `display:block; image-rendering: pixelated`,
   scene: [
     Preloader,
+    MainScene,
     Tamagotchi,
-    TamagotchiRoom,
-    Battle,
-    GameOver,
+    Battle
   ],
 };
 

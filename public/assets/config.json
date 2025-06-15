@@ -48,7 +48,7 @@
     ],
     "battle": {
       "base": {
-        "max_hp": 30,
+        "max_hp": 2,
         "name": "沙包"
       },
       "actions": {
@@ -1576,5 +1576,29 @@
         ]
       }
     }
-  }
+  },
+  "tamagotchi_action_mapping": [
+    {
+      "action": "drink",
+      "matches": ["補充水分"]
+    },
+    {
+      "action": "battle",
+      "matches": ["上上打招呼", "上上刷存在感"],
+      "params": { "opponent": "shangshang" }
+    },
+    {
+      "action": "battle",
+      "matches": ["貝貝打招呼", "貝貝刷存在感"],
+      "params": { "opponent": "beibei" }
+    },
+    {
+      "action": "write",
+      "matches": ["提醒大家存檔"]
+    },
+    {
+      "action": "sleep",
+      "matches": []
+    }
+  ]
 }

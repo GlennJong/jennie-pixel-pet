@@ -1,24 +1,29 @@
 import Phaser from 'phaser';
-import { canvas } from '../../constants';
-import { HeaderSelector } from './HeaderSelector';
-import { HeaderHp } from './HeaderHp';
-import { HeaderCoin } from './HeaderCoin';
+import { HeaderSelector } from './Selector';
+import { IconHp } from './Hp';
+import { IconCoin } from './Coin';
 
-const defaultWidth = canvas.width;
-const defaultHeight = 25;
+const DEFAULT_WIDTH = 160;
+const DEFAULT_HEIGHT = 25;
 const AUTO_HIDE_TIME = 10000;
 
 const selectors = ['drink', 'battle', 'write', 'sleep'];
 
+// TODO Constant Naming
+// const DRINK_ACTION_NAME = 'drink';
+// const BATTLE_ACTION_NAME = 'battle';
+// const WRITE_ACTION_NAME = 'write';
+// const SLEEP_ACTION_NAME = 'sleep';
+// const AWAKE_ACTION_NAME = 'awake';
+
 export class Header extends Phaser.GameObjects.Container {
   public currentSelector: string = selectors[0];
   private selectors: { [key: string]: HeaderSelector } = {};
-  private hp: HeaderHp;
+  private iconHp: IconHp;
   private coin: HeaderCoin;
   private timer: number | undefined;
 
   constructor(scene: Phaser.Scene) {
-    // 1. Inherite from scene
     super(scene);
 
     // 2. background
@@ -26,10 +31,10 @@ export class Header extends Phaser.GameObjects.Container {
       .nineslice({
         key: 'tamagotchi_header_frame',
         frame: 'frame',
-        width: defaultWidth,
-        x: defaultWidth / 2,
-        y: defaultHeight / 2,
-        height: defaultHeight,
+        width: DEFAULT_WIDTH,
+        x: DEFAULT_WIDTH / 2,
+        y: DEFAULT_HEIGHT / 2,
+        height: DEFAULT_HEIGHT,
         leftWidth: 8,
         rightWidth: 8,
         topHeight: 8,
@@ -91,18 +96,14 @@ export class Header extends Phaser.GameObjects.Container {
     this.add(sleep);
     this.selectors['sleep'] = sleep;
 
-    const hp = new HeaderHp(scene, { x: 106, y: 13, value: 0 });
-    this.hp = hp;
-    this.add(hp);
+    this.iconHp = new IconHp(scene, { x: 106, y: 13 });
+    this.add(this.iconHp);
 
-    const coin = new HeaderCoin(scene, { x: 134, y: 13, value: 0 });
-    this.coin = coin;
-    this.add(coin);
-
-    scene.add.existing(this); // board
+    this.coin = new IconCoin(scene, { x: 134, y: 13 });
+    this.add(this.coin);
 
     this.currentSelector = 'drink';
-    this.updateSelector();
+    this.handleUpdateSelector();
   }
 
   private hideHeader() {
@@ -114,7 +115,7 @@ export class Header extends Phaser.GameObjects.Container {
     }, AUTO_HIDE_TIME);
   }
 
-  private updateSelector() {
+  private handleUpdateSelector() {
     this.setAlpha(1);
 
     Object.keys(this.selectors).map((_key) => {
@@ -135,55 +136,38 @@ export class Header extends Phaser.GameObjects.Container {
         this.setAlpha(0);
       }, time);
     }
-    
   }
 
-  public moveToNextSelector() {
+  public moveNext() {
     const currentIndex = selectors.indexOf(this.currentSelector);
     this.currentSelector =
       currentIndex !== selectors.length - 1
         ? selectors[currentIndex + 1]
         : selectors[0];
-    this.updateSelector();
+    this.handleUpdateSelector();
   }
 
-  public moveToPreviousSelector() {
+  public movePrev() {
     const currentIndex = selectors.indexOf(this.currentSelector);
     this.currentSelector =
       currentIndex === 0
         ? selectors[selectors.length - 1]
         : selectors[currentIndex - 1];
-    this.updateSelector();
+    this.handleUpdateSelector();
   }
 
-  public moveToSelector(string: string) {
+  public moveTo(string: string) {
     this.currentSelector = string;
-    this.updateSelector();
+    this.handleUpdateSelector();
   }
 
-  public addHp(value: number) {
-    this.hp.addValue(value);
-  }
-  public reduceHp(value: number) {
-    this.hp.decreaseValue(value);
-  }
-  public addCoin(value: number) {
-    this.coin.addValue(value);
+  public select() {
+    return this.currentSelector;
   }
 
-  public setValue({ hp, coin }: { hp?: number; coin?: number }) {
-    if (typeof hp !== 'undefined') {
-      this.hp.setValue(hp);
-    }
-    if (typeof coin !== 'undefined') {
-      this.coin.setValue(coin);
-    }
-  }
-
-  public statusHandler() {
-    this.hp.update();
+  public update() {
+    this.iconHp.update();
     this.coin.update();
   }
 
-  // public TODO: auto hide
 }

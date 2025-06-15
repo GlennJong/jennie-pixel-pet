@@ -79,7 +79,6 @@ export default class BattleCharacter extends Character {
     scene: Phaser.Scene,
     key: string,
     role: 'self' | 'opponent',
-    data: { hp?: number },
   ) {
     // get current character config
     const currentBattleCharacterConfig =
@@ -120,7 +119,7 @@ export default class BattleCharacter extends Character {
 
     // define current action
     this.hp = {
-      current: typeof data.hp !== 'undefined' ? data.hp : battle.base.max_hp,
+      current: battle.base.max_hp,
       max: battle.base.max_hp,
     };
 

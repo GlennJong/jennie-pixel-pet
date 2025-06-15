@@ -1,44 +1,45 @@
 import Phaser from 'phaser';
+import { EventBus, getGlobalData } from '../../../EventBus';
 
-type TOption = {
-  x: number;
-  y: number;
-  value: number;
-};
+const DEFAULT = 88;
 
-export class HeaderHp extends Phaser.GameObjects.Container {
+export class IconHp extends Phaser.GameObjects.Container {
   private icon: Phaser.GameObjects.Sprite;
   private text: Phaser.GameObjects.Text;
   private value: number;
+  private targetValue: number | undefined;
+  private step: '100' | '75' | '50' | '25' | '10';
 
-  constructor(scene: Phaser.Scene, option: TOption) {
-    // Inherite from scene
+  constructor(scene: Phaser.Scene, option: { x: number; y: number }) {
     super(scene);
 
-    const { x, y, value } = option;
+    this.value = typeof getGlobalData('tamagotchi_hp') !== 'undefined' ?
+      getGlobalData('tamagotchi_hp')
+      :
+      DEFAULT;
 
-    this.value = value;
+    const { x, y } = option;
+
+    // Watch hp change
+    EventBus.on('tamagotchi_hp-updated', (value) => { this.targetValue = value });
 
     // Icon
-    const step = '25';
-    const icon = scene.make.sprite({
+    this.icon = scene.make.sprite({
       key: 'tamagotchi_header_icons',
       frame: 'hp-empty',
       x: x,
       y: y,
     });
-    if (!scene.anims.exists('hp-100')) {
-      scene.anims.create({
-        key: 'hp-100',
-        frames: scene.anims.generateFrameNames('tamagotchi_header_icons', {
-          prefix: `hp-100-`,
-          start: 1,
-          end: 5,
-        }),
-        repeat: -1,
-        frameRate: 6,
-      });
-    }
+    scene.anims.create({
+      key: 'hp-100',
+      frames: scene.anims.generateFrameNames('tamagotchi_header_icons', {
+        prefix: `hp-100-`,
+        start: 1,
+        end: 5,
+      }),
+      repeat: -1,
+      frameRate: 6,
+    });
     
     if (!scene.anims.exists('hp-75')) {
       scene.anims.create({
@@ -79,27 +80,22 @@ export class HeaderHp extends Phaser.GameObjects.Container {
       });
     }
 
-    icon.play(`hp-${step}`);
-    this.icon = icon;
-    this.add(icon);
+    this.icon.play(`hp-100`);
+    this.add(this.icon);
 
     // Text
-    const text = scene.make.text({
+    this.text = scene.make.text({
       x: x + 6,
       y: y - 4,
       style: { fontFamily: 'Tiny5', fontSize: 8, color: '#000' },
       text: '',
     });
-    text.setResolution(4);
-    this.text = text;
-    this.add(text);
+    this.text.setResolution(4);
+    this.add(this.text);
 
     // Apply first
     this.applyIconAndValue();
   }
-
-  private targetValue?: number;
-  private step?: '100' | '75' | '50' | '25' | '10';
 
   private applyIconAndValue() {
     if (this.value > 75 && this.value <= 100 && this.step != '100') {
@@ -120,31 +116,6 @@ export class HeaderHp extends Phaser.GameObjects.Container {
       this.step = '10';
     }
     this.text.setText(this.value.toString());
-  }
-
-  public setValue(value: number) {
-    // if (typeof this.targetValue !== 'undefined') return; // return when value still running
-
-    const resultValue = value;
-    this.targetValue = resultValue;
-  }
-
-  public addValue(value: number) {
-    if (this.targetValue) return; // return when value still running
-
-    const sum = this.value + value;
-    const resultValue = sum;
-
-    this.targetValue = resultValue;
-  }
-
-  public decreaseValue(value: number) {
-    if (this.targetValue) return; // return when value still running
-
-    const decrease = this.value - value;
-    const resultValue = decrease;
-
-    this.targetValue = resultValue;
   }
 
   public update() {

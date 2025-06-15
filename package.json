@@ -10,6 +10,7 @@
   ],
   "scripts": {
     "dev": "vite --config vite.config.js",
+    "serve": "vite serve ./dist",
     "format": "prettier . --write",
     "build": "vite build --config vite.config.js"
   },

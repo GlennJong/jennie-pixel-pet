@@ -1,8 +1,8 @@
 import Phaser from 'phaser';
 import { Character } from '../../components/Character';
-import { canvas } from '../../constants';
 import { selectFromPiority } from '../../utils/selectFromPiority';
 import { TDialogData } from '../../components/PrimaryDialogue';
+import { getGlobalData, setGlobalData } from '../../EventBus';
 
 type TDirection = 'none' | 'left' | 'right';
 
@@ -27,21 +27,18 @@ type TFunctionAction = {
 } & TAction;
 
 // type TSpecialAction = string;
-type TStatus = { [key: string]: number };
 type TamagotchiCharacterProps = {
   x: number;
   y: number;
   edge: { from: number; to: number };
-  callbackFunctions: { [key: string]: <T extends number>(props: T) => void };
-  hp?: number;
 };
 
 const defaultIdlePrefix = 'idle'; // TODO: idle right
 const defaultHp = 50;
 const defaultRecoverHpByTime = 2;
-const defaultDecreaseHpByTime = 1;
-const defaultXSec = 5;
-const defaultStartDelay = 5000;
+const defaultDecreaseHpByTime = -1;
+const defaultXSec = 3;
+const defaultEdge = { from: 50, to: 120 };
 
 // TODO: low hp status...
 const defaultMoveDistance = 32;
@@ -57,37 +54,26 @@ export class TamagotchiCharacter extends Character {
   public functionalAction: { [key: string]: TFunctionAction };
 
   private spaceEdge: { from: number; to: number };
-  private callbackFunctions: {
-    [key: string]: <T extends number>(value: T) => void;
-  };
   private direction: TDirection = 'left';
 
-  // TODO: direction state
-  public status: TStatus = {
-    hp: 100,
-    mp: 100,
-  };
+  public hp: number;
 
   private isReady: boolean = false;
 
   constructor(scene: Phaser.Scene, props: TamagotchiCharacterProps) {
     const key = 'tamagotchi_afk'; // static character here
+    const hp = getGlobalData('tamagotchi_hp');
 
-    const { tamagotchi_afk } = scene.cache.json.get('config'); // get current character config
+    const config = scene.cache.json.get('config')[key]; // get current character config
 
     const characterProps = {
       ...props,
-      animations: tamagotchi_afk.animations,
+      animations: config.animations,
     };
-
+    
     super(scene, key, characterProps);
 
-    const { hp, callbackFunctions } = props;
-
-    // set character depth\
-    this.setDepth(1);
-
-    const shadow = scene.add.circle(
+    const shadow = scene.add.circle( // TODO: how to destroy it?
       characterProps.x,
       characterProps.y,
       10,
@@ -97,32 +83,23 @@ export class TamagotchiCharacter extends Character {
     shadow.setAlpha(0.6);
     shadow.setScale(0.8, 0.3);
     shadow.setDepth(1);
-    this.character.setDepth(2);
     this.setFollowShadow(shadow);
+    this.character.setDepth(2);
 
     // actions
-    this.idleActions = tamagotchi_afk.idle_actions;
-
-    // unavailable actions
-    this.unavailableActions = tamagotchi_afk.unavailable_actions;
-
-    this.functionalAction = tamagotchi_afk.functional_action;
+    this.idleActions = config.idle_actions;
+    this.unavailableActions = config.unavailable_actions;
+    this.functionalAction = config.functional_action;
 
     // temp
-    this.status.hp = hp || defaultHp;
+    this.hp = hp || defaultHp;
 
     // define moving limitation
-    this.spaceEdge = props.edge || { from: 0, to: canvas.width };
+    this.spaceEdge = props.edge || defaultEdge;
 
     // default animation
     this.handleDefaultIdleAction();
 
-    // defined callback function
-    this.callbackFunctions = callbackFunctions;
-
-    setTimeout(() => {
-      this.isReady = true
-    }, defaultStartDelay)
   }
 
   private handleDefaultIdleAction() {
@@ -172,7 +149,6 @@ export class TamagotchiCharacter extends Character {
     this.isActing = true;
     this.playAnimation(`${animation}-${this.direction}`);
     this.moveDirection(this.direction, defaultMoveDistance, () => {
-      // reset action after moved
       this.isActing = false;
       this.handleDefaultIdleAction();
     });
@@ -184,28 +160,18 @@ export class TamagotchiCharacter extends Character {
     this.isActing = false;
   }
 
-  private handleRecoverHpByTime() {
-    const result = this.status.hp + defaultRecoverHpByTime;
+  private handleChangeHp(value) {
+    const result = this.hp + value;
 
-    // TODO: change hp
-    this.status.hp = result >= 100 ? 100 : result <= 0 ? 0 : result;
-    this.callbackFunctions.onHpChange(this.status.hp);
-    this.handleDetectCharacterIsAlive();
-  }
-
-  private handleDecreaseHpByTime() {
-    const result = this.status.hp - defaultDecreaseHpByTime;
-
-    // TODO: change hp
-    this.status.hp = result >= 100 ? 100 : result <= 0 ? 0 : result;
-    this.callbackFunctions.onHpChange(this.status.hp);
+    this.hp = result >= 100 ? 100 : result <= 0 ? 0 : result;
+    setGlobalData('tamagotchi_hp', this.hp);
     this.handleDetectCharacterIsAlive();
   }
 
   private handleDetectCharacterIsAlive() {
-    if (this.isAlive && this.status.hp <= 0) {
+    if (this.isAlive && this.hp <= 0) {
       this.isAlive = false;
-    } else if (!this.isAlive && this.status.hp >= 100) {
+    } else if (!this.isAlive && this.hp >= 100) {
       this.isAlive = true;
       this.isBorn = true;
     }
@@ -213,20 +179,12 @@ export class TamagotchiCharacter extends Character {
 
   private fireEachXsec?: number = undefined;
 
-  // public manualContolDirection(direction: 'left' | 'right' ) {
-  //     if (this.isActing) return;
-
-  //     // change direction if character close to edge
-  //     direction = this.character.x < this.spaceEdge.from ? 'right' : this.character.x > this.spaceEdge.to ? 'left' : direction;
-  //     this.isActing = true;
-  //     this.playAnimation(`walk-${direction}`);
-  //     this.moveDirection(direction, defaultMoveDistance, () => {
-
-  //         // reset action after moved
-  //         this.isActing = false;
-  //         this.handleDefaultIdleAction();
-  //     });
-  // }
+  public startTamagotchi() {
+    this.isReady = true;
+  }
+  public stopTamagotchi() {
+    this.isReady = false;
+  }
 
   public runFuntionalAction(
     action: string,
@@ -236,11 +194,11 @@ export class TamagotchiCharacter extends Character {
     const { point, dialogs } = this.functionalAction[action];
 
     if (point) {
-      const currentHp = this.status.hp + point;
+      const currentHp = this.hp + point;
 
       // TODO: change hp
-      this.status.hp = currentHp >= 100 ? 100 : currentHp <= 0 ? 0 : currentHp;
-      this.callbackFunctions.onHpChange(this.status.hp);
+      this.hp = currentHp >= 100 ? 100 : currentHp <= 0 ? 0 : currentHp;
+      setGlobalData('tamagotchi_hp', this.hp);
     }
 
     const runAnimation = async () => {
@@ -299,11 +257,11 @@ export class TamagotchiCharacter extends Character {
 
   private xSec = defaultXSec;
 
-  public characterHandler(time: number) {
+  public update(time: number) {
     if (!this.isReady) return;
-    // update position trigger at every frame
+    
     if (this.isActing) {
-      this.updatePosition();
+      this.updatePosition(); // update position trigger at every frame
     }
 
     // run handler every x secs
@@ -320,11 +278,11 @@ export class TamagotchiCharacter extends Character {
         }
 
         if (!this.isSleep) {
-          this.handleDecreaseHpByTime();
+          this.handleChangeHp(defaultDecreaseHpByTime);
           this.handleAutomaticAction();
         }
       } else {
-        this.handleRecoverHpByTime();
+        this.handleChangeHp(defaultRecoverHpByTime);
         this.handleUnavailableAction();
       }
     }

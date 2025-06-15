@@ -1,15 +1,14 @@
 import { useRef, useState } from "react";
-import { PhaserGameRef, PhaserGame } from "./game/PhaserGame";
+import { PhaserGame } from "./PhaserGame";
 import useTwitchOauth from "./hooks/useTwitchOauth";
-import { EventBus } from "./game/EventBus";
+import { EventBus, setGlobalData, getGlobalData } from './game/EventBus';
 import Console from "./game/Console";
 
 const isDev = import.meta.env['VITE_ENV'] === 'dev';
 
 
 function App() {
-  const phaserRef = useRef<PhaserGameRef | null>(null);
-  const [ isGameStart, setIsGameStart ] = useState(false)
+  const [ isGameStart, setIsGameStart ] = useState(true);
   const { twitchState, startOauthConnect, startWebsocket } = useTwitchOauth();
   const [ record, setRecord ] = useState<{user?: string, content?: string}[]>([]);
   const recordRef = useRef<{user?: string, content?: string}[]>([]);
@@ -27,7 +26,11 @@ function App() {
   }
 
   const handleClickManualBattle = (user: string, content: string) => {
-    EventBus.emit('queue', {user, content});
+    setGlobalData('message_queue', [
+      ...getGlobalData('message_queue'),
+      { user, content }
+    ]);
+    // EventBus.emit('global-event', '123');
   }
 
   
@@ -39,7 +42,7 @@ function App() {
           !twitchState &&
           <button className="button" onClick={startOauthConnect}>Twitch login</button>
         }
-        { twitchState &&
+        {/* { twitchState && */}
           <div style={{ position: 'relative' }}>
             { !isGameStart &&
               <button
@@ -52,12 +55,18 @@ function App() {
             <div style={{ opacity: !isGameStart ? 0.5 : 1, pointerEvents: isGameStart ? 'auto': 'none' }}>
               <Console>
                 { isGameStart &&
-                  <PhaserGame ref={phaserRef} currentActiveScene={undefined} />
+                  <PhaserGame />
                 }
               </Console>
+              <button onClick={() => {
+                EventBus.emit('global-data-updated', {
+                  key: 'tamagotchi_hp',
+                  value: Math.floor(Math.random() * 100)
+                });
+              }}>change</button>
             </div>
           </div>
-        }
+        {/* } */}
         { isDev && isGameStart &&
           <div style={{ position: 'fixed', bottom: 0, left: 0, width: '100%' }}>
             <div style={{ display: 'flex', gap: '12px', alignItems: 'center', justifyContent: 'center', marginBottom: '12px' }}>
@@ -65,6 +74,7 @@ function App() {
               <button className="button" onClick={() => handleClickManualBattle('test', 'demo_live')}>HP=100</button>
             </div>
             <div style={{ display: 'flex', gap: '12px', alignItems: 'center', justifyContent: 'center' }}>
+              <button className="button" onClick={() => handleClickManualBattle('test', '補充水分')}>補充水分</button>
               <button className="button" onClick={() => handleClickManualBattle('test', '貝貝打招呼')}>battle 貝貝</button>
               <button className="button" onClick={() => handleClickManualBattle('test', '上上打招呼')}>battle 上上</button>
               <button className="button" onClick={() => handleClickManualBattle('bloloblolo', '貝貝打招呼')}>battle BBB</button>

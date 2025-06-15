@@ -1,22 +1,21 @@
 import Phaser from 'phaser';
+import { getGlobalData } from '../../../EventBus';
 
-type TOption = {
-  x: number;
-  y: number;
-  value: number;
-};
+const DEFAULT_COIN = 888;
 
-export class HeaderCoin extends Phaser.GameObjects.Container {
+export class IconCoin extends Phaser.GameObjects.Container {
   private text: Phaser.GameObjects.Text;
   private value: number;
 
-  constructor(scene: Phaser.Scene, option: TOption) {
-    // Inherite from scene
+  constructor(scene: Phaser.Scene, option: { x: number, y: number }) {
     super(scene);
 
-    const { x, y, value } = option;
-
-    this.value = value;
+    this.value = typeof getGlobalData('tamagotchi_coin') !== 'undefined' ?
+      getGlobalData('tamagotchi_coin')
+      :
+      DEFAULT_COIN;
+    
+    const { x, y } = option;
 
     // Icon
     const coin = scene.make.sprite({
@@ -57,15 +56,11 @@ export class HeaderCoin extends Phaser.GameObjects.Container {
   private targetValue?: number;
 
   public setValue(value: number) {
-    // if (this.targetValue) return; // return when value still running
-
     const resultValue = value <= 0 ? 0 : value;
     this.targetValue = resultValue;
   }
 
   public addValue(value: number) {
-    // if (this.targetValue) return; // return when value still running
-
     const sum = this.value + value;
     const resultValue = sum <= 0 ? 0 : sum;
 
