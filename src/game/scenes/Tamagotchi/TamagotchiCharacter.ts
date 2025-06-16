@@ -245,6 +245,8 @@ export class TamagotchiCharacter extends Character {
 
     runAnimation();
 
+    console.log(action, this.functionalAction[action]);
+
     // send dialog back to tamagottchi
     if (dialogs) {
       const { dialog } =

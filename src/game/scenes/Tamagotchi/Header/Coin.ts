@@ -1,11 +1,12 @@
 import Phaser from 'phaser';
-import { getGlobalData } from '../../../EventBus';
+import { getGlobalData, EventBus } from '../../../EventBus';
 
 const DEFAULT_COIN = 888;
 
 export class IconCoin extends Phaser.GameObjects.Container {
   private text: Phaser.GameObjects.Text;
   private value: number;
+  private targetValue: number | undefined;
 
   constructor(scene: Phaser.Scene, option: { x: number, y: number }) {
     super(scene);
@@ -15,6 +16,9 @@ export class IconCoin extends Phaser.GameObjects.Container {
       :
       DEFAULT_COIN;
     
+    // Watch coin change
+    EventBus.on('tamagotchi_coin-updated', (value) => { this.targetValue = value });
+      
     const { x, y } = option;
 
     // Icon
@@ -53,7 +57,6 @@ export class IconCoin extends Phaser.GameObjects.Container {
     this.text.setText(this.value.toString());
   }
 
-  private targetValue?: number;
 
   public setValue(value: number) {
     const resultValue = value <= 0 ? 0 : value;

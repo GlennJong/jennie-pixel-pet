@@ -12,7 +12,11 @@ const DEFAULT_TAMAGOTCHI_POSITION = {
   edge: { from: 50, to: 120 }
 }
 
+const WIN_COIN = 10;
+const LOSE_COIN = -5;
+
 const DEFAULT_USER = 'user';
+const HEADER_DISPLAY_DURATION = 10000;
 
 export default class Tamagotchi extends Scene {
   private background: Phaser.GameObjects.Image;
@@ -69,23 +73,34 @@ export default class Tamagotchi extends Scene {
     (async() => {
       await sceneStarter(this);
       this.character.startTamagotchi();
+
+
+      this.handleBattleAward(); // handle battle reward
     })();
 
-    this.handleBattleAward();
 
   }
 
-  private handleBattleAward = () => {
+  private handleBattleAward = async () => {
     const battleResult = getGlobalData('battle_result');
+    console.log({battleResult})
     if (battleResult === 'win') {
-      // this.character.runFuntionalAction('win');
-      setGlobalData('tamagotchi_coin', getGlobalData('tamagotchi_coin') + 100);
+      const result = this.character.runFuntionalAction('win');
+      if (result) {
+        await this.dialogue.runDialog(result.dialog);
+      }
+      setGlobalData('tamagotchi_coin', getGlobalData('tamagotchi_coin') + WIN_COIN);
+      this.header.showHeader(HEADER_DISPLAY_DURATION);
     }
     else if (battleResult === 'lose') {
-      // this.character.runFuntionalAction('lost');
-      setGlobalData('tamagotchi_coin', getGlobalData('tamagotchi_coin') - 10);
+      const result = this.character.runFuntionalAction('lose');
+      if (result) {
+        await this.dialogue.runDialog(result.dialog);
+      }
+      setGlobalData('tamagotchi_coin', getGlobalData('tamagotchi_coin') + LOSE_COIN);
+      this.header.showHeader(HEADER_DISPLAY_DURATION);
     }
-    setGlobalData('battle_result', null);
+    setGlobalData('battle_result', 'null');
   }
 
   private handleConvertActionQueue = (queue, mapping) => {
@@ -105,11 +120,11 @@ export default class Tamagotchi extends Scene {
 
   private handleActionQueue = async () => {
     this.isActionRunning = true;
-    console.log(this.actionQueue);
     const { user, action, params } = this.actionQueue[0];
 
     const _run = async () => {
       const result = this.character.runFuntionalAction(action);
+      this.header.showHeader(HEADER_DISPLAY_DURATION);
 
       if (result) {
         const currentDialog = result.dialog.map((_item) => ({

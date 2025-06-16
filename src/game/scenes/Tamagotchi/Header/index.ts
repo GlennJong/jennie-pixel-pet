@@ -20,7 +20,7 @@ export class Header extends Phaser.GameObjects.Container {
   public currentSelector: string = selectors[0];
   private selectors: { [key: string]: HeaderSelector } = {};
   private iconHp: IconHp;
-  private coin: HeaderCoin;
+  private coin: IconCoin;
   private timer: number | undefined;
 
   constructor(scene: Phaser.Scene) {
@@ -99,8 +99,8 @@ export class Header extends Phaser.GameObjects.Container {
     this.iconHp = new IconHp(scene, { x: 106, y: 13 });
     this.add(this.iconHp);
 
-    this.coin = new IconCoin(scene, { x: 134, y: 13 });
-    this.add(this.coin);
+    this.iconCoin = new IconCoin(scene, { x: 134, y: 13 });
+    this.add(this.iconCoin);
 
     this.currentSelector = 'drink';
     this.handleUpdateSelector();
@@ -167,7 +167,7 @@ export class Header extends Phaser.GameObjects.Container {
 
   public update() {
     this.iconHp.update();
-    this.coin.update();
+    this.iconCoin.update();
   }
 
 }

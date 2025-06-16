@@ -1574,6 +1574,90 @@
             "piority": 2
           }
         ]
+      },
+      "awake": {
+        "animation": "awake",
+        "point": 0,
+        "dialogs": [
+          {
+            "dialog": [
+              {
+                "face": {
+                  "key": "tamagotchi_character_afk",
+                  "frame": "face_normal"
+                },
+                "text": "起床了"
+              }
+            ],
+            "piority": 2
+          }
+        ]
+      },
+      "win": {
+        "animation": "none",
+        "point": 0,
+        "dialogs": [
+          {
+            "dialog": [
+              {
+                "face": {
+                  "key": "tamagotchi_character_afk",
+                  "frame": "face_normal"
+                },
+                "text": "我贏了！賺到零用錢！"
+              }
+            ],
+            "piority": 2
+          }
+        ]
+      },
+      "lose": {
+        "animation": "none",
+        "point": 0,
+        "dialogs": [
+          {
+            "dialog": [
+              {
+                "face": {
+                  "key": "tamagotchi_character_afk",
+                  "frame": "face_sad"
+                },
+                "text": "輸了，零用錢不見了"
+              }
+            ],
+            "piority": 2
+          }
+        ]
+      },
+      "upgrade": {
+        "animation": "none",
+        "point": 0,
+        "dialogs": [
+          {
+            "dialog": [
+              {
+                "face": {
+                  "key": "tamagotchi_character_afk",
+                  "frame": "face_normal"
+                },
+                "text": "用賺來的錢錢買東西！"
+              }
+            ],
+            "piority": 2
+          },
+          {
+            "dialog": [
+              {
+                "face": {
+                  "key": "tamagotchi_character_afk",
+                  "frame": "face_normal"
+                },
+                "text": "把錢錢變成喜歡的樣子！"
+              }
+            ],
+            "piority": 4
+          }
+        ]
       }
     }
   },

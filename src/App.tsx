@@ -58,12 +58,6 @@ function App() {
                   <PhaserGame />
                 }
               </Console>
-              <button onClick={() => {
-                EventBus.emit('global-data-updated', {
-                  key: 'tamagotchi_hp',
-                  value: Math.floor(Math.random() * 100)
-                });
-              }}>change</button>
             </div>
           </div>
         {/* } */}

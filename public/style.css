@@ -1,9 +1,4 @@
 @font-face {
-  font-family: "cubic-11";
-  font-weight: 600;
-  src: url("/fonts/Cubic_11.ttf");
-}
-@font-face {
   font-family: "BoutiqueBitmap";
   /* font-weight: 600; */
   src: url("/fonts/BoutiqueBitmap9x9.ttf");
@@ -15,7 +10,7 @@ body {
   color: rgba(255, 255, 255, 0.87);
   /* background-color: hsla(240, 100%, 96%, 0.75); */
   background-color: #482e79;
-  font-family: "cubic-11", Arial, Helvetica, sans-serif;
+  font-family: "BoutiqueBitmap", Arial, Helvetica, sans-serif;
 }
 
 #app {

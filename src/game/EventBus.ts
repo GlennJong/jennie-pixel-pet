@@ -74,7 +74,7 @@ export function setGlobalData<K extends keyof GlobalState>(key: K, value: Global
         EventBus.emit(`${key}-updated`, value);
         console.log(`Global data updated: ${key} = ${value} (from ${oldValue})`);
         // Automatically save game state after any global data change
-        saveGame();
+        // saveGame();
     } else {
         console.warn(`Attempted to set unknown global data key: ${key}`);
     }

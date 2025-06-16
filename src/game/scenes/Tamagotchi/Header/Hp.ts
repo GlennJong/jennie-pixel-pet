@@ -2,6 +2,8 @@ import Phaser from 'phaser';
 import { EventBus, getGlobalData } from '../../../EventBus';
 
 const DEFAULT = 88;
+const FONT_FAMILY = 'Tiny5';
+const FONT_SIZE = 8;
 
 export class IconHp extends Phaser.GameObjects.Container {
   private icon: Phaser.GameObjects.Sprite;
@@ -87,7 +89,7 @@ export class IconHp extends Phaser.GameObjects.Container {
     this.text = scene.make.text({
       x: x + 6,
       y: y - 4,
-      style: { fontFamily: 'Tiny5', fontSize: 8, color: '#000' },
+      style: { fontFamily: FONT_FAMILY, fontSize: FONT_SIZE, color: '#000' },
       text: '',
     });
     this.text.setResolution(4);
