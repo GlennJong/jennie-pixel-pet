@@ -1,9 +1,12 @@
 import Phaser, { Scene } from 'phaser';
 import { EventBus, getGlobalData, setGlobalData } from '../../EventBus';
+
 import { PrimaryDialogue } from '../../components/PrimaryDialogue';
-import { Header } from './Header';
-import { TamagotchiCharacter } from './TamagotchiCharacter';
 import { sceneConverter, sceneStarter } from '../../components/CircleSceneTransition';
+
+import { Header } from './Header';
+import { Property } from './Property';
+import { TamagotchiCharacter } from './TamagotchiCharacter';
 import KeyboardHandler from './KeyboardHander';
 
 const DEFAULT_TAMAGOTCHI_POSITION = {
@@ -21,6 +24,7 @@ const HEADER_DISPLAY_DURATION = 10000;
 export default class Tamagotchi extends Scene {
   private background: Phaser.GameObjects.Image;
   private header: Header;
+  private property: Property;
   private character: TamagotchiCharacter;
   private dialogue: PrimaryDialogue;
   private keyboardHandler: KeyboardHandler;
@@ -55,9 +59,14 @@ export default class Tamagotchi extends Scene {
     // Build Tamagotchi Charactor
     this.character = new TamagotchiCharacter(this, DEFAULT_TAMAGOTCHI_POSITION);
 
+    // Build Property
+    this.property = new Property(this);
+    this.add.existing(this.property);
+
     // Build Header
     this.header = new Header(this);
     this.add.existing(this.header);
+
 
     // Build Keyboard
     this.keyboardHandler = new KeyboardHandler(this, {
@@ -83,7 +92,6 @@ export default class Tamagotchi extends Scene {
 
   private handleBattleAward = async () => {
     const battleResult = getGlobalData('battle_result');
-    console.log({battleResult})
     if (battleResult === 'win') {
       const result = this.character.runFuntionalAction('win');
       if (result) {
@@ -155,6 +163,7 @@ export default class Tamagotchi extends Scene {
     // compoents
     this.character.update(time);
     this.header.update();
+    this.property.update();
     this.keyboardHandler.update();
 
     // functions
@@ -167,6 +176,7 @@ export default class Tamagotchi extends Scene {
     this.character.destroy()
     this.background.destroy();
     this.header.destroy();
+    this.property.destroy();
     this.keyboardHandler.destroy();
 
     // store

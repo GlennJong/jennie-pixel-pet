@@ -58,6 +58,9 @@ function App() {
                   <PhaserGame />
                 }
               </Console>
+              <button onClick={() => setGlobalData('tamagotchi_level', 4)}>
+                click
+              </button>
             </div>
           </div>
         {/* } */}

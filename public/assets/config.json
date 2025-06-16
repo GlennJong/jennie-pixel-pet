@@ -10,28 +10,24 @@
     },
     "decoration": [
       {
-        "left": "room_left_1",
-        "right": "room_right_1",
-        "front": "room_front_1",
-        "back": "room_back_1"
+        "key": "tamagotchi_room",
+        "frame": "customized_1"
       },
       {
-        "left": "room_left_2",
-        "right": "room_right_2",
-        "front": "room_front_2",
-        "back": "room_back_2"
+        "key": "tamagotchi_room",
+        "frame": "customized_2"
       },
       {
-        "left": "room_left_2",
-        "right": "room_right_3",
-        "front": "room_front_3",
-        "back": "room_back_3"
+        "key": "tamagotchi_room",
+        "frame": "customized_3"
       },
       {
-        "left": "room_left_2",
-        "right": "room_right_4",
-        "front": "room_front_3",
-        "back": "room_back_4"
+        "key": "tamagotchi_room",
+        "frame": "customized_4"
+      },
+      {
+        "key": "tamagotchi_room",
+        "frame": "customized_5"
       }
     ],
     "recorder": { "prefix": "recorder", "qty": 1, "freq": 1, "repeat": -1 },

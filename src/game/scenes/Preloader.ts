@@ -109,26 +109,8 @@ export class Preloader extends Scene {
         'tamagotchi/header/icons.png',
         'tamagotchi/header/icons.json',
       );
-      this.load.image('tamagotchi_room', 'tamagotchi/room.png');
-      this.load.image('tamagotchi_room_desk', 'tamagotchi/desk.png');
-      this.load.atlas(
-        'tamagotchi_room_window',
-        'tamagotchi/window/spritesheet.png',
-        'tamagotchi/window/spritesheet.json',
-      );
-      this.load.atlas(
-        'tamagotchi_room_recorder',
-        'tamagotchi/recorder/spritesheet.png',
-        'tamagotchi/recorder/spritesheet.json',
-      );
-      this.load.atlas(
-        'tamagotchi_character_afk',
-        'tamagotchi/character/spritesheet.png',
-        'tamagotchi/character/spritesheet.json',
-      );
 
       // Battle
-      this.load.image('battle_background', 'battle/background.png');
       this.load.atlas('battle_board', 'battle/board.png', 'battle/board.json');
       this.load.atlas('battle_afk', 'battle/afk.png', 'battle/afk.json');
 
@@ -139,7 +121,6 @@ export class Preloader extends Scene {
         'dialogue/frame.json',
       );
 
-      this.load.image('background-room', 'background-room.png');
       this.load.image('transition-cover', 'transition-cover.png');
       this.load.atlas('frame', 'ui/frame.png', 'ui/frame.json');
 
