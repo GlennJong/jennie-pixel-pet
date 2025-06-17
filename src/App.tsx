@@ -38,10 +38,10 @@ function App() {
     <div id="app">
       
       <div style={{ zIndex: 1, position: "relative" }}>
-        {
+        {/* {
           !twitchState &&
           <button className="button" onClick={startOauthConnect}>Twitch login</button>
-        }
+        } */}
         {/* { twitchState && */}
           <div style={{ position: 'relative' }}>
             { !isGameStart &&
@@ -58,17 +58,21 @@ function App() {
                   <PhaserGame />
                 }
               </Console>
-              <button onClick={() => setGlobalData('tamagotchi_level', 4)}>
-                click
-              </button>
             </div>
           </div>
         {/* } */}
         { isDev && isGameStart &&
           <div style={{ position: 'fixed', bottom: 0, left: 0, width: '100%' }}>
             <div style={{ display: 'flex', gap: '12px', alignItems: 'center', justifyContent: 'center', marginBottom: '12px' }}>
-              <button className="button" onClick={() => handleClickManualBattle('test', 'demo_dead')}>HP=3</button>
-              <button className="button" onClick={() => handleClickManualBattle('test', 'demo_live')}>HP=100</button>
+              <button className="button" onClick={() => setGlobalData('tamagotchi_level', 1)}>
+                level=1
+              </button>
+              <button className="button" onClick={() => setGlobalData('tamagotchi_coin', 0)}>
+                coin=0
+              </button>
+              <button className="button" onClick={() => setGlobalData('tamagotchi_coin', getGlobalData('tamagotchi_coin') + 20)}>
+                coin+20
+              </button>
             </div>
             <div style={{ display: 'flex', gap: '12px', alignItems: 'center', justifyContent: 'center' }}>
               <button className="button" onClick={() => handleClickManualBattle('test', '補充水分')}>補充水分</button>

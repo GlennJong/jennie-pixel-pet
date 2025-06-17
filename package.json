@@ -10,9 +10,9 @@
   ],
   "scripts": {
     "dev": "vite --config vite.config.js",
-    "serve": "vite serve ./dist",
+    "serve": "vite --config vite.config.js serve ./dist",
     "format": "prettier . --write",
-    "build": "vite build --config vite.config.js"
+    "build": "vite build --config vite.config.js --mode prod"
   },
   "dependencies": {
     "phaser": "^3.80.1",

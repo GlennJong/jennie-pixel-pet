@@ -16,7 +16,7 @@ export class CustomDecroation extends Phaser.GameObjects.Container {
 
     this.maxLevel = decoration.length;
     
-    this.currentLevel = getGlobalData('tamagotchi_level') || DEFAULT_LEVEL;
+    this.currentLevel = Math.min(this.maxLevel, getGlobalData('tamagotchi_level') || DEFAULT_LEVEL);
 
     // Item
     this.item = scene.make.sprite({
@@ -31,11 +31,9 @@ export class CustomDecroation extends Phaser.GameObjects.Container {
 
     // Watch level change
     EventBus.on('tamagotchi_level-updated', (value) => {
-      console.log('work');
-      this.currentLevel = value;
+      this.currentLevel = Math.min(this.maxLevel, value);
       this.item.setTexture(decoration[this.currentLevel - 1].key, decoration[this.currentLevel - 1].frame);
     });
-
   }
 
   public upgrade() {

@@ -191,7 +191,9 @@ export class TamagotchiCharacter extends Character {
   ): { dialog: TDialogData[] } | undefined {
     if (!this.isAlive || this.isActing) return;
 
-    const { point, dialogs } = this.functionalAction[action];
+    const currentAction = action === 'sleep' ? this.isSleep ? 'awake' : 'sleep' : action;
+
+    const { point, dialogs } = this.functionalAction[currentAction];
 
     if (point) {
       const currentHp = this.hp + point;
@@ -202,7 +204,7 @@ export class TamagotchiCharacter extends Character {
     }
 
     const runAnimation = async () => {
-      if (action === 'drink') {
+      if (currentAction === 'drink') {
         this.isActing = true;
         this.isSleep && await this.playAnimation('wake-up');
 
@@ -215,7 +217,7 @@ export class TamagotchiCharacter extends Character {
           this.isActing = false;
         }
         
-      } else if (action === 'write') {
+      } else if (currentAction === 'write') {
         this.isActing = true;
         this.isSleep && await this.playAnimation('wake-up');
 
@@ -228,24 +230,21 @@ export class TamagotchiCharacter extends Character {
           this.isActing = false;
         }
 
-      } else if (action === 'sleep') {
-        this.isSleep = !this.isSleep;
-        if (this.isSleep) {
-          this.isActing = true;
-          await this.playAnimation('lay-down');
-          this.playAnimation('sleep');
-          this.isActing = false;
-        } else {
-          this.isActing = true;
-          await this.playAnimation('wake-up');
-          this.isActing = false;
-        }
+      } else if (currentAction === 'sleep') {
+        this.isActing = true;
+        await this.playAnimation('lay-down');
+        this.playAnimation('sleep');
+        this.isActing = false;
+        this.isSleep = true;
+      } else if (currentAction === 'awake')  {
+        this.isActing = true;
+        await this.playAnimation('wake-up');
+        this.isActing = false;
+        this.isSleep = false;
       }
     };
 
     runAnimation();
-
-    console.log(action, this.functionalAction[action]);
 
     // send dialog back to tamagottchi
     if (dialogs) {

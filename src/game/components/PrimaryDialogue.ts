@@ -107,7 +107,7 @@ export class PrimaryDialogue extends Phaser.GameObjects.Container {
     });
 
     const face = scene.make.sprite({
-      key: "tamagotchi_character_afk",
+      key: "tamagotchi_afk",
       frame: "face_normal",
     });
 

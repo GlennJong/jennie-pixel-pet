@@ -51,10 +51,11 @@ export default class Tamagotchi extends Scene {
     // Convert queue from message queue
     const mapping = this.cache.json.get('config').tamagotchi_action_mapping;
     EventBus.on('message_queue-updated', (queue) => this.handleConvertActionQueue(queue, mapping));
+
+    // handle update coin and level
+    const decoration = this.cache.json.get('config').tamagotchi_room.decoration;
+    EventBus.on('tamagotchi_coin-updated', (coin) => this.handleBuyDecoration(coin, decoration));
     
-    // Build Dialogue
-    this.dialogue = new PrimaryDialogue(this);
-    this.add.existing(this.dialogue);
 
     // Build Tamagotchi Charactor
     this.character = new TamagotchiCharacter(this, DEFAULT_TAMAGOTCHI_POSITION);
@@ -67,6 +68,9 @@ export default class Tamagotchi extends Scene {
     this.header = new Header(this);
     this.add.existing(this.header);
 
+    // Build Dialogue
+    this.dialogue = new PrimaryDialogue(this);
+    this.add.existing(this.dialogue);
 
     // Build Keyboard
     this.keyboardHandler = new KeyboardHandler(this, {
@@ -82,8 +86,6 @@ export default class Tamagotchi extends Scene {
     (async() => {
       await sceneStarter(this);
       this.character.startTamagotchi();
-
-
       this.handleBattleAward(); // handle battle reward
     })();
 
@@ -123,6 +125,22 @@ export default class Tamagotchi extends Scene {
       }
     }
     setGlobalData('message_queue', []);
+  }
+
+  private handleBuyDecoration = async (coin, decoration) => {
+    for(let i = 0; i < decoration.length; i++) {
+      const { cost, level } = decoration[i];
+      if (coin >= cost && getGlobalData('tamagotchi_level') < level) {
+        const result = this.character.runFuntionalAction('buy');
+        if (result) {
+          await this.dialogue.runDialog(result.dialog);
+          this.header.showHeader(HEADER_DISPLAY_DURATION);
+          setGlobalData('tamagotchi_level', getGlobalData('tamagotchi_level') + 1);
+          setGlobalData('tamagotchi_coin', getGlobalData('tamagotchi_coin') - cost);
+          return;
+        }
+      }
+    }
   }
 
 

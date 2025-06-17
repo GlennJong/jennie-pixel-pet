@@ -11,23 +11,33 @@
     "decoration": [
       {
         "key": "tamagotchi_room",
-        "frame": "customized_1"
+        "frame": "customized_1",
+        "cost": 0,
+        "level": 1
       },
       {
         "key": "tamagotchi_room",
-        "frame": "customized_2"
+        "frame": "customized_2",
+        "cost": 100,
+        "level": 2
       },
       {
         "key": "tamagotchi_room",
-        "frame": "customized_3"
+        "frame": "customized_3",
+        "cost": 100,
+        "level": 3
       },
       {
         "key": "tamagotchi_room",
-        "frame": "customized_4"
+        "frame": "customized_4",
+        "cost": 100,
+        "level": 4
       },
       {
         "key": "tamagotchi_room",
-        "frame": "customized_5"
+        "frame": "customized_5",
+        "cost": 100,
+        "level": 5
       }
     ],
     "recorder": { "prefix": "recorder", "qty": 1, "freq": 1, "repeat": -1 },
@@ -1507,7 +1517,7 @@
             "dialog": [
               {
                 "face": {
-                  "key": "tamagotchi_character_afk",
+                  "key": "tamagotchi_afk",
                   "frame": "face_normal"
                 },
                 "text": "感謝{{user_name}}兌換\n補充喝水，為AFK增加了 10 點生命！"
@@ -1525,7 +1535,7 @@
             "dialog": [
               {
                 "face": {
-                  "key": "tamagotchi_character_afk",
+                  "key": "tamagotchi_afk",
                   "frame": "face_normal"
                 },
                 "text": "{{user_name}}兌換\n打招呼！\n有人來挑戰了！"
@@ -1543,7 +1553,7 @@
             "dialog": [
               {
                 "face": {
-                  "key": "tamagotchi_character_afk",
+                  "key": "tamagotchi_afk",
                   "frame": "face_normal"
                 },
                 "text": "感謝 {{user_name}} 兌換\n存檔紀錄，為AFK增加了 10 點生命！"
@@ -1561,7 +1571,7 @@
             "dialog": [
               {
                 "face": {
-                  "key": "tamagotchi_character_afk",
+                  "key": "tamagotchi_afk",
                   "frame": "face_normal"
                 },
                 "text": "休息一下"
@@ -1579,7 +1589,7 @@
             "dialog": [
               {
                 "face": {
-                  "key": "tamagotchi_character_afk",
+                  "key": "tamagotchi_afk",
                   "frame": "face_normal"
                 },
                 "text": "起床了"
@@ -1597,7 +1607,7 @@
             "dialog": [
               {
                 "face": {
-                  "key": "tamagotchi_character_afk",
+                  "key": "tamagotchi_afk",
                   "frame": "face_normal"
                 },
                 "text": "我贏了！賺到零用錢！"
@@ -1615,7 +1625,7 @@
             "dialog": [
               {
                 "face": {
-                  "key": "tamagotchi_character_afk",
+                  "key": "tamagotchi_afk",
                   "frame": "face_sad"
                 },
                 "text": "輸了，零用錢不見了"
@@ -1625,7 +1635,7 @@
           }
         ]
       },
-      "upgrade": {
+      "buy": {
         "animation": "none",
         "point": 0,
         "dialogs": [
@@ -1633,7 +1643,7 @@
             "dialog": [
               {
                 "face": {
-                  "key": "tamagotchi_character_afk",
+                  "key": "tamagotchi_afk",
                   "frame": "face_normal"
                 },
                 "text": "用賺來的錢錢買東西！"
@@ -1645,7 +1655,7 @@
             "dialog": [
               {
                 "face": {
-                  "key": "tamagotchi_character_afk",
+                  "key": "tamagotchi_afk",
                   "frame": "face_normal"
                 },
                 "text": "把錢錢變成喜歡的樣子！"
