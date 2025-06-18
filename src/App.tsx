@@ -3,6 +3,7 @@ import { PhaserGame } from "./PhaserGame";
 import useTwitchOauth from "./hooks/useTwitchOauth";
 import { EventBus, setGlobalData, getGlobalData } from './game/EventBus';
 import Console from "./game/Console";
+import ColorPicker from './ColorPicker';
 
 const isDev = import.meta.env['VITE_ENV'] === 'dev';
 
@@ -10,6 +11,7 @@ function App() {
   const [ isGameStart, setIsGameStart ] = useState(false);
   const { twitchState, startOauthConnect, startWebsocket } = useTwitchOauth();
   const [ record, setRecord ] = useState<{user?: string, content?: string}[]>([]);
+  const [ bgColor, setBgColor ] = useState('#482e79');
   const recordRef = useRef<{user?: string, content?: string}[]>([]);
 
   const handleClickConnectButton = async () => {
@@ -34,7 +36,7 @@ function App() {
 
   
   return (
-    <div id="app">
+    <div id="app" style={{ background: bgColor }}>
       
       <div style={{ zIndex: 1, position: "relative" }}>
         {
@@ -89,6 +91,10 @@ function App() {
           </div>
         }
       </div>
+      <ColorPicker
+        defaultColor={bgColor}
+        onChange={color => setBgColor(color)}
+      />
     </div>
   );
 }
