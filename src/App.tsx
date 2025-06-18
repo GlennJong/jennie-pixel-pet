@@ -6,9 +6,8 @@ import Console from "./game/Console";
 
 const isDev = import.meta.env['VITE_ENV'] === 'dev';
 
-
 function App() {
-  const [ isGameStart, setIsGameStart ] = useState(true);
+  const [ isGameStart, setIsGameStart ] = useState(false);
   const { twitchState, startOauthConnect, startWebsocket } = useTwitchOauth();
   const [ record, setRecord ] = useState<{user?: string, content?: string}[]>([]);
   const recordRef = useRef<{user?: string, content?: string}[]>([]);
@@ -38,11 +37,11 @@ function App() {
     <div id="app">
       
       <div style={{ zIndex: 1, position: "relative" }}>
-        {/* {
+        {
           !twitchState &&
           <button className="button" onClick={startOauthConnect}>Twitch login</button>
-        } */}
-        {/* { twitchState && */}
+        }
+        { twitchState &&
           <div style={{ position: 'relative' }}>
             { !isGameStart &&
               <button
@@ -60,7 +59,7 @@ function App() {
               </Console>
             </div>
           </div>
-        {/* } */}
+        }
         { isDev && isGameStart &&
           <div style={{ position: 'fixed', bottom: 0, left: 0, width: '100%' }}>
             <div style={{ display: 'flex', gap: '12px', alignItems: 'center', justifyContent: 'center', marginBottom: '12px' }}>
@@ -78,9 +77,6 @@ function App() {
               <button className="button" onClick={() => handleClickManualBattle('test', '補充水分')}>補充水分</button>
               <button className="button" onClick={() => handleClickManualBattle('test', '貝貝打招呼')}>battle 貝貝</button>
               <button className="button" onClick={() => handleClickManualBattle('test', '上上打招呼')}>battle 上上</button>
-              <button className="button" onClick={() => handleClickManualBattle('bloloblolo', '貝貝打招呼')}>battle BBB</button>
-              <button className="button" onClick={() => handleClickManualBattle('touching0212', '貝貝打招呼')}>battle 踏青</button>
-              <button className="button" onClick={() => handleClickManualBattle('curry_cat', '貝貝打招呼')}>battle curry_cat</button>
             </div>
             <div>
               { twitchState && JSON.stringify(twitchState) }
@@ -92,7 +88,6 @@ function App() {
             </div>
           </div>
         }
-        
       </div>
     </div>
   );

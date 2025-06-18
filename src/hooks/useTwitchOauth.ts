@@ -10,9 +10,8 @@ import { TWITCH_WS_URL } from "./constants";
 import { TwitchOauthLoginState, TwitchUserState, TwitchWsMessagePayload } from "./types";
 
 // constants
-const isDev = import.meta.env['VITE_ENV'] === 'dev';
 const client_id = import.meta.env['VITE_TWITCH_CLIENT_ID'];
-const redirect_uri = import.meta.env[ isDev ? 'VITE_DEV_TWITCH_OAUTH_REDIRECT_URI' : 'VITE_PRO_TWITCH_OAUTH_REDIRECT_URI'];
+const redirect_uri = import.meta.env['VITE_TWITCH_OAUTH_REDIRECT_URI'];
 
 type ConnectMode = 'chat' | 'channel_point';
 

@@ -12,7 +12,8 @@
     "dev": "vite --config vite.config.js",
     "serve": "vite --config vite.config.js serve ./dist",
     "format": "prettier . --write",
-    "build": "vite build --config vite.config.js --mode prod"
+    "build:dev": "vite build --config vite.config.js --mode dev",
+    "build:prod": "vite build --config vite.config.js --mode prod"
   },
   "dependencies": {
     "phaser": "^3.80.1",
