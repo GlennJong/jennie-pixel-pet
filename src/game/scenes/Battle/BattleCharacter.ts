@@ -54,10 +54,10 @@ const defaultCharacterPosition = {
   opponent: { x: 130, y: 36 },
 };
 
-const defaultShadow = {
-  self: { x: 30, y: 114, size: 24 },
-  opponent: { x: 130, y: 64, size: 16 },
-};
+// const defaultShadow = {
+//   self: { x: 30, y: 114, size: 24 },
+//   opponent: { x: 130, y: 64, size: 16 },
+// };
 
 const defaultStatusBoardPosition = {
   self: { x: 110, y: 80 },

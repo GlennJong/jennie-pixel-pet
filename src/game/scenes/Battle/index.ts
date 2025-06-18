@@ -35,7 +35,6 @@ export default class Battle extends Scene {
 
     const opponent = getGlobalData('battle_opponent') || 'default';
 
-    console.log({ opponent })
     // init characters
     this.opponent = new BattleCharacter(
       this,
@@ -60,6 +59,7 @@ export default class Battle extends Scene {
     sceneStarter(this);
     this.handleStartGameScene();
 
+    this.events.on('shutdown', this.shutdown, this);
   }
 
   update() {
@@ -164,5 +164,9 @@ export default class Battle extends Scene {
     this.self.board.setAlpha(1);
     this.opponent.board.setAlpha(1);
 
+  }
+  shutdown() {
+    this.opponent.destroy();
+    this.self.destroy();
   }
 }

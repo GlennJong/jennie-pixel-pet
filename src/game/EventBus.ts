@@ -96,14 +96,14 @@ export function setupGlobalEventListener(sceneInstance: Phaser.Scene & {
                 sceneInstance.globalEventStatusText.setText(`Global Event: ${message}`);
                 sceneInstance.globalEventCounter++;
             }
-            console.log(`${sceneInstance.sys.settings.key} received global-event:`, message);
+            // console.log(`${sceneInstance.sys.settings.key} received global-event:`, message);
         };
 
         EventBus.on('global-event', sceneInstance._globalEventHandler, sceneInstance);
 
         sceneInstance.events.on('shutdown', () => {
             EventBus.off('global-event', sceneInstance._globalEventHandler, sceneInstance);
-            console.log(`${sceneInstance.sys.settings.key} shutdown: global-event listener removed.`);
+            // console.log(`${sceneInstance.sys.settings.key} shutdown: global-event listener removed.`);
             delete sceneInstance._globalEventHandler;
         });
     }

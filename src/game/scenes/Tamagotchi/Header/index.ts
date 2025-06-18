@@ -170,4 +170,10 @@ export class Header extends Phaser.GameObjects.Container {
     this.iconCoin.update();
   }
 
+  public destroy() {
+    this.iconHp.destroy();
+    this.iconCoin.destroy();
+    clearTimeout(this.timer);
+  }
+
 }

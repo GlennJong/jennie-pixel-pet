@@ -30,6 +30,7 @@ export default class Tamagotchi extends Scene {
   private keyboardHandler: KeyboardHandler;
 
   private actionQueue: { user: string; action: string }[] = [];
+  private isStart: boolean = false;
   private isActionRunning: boolean = false;
   
   constructor() {
@@ -49,14 +50,11 @@ export default class Tamagotchi extends Scene {
     this.actionQueue = getGlobalData('tamagotchi_queue') || [];
 
     // Convert queue from message queue
-    const mapping = this.cache.json.get('config').tamagotchi_action_mapping;
-    EventBus.on('message_queue-updated', (queue) => this.handleConvertActionQueue(queue, mapping));
+    EventBus.on('message_queue-updated', this.handleConvertActionQueue);
 
     // handle update coin and level
-    const decoration = this.cache.json.get('config').tamagotchi_room.decoration;
-    EventBus.on('tamagotchi_coin-updated', (coin) => this.handleBuyDecoration(coin, decoration));
+    EventBus.on('tamagotchi_coin-updated', this.handleBuyDecoration);
     
-
     // Build Tamagotchi Charactor
     this.character = new TamagotchiCharacter(this, DEFAULT_TAMAGOTCHI_POSITION);
 
@@ -74,22 +72,34 @@ export default class Tamagotchi extends Scene {
 
     // Build Keyboard
     this.keyboardHandler = new KeyboardHandler(this, {
-      onLeft: () => this.header.movePrev(),
-      onRight: () => this.header.moveNext(),
-      onSpace: () => {
-        const action = this.header.select();
-        this.actionQueue.push({ user: DEFAULT_USER, action });
-      },
+      onLeft: () => this.handleControlButton('left'),
+      onRight: () => this.handleControlButton('right'),
+      onSpace: () => this.handleControlButton('space')
     });
+
+    // outside controller
+    EventBus.on('trigger-button', this.handleControlButton);
     
     // Run opening scene and start tamagotchi
     (async() => {
       await sceneStarter(this);
+      await this.handleBattleAward(); // handle battle reward
       this.character.startTamagotchi();
-      this.handleBattleAward(); // handle battle reward
+      this.isStart = true;
     })();
 
+    this.events.on('shutdown', this.shutdown, this);
+  }
 
+  private handleControlButton = (key) => {
+    if (key === 'left' ) {
+      this.header.movePrev()
+    } else if (key === 'right') {
+      this.header.moveNext()
+    } else if (key === 'space') {
+      const action = this.header.select();
+      this.actionQueue.push({ user: DEFAULT_USER, action });
+    }
   }
 
   private handleBattleAward = async () => {
@@ -113,8 +123,10 @@ export default class Tamagotchi extends Scene {
     setGlobalData('battle_result', 'null');
   }
 
-  private handleConvertActionQueue = (queue, mapping) => {
+  private handleConvertActionQueue = (queue) => {
     if (queue.length === 0) return;
+    const mapping = this.cache.json.get('config').tamagotchi_action_mapping;
+
     for(let i = 0; i < queue.length; i++) {
       const { user, content } = queue[i];
       const result = mapping.find(_item => _item.matches.includes(content));
@@ -127,7 +139,9 @@ export default class Tamagotchi extends Scene {
     setGlobalData('message_queue', []);
   }
 
-  private handleBuyDecoration = async (coin, decoration) => {
+  private handleBuyDecoration = async (coin) => {
+    const decoration = this.cache.json.get('config').tamagotchi_room.decoration;
+
     for(let i = 0; i < decoration.length; i++) {
       const { cost, level } = decoration[i];
       if (coin >= cost && getGlobalData('tamagotchi_level') < level) {
@@ -142,7 +156,6 @@ export default class Tamagotchi extends Scene {
       }
     }
   }
-
 
   private handleActionQueue = async () => {
     this.isActionRunning = true;
@@ -177,7 +190,6 @@ export default class Tamagotchi extends Scene {
   }
 
   update(time: number) {
-
     // compoents
     this.character.update(time);
     this.header.update();
@@ -185,17 +197,22 @@ export default class Tamagotchi extends Scene {
     this.keyboardHandler.update();
 
     // functions
-    if (this.actionQueue.length !== 0 && !this.isActionRunning) {
+    if (this.actionQueue.length !== 0 && !this.isActionRunning && this.isStart) {
       this.handleActionQueue();
     }
   }
 
-  shutdown() {
+  shutdown = () => {
+    this.isActionRunning = false;
     this.character.destroy()
     this.background.destroy();
     this.header.destroy();
     this.property.destroy();
-    this.keyboardHandler.destroy();
+
+    // Event
+    EventBus.off('message_queue-updated', this.handleConvertActionQueue);
+    EventBus.off('tamagotchi_coin-updated', this.handleBuyDecoration);
+    EventBus.off('trigger-button', this.handleControlButton);
 
     // store
     setGlobalData('tamagotchi_queue', this.actionQueue);

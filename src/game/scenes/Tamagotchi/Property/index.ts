@@ -7,18 +7,21 @@ const RECORDER_POSITION = { x: 26, y: 60 }
 
 export class Property extends Phaser.GameObjects.Container {
   private level: number;
+  private window: RoomWindow;
+  private recorder: RoomRecorder;
+  private decoration: CustomDecroation;
   
   constructor(scene: Phaser.Scene) {
     super(scene);
     
     // Window
-    new RoomWindow(scene, WINDOW_POSITION);
+    this.window = new RoomWindow(scene, WINDOW_POSITION);
 
     // Recorder
-    new RoomRecorder(scene, RECORDER_POSITION);
+    this.recorder = new RoomRecorder(scene, RECORDER_POSITION);
 
     // Custom Decroation
-    new CustomDecroation(scene);
+    this.decoration = new CustomDecroation(scene);
   }
 
   create() {
@@ -28,4 +31,9 @@ export class Property extends Phaser.GameObjects.Container {
   public update() {
   }
 
+  public destroy() {
+    this.window.destroy();
+    this.recorder.destroy();
+    this.decoration.destroy();
+  } 
 }

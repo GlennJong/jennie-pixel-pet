@@ -23,7 +23,7 @@ export class IconHp extends Phaser.GameObjects.Container {
     const { x, y } = option;
 
     // Watch hp change
-    EventBus.on('tamagotchi_hp-updated', (value) => { this.targetValue = value });
+    EventBus.on('tamagotchi_hp-updated', this.handleSetValue);
 
     // Icon
     this.icon = scene.make.sprite({
@@ -99,6 +99,10 @@ export class IconHp extends Phaser.GameObjects.Container {
     this.applyIconAndValue();
   }
 
+  private handleSetValue = (value: number) => {
+    this.targetValue = value;
+  }
+
   private applyIconAndValue() {
     if (this.value > 75 && this.value <= 100 && this.step != '100') {
       this.icon.play(`hp-100`);
@@ -131,5 +135,11 @@ export class IconHp extends Phaser.GameObjects.Container {
       this.targetValue = undefined;
     }
     this.applyIconAndValue();
+  }
+
+  public destroy() {
+    EventBus.off('tamagotchi_hp-updated', this.setValue);
+    this.icon.destroy();
+    this.text.destroy();
   }
 }

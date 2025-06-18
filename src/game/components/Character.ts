@@ -161,4 +161,8 @@ export class Character extends Phaser.GameObjects.Container {
       }
     }
   }
+  
+  public destroy() {
+    this.character.destroy();
+  }
 }

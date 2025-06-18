@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import './style.css';
+import { EventBus } from '../EventBus';
 
 const Console = ({ children }: { children: React.ReactNode }) => {
   const [ isFilterOpen, setIsFilterOpen ] = useState(false);
@@ -18,13 +19,16 @@ const Console = ({ children }: { children: React.ReactNode }) => {
         </div>
         <div className="buttons">
           <div className="circle-btn-wrapper">
-            <button className="circle-btn" disabled onClick={() => setIsFilterOpen(!isFilterOpen)}>save</button>
+            <button className="circle-btn"  onClick={() => EventBus.emit('trigger-button', 'left')}><div style={{ transform: 'rotate(180deg)' }}>►</div></button>
           </div>
           <div className="circle-btn-wrapper">
-            <button className="circle-btn" disabled onClick={() => setIsFilterOpen(!isFilterOpen)}>load</button>
+            <button className="circle-btn"  onClick={() => EventBus.emit('trigger-button', 'right')}>►</button>
           </div>
           <div className="circle-btn-wrapper">
-            <button className="circle-btn" onClick={() => setIsFilterOpen(!isFilterOpen)}>retro</button>
+            <button className="circle-btn"  onClick={() => EventBus.emit('trigger-button', 'space')}></button>
+          </div>
+          <div className="circle-btn-wrapper">
+            <button className="circle-btn special" onClick={() => setIsFilterOpen(!isFilterOpen)}></button>
           </div>
         </div>
       </div>

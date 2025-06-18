@@ -41,4 +41,5 @@ export class RoomRecorder extends Phaser.GameObjects.Container {
 
     scene.add.existing(this);
   }
+
 }

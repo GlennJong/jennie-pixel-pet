@@ -288,4 +288,5 @@ export class TamagotchiCharacter extends Character {
       }
     }
   }
+
 }
