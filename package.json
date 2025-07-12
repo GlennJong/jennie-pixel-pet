@@ -17,7 +17,6 @@
   },
   "dependencies": {
     "phaser": "^3.80.1",
-    "phaser3-rex-plugins": "^1.80.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "socket.io-client": "^4.7.5"

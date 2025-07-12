@@ -7,8 +7,8 @@ export default defineConfig({
     react(),
   ],
   watch: {
-    usePolling: true,
-    interval: 1000, // increases delay
+    // usePolling: true,
+    // interval: 1000, // increases delay
   },
   server: {
     host: true,

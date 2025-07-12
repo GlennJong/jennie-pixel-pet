@@ -31,7 +31,6 @@ function App() {
       ...getGlobalData('message_queue'),
       { user, content }
     ]);
-    // EventBus.emit('global-event', '123');
   }
 
   

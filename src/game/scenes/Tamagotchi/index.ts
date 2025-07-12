@@ -68,7 +68,8 @@ export default class Tamagotchi extends Scene {
 
     // Build Dialogue
     this.dialogue = new PrimaryDialogue(this);
-    this.add.existing(this.dialogue);
+    this.dialogue.initDialogue();
+    // this.add.existing(this.dialogue);
 
     // Build Keyboard
     this.keyboardHandler = new KeyboardHandler(this, {
@@ -107,7 +108,7 @@ export default class Tamagotchi extends Scene {
     if (battleResult === 'win') {
       const result = this.character.runFuntionalAction('win');
       if (result) {
-        await this.dialogue.runDialog(result.dialog);
+        await this.dialogue.runDialogue(result.dialog);
       }
       setGlobalData('tamagotchi_coin', getGlobalData('tamagotchi_coin') + WIN_COIN);
       this.header.showHeader(HEADER_DISPLAY_DURATION);
@@ -115,7 +116,7 @@ export default class Tamagotchi extends Scene {
     else if (battleResult === 'lose') {
       const result = this.character.runFuntionalAction('lose');
       if (result) {
-        await this.dialogue.runDialog(result.dialog);
+        await this.dialogue.runDialogue(result.dialog);
       }
       setGlobalData('tamagotchi_coin', getGlobalData('tamagotchi_coin') + LOSE_COIN);
       this.header.showHeader(HEADER_DISPLAY_DURATION);
@@ -147,7 +148,7 @@ export default class Tamagotchi extends Scene {
       if (coin >= cost && getGlobalData('tamagotchi_level') < level) {
         const result = this.character.runFuntionalAction('buy');
         if (result) {
-          await this.dialogue.runDialog(result.dialog);
+          await this.dialogue.runDialogue(result.dialog);
           this.header.showHeader(HEADER_DISPLAY_DURATION);
           setGlobalData('tamagotchi_level', getGlobalData('tamagotchi_level') + 1);
           setGlobalData('tamagotchi_coin', getGlobalData('tamagotchi_coin') - cost);
@@ -166,11 +167,9 @@ export default class Tamagotchi extends Scene {
       this.header.showHeader(HEADER_DISPLAY_DURATION);
 
       if (result) {
-        const currentDialog = result.dialog.map((_item) => ({
-          ..._item,
-          text: _item.text.replaceAll('{{user_name}}', user),
-        }));
-        await this.dialogue.runDialog(currentDialog);
+        result.text = result.text.replaceAll('{{user_name}}', user);
+        await this.dialogue.runDialogue([result]);
+        console.log('finished');
 
         if (action === 'battle') {
           await this.handleSwitchToBattleScene(user, params);

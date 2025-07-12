@@ -128,6 +128,6 @@ export class Preloader extends Scene {
   }
 
   create() {
-    this.scene.start('MainScene');
+    this.scene.start('Tamagotchi');
   }
 }

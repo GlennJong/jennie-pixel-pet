@@ -7,7 +7,8 @@ import { getGlobalData, setGlobalData } from '../../EventBus';
 type TDirection = 'none' | 'left' | 'right';
 
 type TFunctionalActionDialogItem = {
-  dialog: TDialogData[];
+  face: { key: string; frame: string };
+  text: string;
   piority: number;
 };
 
@@ -248,9 +249,10 @@ export class TamagotchiCharacter extends Character {
 
     // send dialog back to tamagottchi
     if (dialogs) {
-      const { dialog } =
+      const dialog =
         selectFromPiority<TFunctionalActionDialogItem>(dialogs);
-      return { dialog };
+        console.log(dialog);
+      return dialog;
     }
   }
 
