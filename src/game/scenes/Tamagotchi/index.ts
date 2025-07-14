@@ -8,10 +8,11 @@ import { Header } from './Header';
 import { Property } from './Property';
 import { TamagotchiCharacter } from './TamagotchiCharacter';
 import KeyboardHandler from './KeyboardHander';
+import { originalHeight, originalWidth } from '../../constants';
 
 const DEFAULT_TAMAGOTCHI_POSITION = {
-  x: 80,
-  y: 84,
+  x: 60,
+  y: 68,
   edge: { from: 50, to: 120 }
 }
 
@@ -41,9 +42,11 @@ export default class Tamagotchi extends Scene {
     this.background = this.make.image({
       key: 'tamagotchi_room',
       frame: 'room',
-      x: 160 / 2,
-      y: 144 / 2,
-    });
+      x: 0,
+      y: 0,
+    })
+    .setDisplayOrigin(originalWidth, originalHeight)
+    .setOrigin(0);
     this.add.existing(this.background);
 
     
@@ -168,9 +171,11 @@ export default class Tamagotchi extends Scene {
       this.header.showHeader(HEADER_DISPLAY_DURATION);
 
       if (result) {
-        result.text = result.text.replaceAll('{{user_name}}', user);
-        await this.dialogue.runDialogue([result]);
-        console.log('finished');
+        const currentDialog = result.dialog.map((_item) => ({
+          ..._item,
+          text: _item.text.replaceAll('{{user_name}}', user),
+        }));
+        await this.dialogue.runDialogue(currentDialog);
 
         if (action === 'battle') {
           await this.handleSwitchToBattleScene(user, params);
@@ -208,6 +213,7 @@ export default class Tamagotchi extends Scene {
     this.background.destroy();
     this.header.destroy();
     this.property.destroy();
+    this.dialogue.destroy();
 
     // Event
     EventBus.off('message_queue-updated', this.handleConvertActionQueue);

@@ -58,7 +58,7 @@ export class Character extends Phaser.GameObjects.Container {
     // create character
     const posX = x || 0;
     const posY = y || 0;
-    const character = scene.add.sprite(posX, posY, key).setScale(1);
+    const character = scene.add.sprite(posX, posY, key).setScale(1).setOrigin(0);
 
     this.character = character;
     scene.add.existing(this);

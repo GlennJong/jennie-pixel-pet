@@ -96,7 +96,7 @@ export class Header extends Phaser.GameObjects.Container {
     this.add(sleep);
     this.selectors['sleep'] = sleep;
 
-    this.iconHp = new IconHp(scene, { x: 106, y: 7 });
+    this.iconHp = new IconHp(scene, { x: 100, y: 7 });
     this.add(this.iconHp);
 
     this.iconCoin = new IconCoin(scene, { x: 126, y: 7 });

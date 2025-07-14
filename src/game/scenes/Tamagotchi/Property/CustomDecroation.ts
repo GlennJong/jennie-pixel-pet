@@ -23,9 +23,9 @@ export class CustomDecroation extends Phaser.GameObjects.Container {
     this.item = scene.make.sprite({
       key: this.config[this.currentLevel - 1].key,
       frame: this.config[this.currentLevel - 1].frame,
-      x: 160 / 2,
-      y: 144 / 2,
-    });
+      x: 0,
+      y: 0,
+    }).setOrigin(0);
     this.add(this.item);
 
     scene.add.existing(this);

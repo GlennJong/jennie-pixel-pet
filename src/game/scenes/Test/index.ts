@@ -26,6 +26,57 @@ export default class TestScene extends Scene {
       }
     ];
 
+    const padding = 4;
+    const background = this.make
+      .nineslice({
+        key: 'battle_board',
+        frame: 'background',
+        width: 64,
+        height: 20,
+        leftWidth: 4,
+        rightWidth: 4,
+        topHeight: 4,
+        bottomHeight: 4,
+        x: 10,
+        y: 10
+      })
+      .setOrigin(0);
+
+    const hpBarHead = this.make.sprite({
+      key: 'battle_board',
+      frame: 'bar-head',
+        x: 10 + padding,
+        y: 10 + padding
+      
+    }).setOrigin(0);
+
+    const hpFrame = this.make
+      .nineslice({
+        key: 'battle_board',
+        frame: 'bar-frame',
+        width: 40,
+        height: hpBarHead.height,
+        leftWidth: 2,
+        rightWidth: 2,
+        topHeight: 2,
+        bottomHeight: 2,
+        x: 10 + padding + hpBarHead.width,
+        y: 10 + padding
+      })
+      .setOrigin(0);
+    // this.add(background);
+
+    const hpBar = this.make
+      .sprite({
+        key: 'battle_board',
+        frame: 'bar',
+        x: 10 + padding + hpBarHead.width + 1,
+        y: 10 + padding + 2,
+      })
+      // .setDisplaySize(20, 2)
+      .setOrigin(0);
+      hpBar.displayWidth = 20
+
     // const drink = this.make.sprite({
     //   key: 'tamagotchi_header_icons',
     //   frame: 'drink-1',

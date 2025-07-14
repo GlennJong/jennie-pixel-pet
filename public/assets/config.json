@@ -1514,11 +1514,15 @@
         "point": 10,
         "dialogs": [
           {
-            "face": {
-              "key": "tamagotchi_afk",
-              "frame": "face_normal"
-            },
-            "text": "感謝 {{user_name}} 兌換\n補充喝水，為AFK增加了 10 點生命！",
+            "dialog": [
+              {
+                "face": {
+                  "key": "tamagotchi_afk",
+                  "frame": "face_normal"
+                },
+                "text": "感謝{{user_name}}兌換\n補充喝水，為AFK增加了 10 點生命！"
+              }
+            ],
             "piority": 2
           }
         ]
@@ -1528,11 +1532,15 @@
         "point": 0,
         "dialogs": [
           {
-            "face": {
-              "key": "tamagotchi_afk",
-              "frame": "face_normal"
-            },
-            "text": "{{user_name}} 兌換\n打招呼！\n有人來挑戰了！",
+            "dialog": [
+              {
+                "face": {
+                  "key": "tamagotchi_afk",
+                  "frame": "face_normal"
+                },
+                "text": "{{user_name}}兌換\n打招呼！\n有人來挑戰了！"
+              }
+            ],
             "piority": 2
           }
         ]
@@ -1542,11 +1550,15 @@
         "point": 10,
         "dialogs": [
           {
-            "face": {
-              "key": "tamagotchi_afk",
-              "frame": "face_normal"
-            },
-            "text": "感謝 {{user_name}} 兌換\n存檔紀錄，為AFK增加了 10 點生命！",
+            "dialog": [
+              {
+                "face": {
+                  "key": "tamagotchi_afk",
+                  "frame": "face_normal"
+                },
+                "text": "感謝 {{user_name}} 兌換\n存檔紀錄，為AFK增加了 10 點生命！"
+              }
+            ],
             "piority": 2
           }
         ]
@@ -1556,11 +1568,15 @@
         "point": 0,
         "dialogs": [
           {
-            "face": {
-              "key": "tamagotchi_afk",
-              "frame": "face_normal"
-            },
-            "text": "休息一下",
+            "dialog": [
+              {
+                "face": {
+                  "key": "tamagotchi_afk",
+                  "frame": "face_normal"
+                },
+                "text": "休息一下"
+              }
+            ],
             "piority": 2
           }
         ]
@@ -1570,11 +1586,15 @@
         "point": 0,
         "dialogs": [
           {
-            "face": {
-              "key": "tamagotchi_afk",
-              "frame": "face_normal"
-            },
-            "text": "起床了",
+            "dialog": [
+              {
+                "face": {
+                  "key": "tamagotchi_afk",
+                  "frame": "face_normal"
+                },
+                "text": "起床了"
+              }
+            ],
             "piority": 2
           }
         ]
@@ -1584,11 +1604,15 @@
         "point": 0,
         "dialogs": [
           {
-            "face": {
-              "key": "tamagotchi_afk",
-              "frame": "face_normal"
-            },
-            "text": "我贏了！賺到零用錢！",
+            "dialog": [
+              {
+                "face": {
+                  "key": "tamagotchi_afk",
+                  "frame": "face_normal"
+                },
+                "text": "我贏了！賺到零用錢！"
+              }
+            ],
             "piority": 2
           }
         ]
@@ -1598,11 +1622,15 @@
         "point": 0,
         "dialogs": [
           {
-            "face": {
-              "key": "tamagotchi_afk",
-              "frame": "face_sad"
-            },
-            "text": "輸了，零用錢不見了",
+            "dialog": [
+              {
+                "face": {
+                  "key": "tamagotchi_afk",
+                  "frame": "face_sad"
+                },
+                "text": "輸了，零用錢不見了"
+              }
+            ],
             "piority": 2
           }
         ]
@@ -1612,19 +1640,27 @@
         "point": 0,
         "dialogs": [
           {
-            "face": {
-              "key": "tamagotchi_afk",
-              "frame": "face_normal"
-            },
-            "text": "用賺來的錢錢買東西！",
+            "dialog": [
+              {
+                "face": {
+                  "key": "tamagotchi_afk",
+                  "frame": "face_normal"
+                },
+                "text": "用賺來的錢錢買東西！"
+              }
+            ],
             "piority": 2
           },
           {
-            "face": {
-              "key": "tamagotchi_afk",
-              "frame": "face_normal"
-            },
-            "text": "把錢錢變成喜歡的樣子！",
+            "dialog": [
+              {
+                "face": {
+                  "key": "tamagotchi_afk",
+                  "frame": "face_normal"
+                },
+                "text": "把錢錢變成喜歡的樣子！"
+              }
+            ],
             "piority": 4
           }
         ]

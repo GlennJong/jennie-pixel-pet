@@ -18,7 +18,7 @@ export class RoomRecorder extends Phaser.GameObjects.Container {
       frame: 'recorder_2',
       x: x,
       y: y,
-    });
+    }).setOrigin(0);
 
     if (!scene.anims.exists('room_recoreder_animation')) {
       scene.anims.create({

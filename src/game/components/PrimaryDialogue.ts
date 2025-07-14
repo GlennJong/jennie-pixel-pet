@@ -309,12 +309,14 @@ export class PrimaryDialogue extends Phaser.GameObjects.Container {
     this.textboxBackground = this.scene.make.nineslice({
       ...DIALOGUE_FRAME_CONFIG,
     }).setOrigin(0)
-      .setVisible(false);
+      .setVisible(false)
+      .setDepth(998);
 
     this.portraitBackground = this.scene.make.nineslice({
       ...PORTRAIT_FRAME_CONFIG,
     }).setOrigin(0)
-      .setVisible(false);
+      .setVisible(false)
+      .setDepth(998);
 
     this.portrait = this.scene.make.image({
       ...PORTRAIT_CONFIG,
@@ -323,7 +325,7 @@ export class PrimaryDialogue extends Phaser.GameObjects.Container {
     })
       .setDisplaySize(PORTRAIT_SIZE, PORTRAIT_SIZE)
       .setOrigin(0)
-      .setDepth(1)
+      .setDepth(999)
       .setVisible(false);
 
     this.textbox = this.scene.add.text(TEXTBOX_X, TEXTBOX_Y, '', {
@@ -331,7 +333,9 @@ export class PrimaryDialogue extends Phaser.GameObjects.Container {
     })
       .setDepth(2)
       .setOrigin(0)
+      .setDepth(999)
       .setVisible(false);
+    
   }
 
   // Destory

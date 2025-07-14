@@ -91,7 +91,7 @@ export class IconHp extends Phaser.GameObjects.Container {
       y: y + 2,
       style: { fontFamily: FONT_FAMILY, fontSize: FONT_SIZE, color: '#000' },
       text: '',
-    });
+    }).setOrigin(0);
     this.text.setResolution(4);
     this.add(this.text);
 

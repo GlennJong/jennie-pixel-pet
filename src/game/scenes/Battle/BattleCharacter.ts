@@ -50,8 +50,8 @@ export type TRunResult = {
 const fullWidth = 160;
 
 const defaultCharacterPosition = {
-  self: { x: 30, y: 90 },
-  opponent: { x: 130, y: 36 },
+  self: { x: 10, y: 70 },
+  opponent: { x: 96, y: 12 },
 };
 
 // const defaultShadow = {
@@ -60,8 +60,8 @@ const defaultCharacterPosition = {
 // };
 
 const defaultStatusBoardPosition = {
-  self: { x: 110, y: 80 },
-  opponent: { x: 50, y: 20 },
+  self: { x: 80, y: 70 },
+  opponent: { x: 10, y: 10 },
 };
 
 export default class BattleCharacter extends Character {
@@ -130,7 +130,7 @@ export default class BattleCharacter extends Character {
     this.board = new StatusBoard(scene, boardPosition.x, boardPosition.y, {
       hp: this.hp,
       name,
-    });
+    }).setDepth(10);
 
     this.playAnimation('idle');
 
@@ -154,7 +154,7 @@ export default class BattleCharacter extends Character {
   };
 
   private handlePlayAttackReaction = async () => {
-    const distance = this.role === 'self' ? 10 : -10;
+    const distance = this.role === 'self' ? 8 : -8;
     const position = defaultCharacterPosition[this.role];
 
     await this.board.setAlpha(0);

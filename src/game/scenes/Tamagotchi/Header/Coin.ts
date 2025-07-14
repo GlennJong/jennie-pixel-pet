@@ -48,7 +48,7 @@ export class IconCoin extends Phaser.GameObjects.Container {
       x: x + 12,
       y: y + 2,
       style: { fontFamily: 'Tiny5', fontSize: 8, color: '#000' },
-    });
+    }).setOrigin(0);
     text.setResolution(4);
 
     this.text = text;

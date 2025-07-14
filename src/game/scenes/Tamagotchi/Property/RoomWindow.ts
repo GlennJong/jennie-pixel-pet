@@ -18,7 +18,7 @@ export class RoomWindow extends Phaser.GameObjects.Container {
       frame: 'window_1',
       x: x,
       y: y,
-    });
+    }).setOrigin(0);
 
     if (!scene.anims.exists('window-cloud')) {
       scene.anims.create({

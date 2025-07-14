@@ -54,6 +54,7 @@ export default class Battle extends Scene {
 
     // init dialogue
     this.dialogue = new PrimaryDialogue(this);
+    this.dialogue.initDialogue();
     this.dialogue.setDepth(99);
 
     sceneStarter(this);
@@ -98,7 +99,7 @@ export default class Battle extends Scene {
       if (!effect) return;
 
       const { type, target, value } = effect;
-      await this.dialogue.runDialog(actionDialog, true);
+      await this.dialogue.runDialogue(actionDialog);
 
       // reaction movement
       const sufferCharacter = target === 'self' ? this.self : this.opponent;
@@ -106,13 +107,13 @@ export default class Battle extends Scene {
 
       if (!reactionResult) return;
       const { dialog: sufferDialog, isDead } = reactionResult;
-      await this.dialogue.runDialog(sufferDialog, true);
+      await this.dialogue.runDialogue(sufferDialog);
 
       if (isDead) {
         const winResult = actionCharacter.runResult('win');
         if (!winResult) return;
         const { dialog: winnerDialog } = winResult;
-        await this.dialogue.runDialog(winnerDialog, true);
+        await this.dialogue.runDialogue(winnerDialog);
 
         sufferCharacter.runResult('lose');
         const loseResult = sufferCharacter.runResult('lose');
@@ -120,7 +121,7 @@ export default class Battle extends Scene {
         
         if (!loseResult) return;
         const { dialog: loserDialog } = loseResult;
-        await this.dialogue.runDialog(loserDialog);
+        await this.dialogue.runDialogue(loserDialog);
 
         this.handleFinishGame();
         return;
@@ -136,7 +137,7 @@ export default class Battle extends Scene {
 
   private async handleFinishGame() {
     const selfFinishDialog = this.self.runFinish();
-    await this.dialogue.runDialog(selfFinishDialog);
+    await this.dialogue.runDialogue(selfFinishDialog);
     setGlobalData('battle_result', this.self.hp.current > 0 ? 'win' : 'lose');
     sceneConverter(this, 'Tamagotchi');
   }
@@ -151,14 +152,14 @@ export default class Battle extends Scene {
 
     // run battle introduce
     const selfStartDialog = this.self.runStart();
-    await this.dialogue.runDialog(selfStartDialog);
+    await this.dialogue.runDialogue(selfStartDialog);
 
     // run opponent opening animation
     this.opponent.character.setAlpha(1);
     await this.opponent.openingCharacter();
 
     const opponentStartDialog = this.opponent.runStart();
-    await this.dialogue.runDialog(opponentStartDialog);
+    await this.dialogue.runDialogue(opponentStartDialog);
 
     // show status board for both
     this.self.board.setAlpha(1);

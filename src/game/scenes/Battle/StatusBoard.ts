@@ -1,7 +1,7 @@
 import Phaser from 'phaser';
 
 const defaultWidth = 72;
-const defaultHeight = 24;
+const defaultHeight = 28;
 const paddingX = 4;
 const paddingY = 4;
 
@@ -10,6 +10,7 @@ const hpFrameHeight = 6;
 
 const textFontFamily = 'BoutiqueBitmap';
 const textFontSize = 10;
+const textBottomPadding = 2;
 const textFontResolution = 4;
 
 const playerNameY = -2;
@@ -29,7 +30,6 @@ export class StatusBoard extends Phaser.GameObjects.Container {
   private hp: { current: number; max: number };
   private hpBar: Phaser.GameObjects.Sprite;
   private hpBarWidth: number;
-  private currentHpText: Phaser.GameObjects.Text;
 
   constructor(
     scene: Phaser.Scene,
@@ -52,12 +52,14 @@ export class StatusBoard extends Phaser.GameObjects.Container {
         frame: 'background',
         width: defaultWidth,
         height: defaultHeight,
-        leftWidth: 3,
-        rightWidth: 3,
-        topHeight: 3,
-        bottomHeight: 3,
+        leftWidth: 4,
+        rightWidth: 4,
+        topHeight: 4,
+        bottomHeight: 4,
+        x: x,
+        y: y
       })
-      .setOrigin(0.5)
+      .setOrigin(0)
       .setPosition(x, y);
     this.add(background);
 
@@ -65,11 +67,14 @@ export class StatusBoard extends Phaser.GameObjects.Container {
     const hpBarHead = scene.make.sprite({
       key: 'battle_board',
       frame: 'bar-head',
-    });
-    hpBarHead.setPosition(
-      x - defaultWidth / 2 + paddingX + hpBarHead.width / 2,
-      y - defaultHeight / 2 + paddingY + barY + hpBarHead.height / 2,
-    );
+      x: x + paddingX,
+      y: y + paddingY + textFontSize + textBottomPadding
+    }).setOrigin(0);
+    
+    // hpBarHead.setPosition(
+    //   x + defaultWidth / 2 + paddingX + hpBarHead.width / 2,
+    //   y - defaultHeight / 2 + paddingY + barY + hpBarHead.height / 2,
+    // );
 
     const hpFrame = scene.make
       .nineslice({
@@ -81,8 +86,8 @@ export class StatusBoard extends Phaser.GameObjects.Container {
         rightWidth: 2,
         topHeight: 2,
         bottomHeight: 2,
-        x: x - defaultWidth / 2 + paddingX + hpBarHead.width,
-        y: y - defaultHeight / 2 + paddingY + barY,
+        x: x + paddingX + hpBarHead.width,
+        y: y + paddingY + textFontSize + textBottomPadding
       })
       .setOrigin(0);
 
@@ -91,8 +96,8 @@ export class StatusBoard extends Phaser.GameObjects.Container {
       .sprite({
         key: 'battle_board',
         frame: 'bar',
-        x: x - defaultWidth / 2 + paddingX + hpBarHead.width + 1,
-        y: y - defaultHeight / 2 + paddingY + barY + 2,
+        x: x + paddingX + hpBarHead.width + 1,
+        y: y + paddingY + textFontSize + textBottomPadding + 2,
       })
       .setOrigin(0);
 
@@ -106,15 +111,16 @@ export class StatusBoard extends Phaser.GameObjects.Container {
 
     // 5. player name
     const playerName = scene.make.text({
-      x: x - defaultWidth / 2 + paddingX,
-      y: y - defaultHeight / 2 + paddingY + playerNameY,
+      x: x + paddingX,
+      y: y + paddingY,
       style: {
         fontFamily: textFontFamily,
         fontSize: textFontSize,
         color: '#000',
       },
       text: data.name,
-    });
+    })
+    .setOrigin(0);
     playerName.setResolution(textFontResolution);
     this.add(playerName);
 

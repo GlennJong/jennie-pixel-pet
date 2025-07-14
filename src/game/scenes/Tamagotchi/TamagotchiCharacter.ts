@@ -74,17 +74,17 @@ export class TamagotchiCharacter extends Character {
     
     super(scene, key, characterProps);
 
-    const shadow = scene.add.circle( // TODO: how to destroy it?
-      characterProps.x,
-      characterProps.y,
-      10,
-      0x000000,
-    );
-    shadow.setOrigin(0.5, -1.8);
-    shadow.setAlpha(0.6);
-    shadow.setScale(0.8, 0.3);
-    shadow.setDepth(1);
-    this.setFollowShadow(shadow);
+    // const shadow = scene.add.circle( // TODO: how to destroy it?
+    //   characterProps.x + this.character.width/1.8,
+    //   characterProps.y + this.character.height,
+    //   12,
+    //   0x000000,
+    // );
+    // shadow.setOrigin(0.5);
+    // shadow.setAlpha(0.6);
+    // shadow.setScale(0.8, 0.3);
+    // shadow.setDepth(1);
+    // this.setFollowShadow(shadow);
     this.character.setDepth(2);
 
     // actions
