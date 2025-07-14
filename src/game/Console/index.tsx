@@ -9,7 +9,7 @@ const Console = ({ children }: { children: React.ReactNode }) => {
     <div className="console">
       <div className="base">
         <div className="monitor">
-          <div className="monitor-inner" style={{ width: '320px', height: '288px' }}>
+          <div className="monitor-inner" style={{ width: '160px', height: '144px' }}>
             <div className={`filter-greenscreen ${isFilterOpen ? 'active' : ''}`}>
               <div className={`filter-grayscale ${isFilterOpen ? 'active' : ''}`}>
                 { children }

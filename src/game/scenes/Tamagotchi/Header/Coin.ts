@@ -27,7 +27,7 @@ export class IconCoin extends Phaser.GameObjects.Container {
       frame: 'coin-1',
       x: x,
       y: y,
-    });
+    }).setOrigin(0);
     if (!scene.anims.exists('coin')) {
       scene.anims.create({
         key: 'coin',
@@ -45,8 +45,8 @@ export class IconCoin extends Phaser.GameObjects.Container {
     this.add(coin);
 
     const text = scene.make.text({
-      x: x + 7,
-      y: y - 4,
+      x: x + 12,
+      y: y + 2,
       style: { fontFamily: 'Tiny5', fontSize: 8, color: '#000' },
     });
     text.setResolution(4);

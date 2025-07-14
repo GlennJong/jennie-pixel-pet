@@ -116,9 +116,9 @@ export class PrimaryDialogue extends Phaser.GameObjects.Container {
 
   private resolvePromise: ((value?: unknown) => void) | null = null;
 
-  private setAvatar = (avatarKey: string) => {
+  private setAvatar = (avatarKey: string, avatarFrame: string) => {
     if (this.portrait && avatarKey) {
-      this.portrait.setTexture(avatarKey);
+      this.portrait.setTexture(avatarKey, avatarFrame);
     }
   }
 
@@ -151,7 +151,7 @@ export class PrimaryDialogue extends Phaser.GameObjects.Container {
     }
 
     const currentEntry = this.dialogueData[this.currentDialogueEntryIndex];
-    this.setAvatar(currentEntry.face.key);
+    this.setAvatar(currentEntry.face.key, currentEntry.face.frame);
     this.handleShowDialogue(currentEntry.text);
   }
 
@@ -276,7 +276,6 @@ export class PrimaryDialogue extends Phaser.GameObjects.Container {
     }
 
     this.currentPageIndex++;
-    console.log('Current Page Index:', this.currentPageIndex, 'Total Pages:', this.dialoguePages.length); // 您的日誌保留
 
     if (this.currentPageIndex <= this.dialoguePages.length - 1) {
       this.handleDisplayCurrentPage();

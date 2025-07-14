@@ -20,7 +20,7 @@ export class Header extends Phaser.GameObjects.Container {
   public currentSelector: string = selectors[0];
   private selectors: { [key: string]: HeaderSelector } = {};
   private iconHp: IconHp;
-  private coin: IconCoin;
+  private iconCoin: IconCoin;
   private timer: number | undefined;
 
   constructor(scene: Phaser.Scene) {
@@ -47,8 +47,8 @@ export class Header extends Phaser.GameObjects.Container {
     const drink = new HeaderSelector(scene, {
       key: 'tamagotchi_header_icons',
       frame: 'drink',
-      x: 20,
-      y: 13,
+      x: 16,
+      y: 7,
       start: 1,
       end: 5,
       freq: 4,
@@ -60,8 +60,8 @@ export class Header extends Phaser.GameObjects.Container {
     const battle = new HeaderSelector(scene, {
       key: 'tamagotchi_header_icons',
       frame: 'battle',
-      x: 40,
-      y: 13,
+      x: 36,
+      y: 7,
       start: 1,
       end: 4,
       freq: 4,
@@ -73,8 +73,8 @@ export class Header extends Phaser.GameObjects.Container {
     const write = new HeaderSelector(scene, {
       key: 'tamagotchi_header_icons',
       frame: 'write',
-      x: 60,
-      y: 13,
+      x: 56,
+      y: 7,
       start: 1,
       end: 5,
       freq: 4,
@@ -86,8 +86,8 @@ export class Header extends Phaser.GameObjects.Container {
     const sleep = new HeaderSelector(scene, {
       key: 'tamagotchi_header_icons',
       frame: 'sleep',
-      x: 79,
-      y: 13,
+      x: 76,
+      y: 7,
       start: 1,
       end: 2,
       freq: 1,
@@ -96,10 +96,10 @@ export class Header extends Phaser.GameObjects.Container {
     this.add(sleep);
     this.selectors['sleep'] = sleep;
 
-    this.iconHp = new IconHp(scene, { x: 106, y: 13 });
+    this.iconHp = new IconHp(scene, { x: 106, y: 7 });
     this.add(this.iconHp);
 
-    this.iconCoin = new IconCoin(scene, { x: 134, y: 13 });
+    this.iconCoin = new IconCoin(scene, { x: 126, y: 7 });
     this.add(this.iconCoin);
 
     this.currentSelector = 'drink';
@@ -156,8 +156,8 @@ export class Header extends Phaser.GameObjects.Container {
     this.handleUpdateSelector();
   }
 
-  public moveTo(string: string) {
-    this.currentSelector = string;
+  public moveToSelector(selector: string) {
+    this.currentSelector = selector;
     this.handleUpdateSelector();
   }
 

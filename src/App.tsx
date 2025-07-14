@@ -8,7 +8,7 @@ import ColorPicker from './ColorPicker';
 const isDev = import.meta.env['VITE_ENV'] === 'dev';
 
 function App() {
-  const [ isGameStart, setIsGameStart ] = useState(false);
+  const [ isGameStart, setIsGameStart ] = useState(true);
   const { twitchState, startOauthConnect, startWebsocket } = useTwitchOauth();
   const [ record, setRecord ] = useState<{user?: string, content?: string}[]>([]);
   const [ bgColor, setBgColor ] = useState('#482e79');
@@ -39,10 +39,10 @@ function App() {
       
       <div style={{ zIndex: 1, position: "relative" }}>
         {
-          !twitchState &&
+          twitchState &&
           <button className="button" onClick={startOauthConnect}>Twitch login</button>
         }
-        { twitchState &&
+        { !twitchState &&
           <div style={{ position: 'relative' }}>
             { !isGameStart &&
               <button

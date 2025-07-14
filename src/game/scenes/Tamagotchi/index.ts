@@ -45,6 +45,7 @@ export default class Tamagotchi extends Scene {
       y: 144 / 2,
     });
     this.add.existing(this.background);
+
     
     // Inherit queue or create new queue
     this.actionQueue = getGlobalData('tamagotchi_queue') || [];

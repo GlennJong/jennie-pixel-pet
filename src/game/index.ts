@@ -18,7 +18,7 @@ const config: Phaser.Types.Core.GameConfig = {
   width: canvas.width,
   height: canvas.height,
   parent: 'game-container',
-  zoom: 2,
+  // zoom: 2,
   backgroundColor: '#000',
   canvasStyle: `display:block; image-rendering: pixelated`,
   scene: [

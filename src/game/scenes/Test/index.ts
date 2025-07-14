@@ -26,7 +26,28 @@ export default class TestScene extends Scene {
       }
     ];
 
-    this.dialogue.runDialogue(exampleDialogueData);
+    // const drink = this.make.sprite({
+    //   key: 'tamagotchi_header_icons',
+    //   frame: 'drink-1',
+    //   x: 50,
+    //   y: 80,
+    // }).setOrigin(0);
+
+    // this.make.sprite({
+    //   key: 'tamagotchi_header_icons',
+    //   frame: 'sleep-1',
+    //   x: 60,
+    //   y: 80,
+    // }).setOrigin(0);
+
+    // this.make.sprite({
+    //   key: 'tamagotchi_afk',
+    //   frame: 'face_angry',
+    //   x: 60,
+    //   y: 90,
+    // }).setOrigin(0);
+
+    // this.dialogue.runDialogue(exampleDialogueData);
 
 
   }

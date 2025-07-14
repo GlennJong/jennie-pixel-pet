@@ -31,7 +31,7 @@ export class IconHp extends Phaser.GameObjects.Container {
       frame: 'hp-empty',
       x: x,
       y: y,
-    });
+    }).setOrigin(0);
     scene.anims.create({
       key: 'hp-100',
       frames: scene.anims.generateFrameNames('tamagotchi_header_icons', {
@@ -87,8 +87,8 @@ export class IconHp extends Phaser.GameObjects.Container {
 
     // Text
     this.text = scene.make.text({
-      x: x + 6,
-      y: y - 4,
+      x: x + 12,
+      y: y + 2,
       style: { fontFamily: FONT_FAMILY, fontSize: FONT_SIZE, color: '#000' },
       text: '',
     });
