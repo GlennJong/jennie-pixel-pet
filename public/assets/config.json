@@ -1678,17 +1678,17 @@
       "action": "battle",
       "matches": {
         "user": ["curry_cat"],
-        "content": ["上上打招呼", "上上刷存在感"]
+        "content": ["貝貝打招呼", "貝貝刷存在感", "上上打招呼", "上上刷存在感"]
       },
       "params": { "opponent": "currycat" }
     },
     {
       "action": "battle",
       "matches": {
-        "user": ["curry_cat"],
-        "content": ["貝貝打招呼", "貝貝刷存在感"]
+        "user": ["jennie_congee"],
+        "content": ["貝貝打招呼", "貝貝刷存在感", "上上打招呼", "上上刷存在感"]
       },
-      "params": { "opponent": "currycat" }
+      "params": { "opponent": "jennie" }
     },
     {
       "action": "battle",

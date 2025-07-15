@@ -7,6 +7,7 @@ import {
   sceneConverter,
   sceneStarter,
 } from '../../components/CircleSceneTransition';
+import { originalHeight, originalWidth } from '../../constants';
 
 type TProcess = {
   from: 'self' | 'opponent';
@@ -15,11 +16,10 @@ type TProcess = {
 };
 
 export default class Battle extends Scene {
-  // camera: Phaser.Cameras.Scene2D.Camera;
-  background: Phaser.GameObjects.Image;
-  self: BattleCharacter;
-  opponent: BattleCharacter;
-  dialogue: PrimaryDialogue;
+  background?: Phaser.GameObjects.Rectangle;
+  self?: BattleCharacter;
+  opponent?: BattleCharacter;
+  dialogue?: PrimaryDialogue;
 
   constructor() {
     super('Battle');
@@ -30,8 +30,9 @@ export default class Battle extends Scene {
   }
 
   create() {
-    // this.camera = this.cameras.main;
-    // this.camera.setBackgroundColor(0xeeeeee);
+    
+    // background
+    this.background = this.add.rectangle(0, 0, originalWidth, originalHeight, 0xeeeeee).setOrigin(0);
 
     const opponent = getGlobalData('battle_opponent') || 'default';
 
@@ -50,7 +51,7 @@ export default class Battle extends Scene {
 
     // default hide status board
     this.self.board.setAlpha(0);
-    this.opponent.board.setAlpha(0);
+    this.opponent!.board.setAlpha(0);
 
     // init dialogue
     this.dialogue = new PrimaryDialogue(this);
@@ -64,8 +65,8 @@ export default class Battle extends Scene {
   }
 
   update() {
-    this.self.characterHandler();
-    this.opponent.characterHandler();
+    this.self!.characterHandler();
+    this.opponent!.characterHandler();
   }
 
   private generateRandomBattleProcess(): TProcess[] {
@@ -89,9 +90,9 @@ export default class Battle extends Scene {
       // action movement
       const actionCharacter = from === 'self' ? this.self : this.opponent;
 
-      const currentAction = actionCharacter.getRandomAction();
+      const currentAction = actionCharacter!.getRandomAction();
       
-      const actionResult = actionCharacter.runAction(currentAction);
+      const actionResult = actionCharacter!.runAction(currentAction);
       if (!actionResult) return;
       
       const { effect, dialog: actionDialog } = actionResult;
@@ -99,29 +100,29 @@ export default class Battle extends Scene {
       if (!effect) return;
 
       const { type, target, value } = effect;
-      await this.dialogue.runDialogue(actionDialog);
+      await this.dialogue!.runDialogue(actionDialog);
 
       // reaction movement
       const sufferCharacter = target === 'self' ? this.self : this.opponent;
-      const reactionResult = sufferCharacter.runReaction(type, value || 0);
+      const reactionResult = sufferCharacter!.runReaction(type, value || 0);
 
       if (!reactionResult) return;
       const { dialog: sufferDialog, isDead } = reactionResult;
-      await this.dialogue.runDialogue(sufferDialog);
+      await this.dialogue!.runDialogue(sufferDialog);
 
       if (isDead) {
-        const winResult = actionCharacter.runResult('win');
+        const winResult = actionCharacter!.runResult('win');
         if (!winResult) return;
         const { dialog: winnerDialog } = winResult;
-        await this.dialogue.runDialogue(winnerDialog);
+        await this.dialogue!.runDialogue(winnerDialog);
 
-        sufferCharacter.runResult('lose');
-        const loseResult = sufferCharacter.runResult('lose');
+        sufferCharacter!.runResult('lose');
+        const loseResult = sufferCharacter!.runResult('lose');
 
         
         if (!loseResult) return;
         const { dialog: loserDialog } = loseResult;
-        await this.dialogue.runDialogue(loserDialog);
+        await this.dialogue!.runDialogue(loserDialog);
 
         this.handleFinishGame();
         return;
@@ -136,38 +137,38 @@ export default class Battle extends Scene {
   }
 
   private async handleFinishGame() {
-    const selfFinishDialog = this.self.runFinish();
-    await this.dialogue.runDialogue(selfFinishDialog);
-    setGlobalData('battle_result', this.self.hp.current > 0 ? 'win' : 'lose');
+    const selfFinishDialog = this.self!.runFinish();
+    await this.dialogue!.runDialogue(selfFinishDialog);
+    setGlobalData('battle_result', this.self!.hp.current > 0 ? 'win' : 'lose');
     sceneConverter(this, 'Tamagotchi');
   }
 
   private async openingCharacterMovement() {
-    this.self.character.setAlpha(0);
-    this.opponent.character.setAlpha(0);
+    this.self!.character.setAlpha(0);
+    this.opponent!.character.setAlpha(0);
 
     // run self opening animation
-    this.self.character.setAlpha(1);
-    await this.self.openingCharacter();
+    this.self!.character.setAlpha(1);
+    await this.self!.openingCharacter();
 
     // run battle introduce
-    const selfStartDialog = this.self.runStart();
-    await this.dialogue.runDialogue(selfStartDialog);
+    const selfStartDialog = this.self!.runStart();
+    await this.dialogue!.runDialogue(selfStartDialog);
 
     // run opponent opening animation
-    this.opponent.character.setAlpha(1);
-    await this.opponent.openingCharacter();
+    this.opponent!.character.setAlpha(1);
+    await this.opponent!.openingCharacter();
 
-    const opponentStartDialog = this.opponent.runStart();
-    await this.dialogue.runDialogue(opponentStartDialog);
+    const opponentStartDialog = this.opponent!.runStart();
+    await this.dialogue!.runDialogue(opponentStartDialog);
 
     // show status board for both
-    this.self.board.setAlpha(1);
-    this.opponent.board.setAlpha(1);
+    this.self!.board.setAlpha(1);
+    this.opponent!.board.setAlpha(1);
 
   }
   shutdown() {
-    this.opponent.destroy();
-    this.self.destroy();
+    this.opponent!.destroy();
+    this.self!.destroy();
   }
 }

@@ -7,8 +7,7 @@ import { getGlobalData, setGlobalData } from '../../EventBus';
 type TDirection = 'none' | 'left' | 'right';
 
 type TFunctionalActionDialogItem = {
-  face: { key: string; frame: string };
-  text: string;
+  dialog: TDialogData[];
   piority: number;
 };
 
@@ -161,7 +160,7 @@ export class TamagotchiCharacter extends Character {
     this.isActing = false;
   }
 
-  private handleChangeHp(value) {
+  private handleChangeHp(value: number) {
     const result = this.hp + value;
 
     this.hp = result >= 100 ? 100 : result <= 0 ? 0 : result;
@@ -249,10 +248,8 @@ export class TamagotchiCharacter extends Character {
 
     // send dialog back to tamagottchi
     if (dialogs) {
-      const dialog =
-        selectFromPiority<TFunctionalActionDialogItem>(dialogs);
-        console.log(dialog);
-      return dialog;
+      const result = selectFromPiority<TFunctionalActionDialogItem>(dialogs);
+      return result;
     }
   }
 

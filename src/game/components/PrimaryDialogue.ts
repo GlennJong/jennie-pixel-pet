@@ -106,7 +106,7 @@ export class PrimaryDialogue extends Phaser.GameObjects.Container {
 
   // Data
   private dialogueData: TDialogData[] = [];
-  private currentDialogueEntryIndex = 0; // 追蹤當前對話條目的索引
+  private currentDialogueEntryIndex = 0;
 
   private currentDialogueSegment: string = "";
   private currentLetterIndex: number = 0;
@@ -160,35 +160,40 @@ export class PrimaryDialogue extends Phaser.GameObjects.Container {
     const mockText = this.scene.make.text({
       ...MOCK_TEXTBOX_CONFIT,
     }).setVisible(false);
+    let currentWorkingSegment = '';
+    let tempPageCandidate = '';
 
-    let currentSegment = '';
     for (let i = 0; i < fullText.length; i++) {
       const char = fullText[i];
 
       if (char === '\n') {
-        if (currentSegment !== '') {
-          pages.push(currentSegment);
+        if (currentWorkingSegment !== '') {
+          mockText.setText(currentWorkingSegment);
+          pages.push(mockText.getWrappedText().join('\n'));
         }
-        currentSegment = '';
+        currentWorkingSegment = '';
+        tempPageCandidate = '';
         continue;
       }
 
-      const testSegment = currentSegment + char;
+      const testSegment = currentWorkingSegment + char;
       mockText.setText(testSegment);
-
       const wrappedLines = mockText.getWrappedText();
 
       if (wrappedLines.length <= 2) {
-        currentSegment = testSegment;
+        currentWorkingSegment = testSegment;
+        tempPageCandidate = wrappedLines.join('\n');
       } else {
-        pages.push(currentSegment);
-        currentSegment = char;
-        mockText.setText(currentSegment);
+        pages.push(tempPageCandidate);
+        currentWorkingSegment = char;
+        mockText.setText(currentWorkingSegment);
+        tempPageCandidate = mockText.getWrappedText().join('\n');
       }
     }
 
-    if (currentSegment !== '') {
-      pages.push(currentSegment);
+    if (currentWorkingSegment !== '') {
+      mockText.setText(currentWorkingSegment);
+      pages.push(mockText.getWrappedText().join('\n'));
     }
 
     mockText.destroy();
@@ -335,7 +340,7 @@ export class PrimaryDialogue extends Phaser.GameObjects.Container {
       .setOrigin(0)
       .setDepth(999)
       .setVisible(false);
-    
+
   }
 
   // Destory

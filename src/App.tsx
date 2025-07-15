@@ -4,6 +4,7 @@ import useTwitchOauth from "./hooks/useTwitchOauth";
 import { EventBus, setGlobalData, getGlobalData } from './game/EventBus';
 import Console from "./game/Console";
 import ColorPicker from './ColorPicker';
+import ConfigEditor from './ConfigEditor';
 
 const isDev = import.meta.env['VITE_ENV'] === 'dev';
 
@@ -63,6 +64,7 @@ function App() {
         }
         { isDev && isGameStart &&
           <div style={{ position: 'fixed', bottom: 0, left: 0, width: '100%' }}>
+            <ConfigEditor />
             <div style={{ display: 'flex', gap: '12px', alignItems: 'center', justifyContent: 'center', marginBottom: '12px' }}>
               <button className="button" onClick={() => setGlobalData('tamagotchi_level', 1)}>
                 level=1
@@ -78,7 +80,8 @@ function App() {
               <button className="button" onClick={() => handleClickManualBattle('test', '補充水分')}>補充水分</button>
               <button className="button" onClick={() => handleClickManualBattle('test', '貝貝打招呼')}>battle 貝貝</button>
               <button className="button" onClick={() => handleClickManualBattle('test', '上上打招呼')}>battle 上上</button>
-              <button className="button" onClick={() => handleClickManualBattle('curry_cat', '上上打招呼')}>battle 上上（curry_cat）</button>
+              <button className="button" onClick={() => handleClickManualBattle('curry_cat', '上上打招呼')}>battle curry_cat</button>
+              <button className="button" onClick={() => handleClickManualBattle('jennie_congee', '上上打招呼')}>battle jennie_congee</button>
             </div>
             <div>
               { twitchState && JSON.stringify(twitchState) }

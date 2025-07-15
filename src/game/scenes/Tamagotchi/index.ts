@@ -21,7 +21,6 @@ type Task = {
   user: string,
   content: string
 }
-  
 
 type MappingList = {
   action: string,
@@ -44,7 +43,7 @@ export default class Tamagotchi extends Scene {
   private keyboardHandler?: KeyboardHandler;
 
   private actionQueue: { user: string; action: string, params?: { [key: string]: string } }[] = [];
-  private isStart: boolean = false;
+  private isTamagotchiReady: boolean = false;
   private isActionRunning: boolean = false;
   
   constructor() {
@@ -85,7 +84,7 @@ export default class Tamagotchi extends Scene {
 
     // Build Dialogue
     this.dialogue = new PrimaryDialogue(this);
-    this.dialogue!.initDialogue();
+    this.dialogue.initDialogue();
     // this.add.existing(this.dialogue);
 
     // Build Keyboard
@@ -103,7 +102,7 @@ export default class Tamagotchi extends Scene {
       await sceneStarter(this);
       await this.handleBattleAward(); // handle battle reward
       this.character!.startTamagotchi();
-      this.isStart = true;
+      this.isTamagotchiReady = true;
     })();
 
     this.events.on('shutdown', this.shutdown, this);
@@ -142,7 +141,6 @@ export default class Tamagotchi extends Scene {
   }
 
   private handleConvertActionQueue = (queue: Task[]) => {
-    console.log(queue);
     if (queue.length === 0) return;
     const mappingList: MappingList[] = this.cache.json.get('config').tamagotchi_action_mapping;
 
@@ -219,12 +217,13 @@ export default class Tamagotchi extends Scene {
     this.keyboardHandler!.update();
 
     // functions
-    if (this.actionQueue.length !== 0 && !this.isActionRunning && this.isStart) {
+    if (this.actionQueue.length !== 0 && !this.isActionRunning && this.isTamagotchiReady) {
       this.handleActionQueue();
     }
   }
 
   shutdown = () => {
+    this.isTamagotchiReady = false;
     this.isActionRunning = false;
     this.character!.destroy()
     this.background!.destroy();
