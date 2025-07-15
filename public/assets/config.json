@@ -424,7 +424,7 @@
                     "key": "battle_beibei_opponent",
                     "frame": "face_normal"
                   },
-                  "text": "你欠打喔！"
+                  "text": "打！"
                 }
               ],
               "piority": 2
@@ -471,7 +471,7 @@
                     "key": "battle_beibei_opponent",
                     "frame": "face_sad"
                   },
-                  "text": "好痛啦！！"
+                  "text": "痛！！"
                 }
               ],
               "piority": 2
@@ -1520,7 +1520,7 @@
                   "key": "tamagotchi_afk",
                   "frame": "face_normal"
                 },
-                "text": "感謝{{user_name}}兌換\n補充喝水，為AFK增加了 10 點生命！"
+                "text": "感謝 {{user_name}} 兌換\n補充喝水，為AFK增加了 10 點生命！"
               }
             ],
             "piority": 2
@@ -1538,7 +1538,7 @@
                   "key": "tamagotchi_afk",
                   "frame": "face_normal"
                 },
-                "text": "{{user_name}}兌換\n打招呼！\n有人來挑戰了！"
+                "text": "{{user_name}} 兌換打招呼！\n有人來挑戰了！"
               }
             ],
             "piority": 2
@@ -1556,7 +1556,7 @@
                   "key": "tamagotchi_afk",
                   "frame": "face_normal"
                 },
-                "text": "感謝 {{user_name}} 兌換\n存檔紀錄，為AFK增加了 10 點生命！"
+                "text": "感謝 {{user_name}} 兌換存檔紀錄，為AFK增加了 10 點生命！"
               }
             ],
             "piority": 2
@@ -1670,21 +1670,45 @@
   "tamagotchi_action_mapping": [
     {
       "action": "drink",
-      "matches": ["補充水分"]
+      "matches": {
+        "content": ["補充水分"]
+      }
     },
     {
       "action": "battle",
-      "matches": ["上上打招呼", "上上刷存在感"],
+      "matches": {
+        "user": ["curry_cat"],
+        "content": ["上上打招呼", "上上刷存在感"]
+      },
+      "params": { "opponent": "currycat" }
+    },
+    {
+      "action": "battle",
+      "matches": {
+        "user": ["curry_cat"],
+        "content": ["貝貝打招呼", "貝貝刷存在感"]
+      },
+      "params": { "opponent": "currycat" }
+    },
+    {
+      "action": "battle",
+      "matches": {
+        "content": ["上上打招呼", "上上刷存在感"]
+      },
       "params": { "opponent": "shangshang" }
     },
     {
       "action": "battle",
-      "matches": ["貝貝打招呼", "貝貝刷存在感"],
+      "matches": {
+        "content": ["貝貝打招呼", "貝貝刷存在感"]
+      },
       "params": { "opponent": "beibei" }
     },
     {
       "action": "write",
-      "matches": ["提醒大家存檔"]
+      "matches": {
+        "content": ["提醒大家存檔"]
+      }
     },
     {
       "action": "sleep",

@@ -78,6 +78,7 @@ function App() {
               <button className="button" onClick={() => handleClickManualBattle('test', '補充水分')}>補充水分</button>
               <button className="button" onClick={() => handleClickManualBattle('test', '貝貝打招呼')}>battle 貝貝</button>
               <button className="button" onClick={() => handleClickManualBattle('test', '上上打招呼')}>battle 上上</button>
+              <button className="button" onClick={() => handleClickManualBattle('curry_cat', '上上打招呼')}>battle 上上（curry_cat）</button>
             </div>
             <div>
               { twitchState && JSON.stringify(twitchState) }

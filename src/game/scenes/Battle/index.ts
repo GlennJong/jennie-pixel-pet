@@ -15,7 +15,7 @@ type TProcess = {
 };
 
 export default class Battle extends Scene {
-  camera: Phaser.Cameras.Scene2D.Camera;
+  // camera: Phaser.Cameras.Scene2D.Camera;
   background: Phaser.GameObjects.Image;
   self: BattleCharacter;
   opponent: BattleCharacter;
@@ -30,8 +30,8 @@ export default class Battle extends Scene {
   }
 
   create() {
-    this.camera = this.cameras.main;
-    this.camera.setBackgroundColor(0xeeeeee);
+    // this.camera = this.cameras.main;
+    // this.camera.setBackgroundColor(0xeeeeee);
 
     const opponent = getGlobalData('battle_opponent') || 'default';
 

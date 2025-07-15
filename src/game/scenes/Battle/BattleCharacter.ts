@@ -206,7 +206,13 @@ export default class BattleCharacter extends Character {
   private handlePlayRecoverReaction = async (value: number) => {
     const result = Math.min(this.hp.max, this.hp.current + value);
     this.hp.current = result;
+    this.character.setOrigin(0.5);
+    const originX = this.character.x;
+    const originY = this.character.y;
+    this.character.setPosition(this.character.x + this.character.width/2, this.character.y + this.character.height/2);
     await runTween(this.character, { scale: 1.15, yoyo: 1 }, 200);
+    this.character.setPosition(originX, originY);
+    this.character.setOrigin(0);
     this.character.setScale(1);
     await this.board.setHP(this.hp.current);
   };

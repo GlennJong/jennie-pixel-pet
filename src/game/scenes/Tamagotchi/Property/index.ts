@@ -6,7 +6,6 @@ const WINDOW_POSITION = { x: 44, y: -4 };
 const RECORDER_POSITION = { x: 0, y: 31 }
 
 export class Property extends Phaser.GameObjects.Container {
-  private level: number;
   private window: RoomWindow;
   private recorder: RoomRecorder;
   private decoration: CustomDecroation;
