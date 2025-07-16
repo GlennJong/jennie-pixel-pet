@@ -10,7 +10,7 @@ export class IconHp extends Phaser.GameObjects.Container {
   private text: Phaser.GameObjects.Text;
   private value: number;
   private targetValue: number | undefined;
-  private step: '100' | '75' | '50' | '25' | '10';
+  private step: '100' | '75' | '50' | '25' | '10' = '100';
 
   constructor(scene: Phaser.Scene, option: { x: number; y: number }) {
     super(scene);
@@ -138,7 +138,7 @@ export class IconHp extends Phaser.GameObjects.Container {
   }
 
   public destroy() {
-    EventBus.off('tamagotchi_hp-updated', this.setValue);
+    EventBus.off('tamagotchi_hp-updated', this.handleSetValue);
     this.icon.destroy();
     this.text.destroy();
   }

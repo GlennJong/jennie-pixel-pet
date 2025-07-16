@@ -33,6 +33,7 @@ type TamagotchiCharacterProps = {
   edge: { from: number; to: number };
 };
 
+const DEFAULT_CHARACTER_KEY = 'tamagotchi_afk';
 const defaultIdlePrefix = 'idle'; // TODO: idle right
 const defaultHp = 50;
 const defaultRecoverHpByTime = 2;
@@ -61,10 +62,10 @@ export class TamagotchiCharacter extends Character {
   private isReady: boolean = false;
 
   constructor(scene: Phaser.Scene, props: TamagotchiCharacterProps) {
-    const key = 'tamagotchi_afk'; // static character here
+    const key = DEFAULT_CHARACTER_KEY; // static character here
     const hp = getGlobalData('tamagotchi_hp');
 
-    const config = scene.cache.json.get('config')[key]; // get current character config
+    const config = scene.cache.json.get('config').tamagotchi[DEFAULT_CHARACTER_KEY]; // get current character config
 
     const characterProps = {
       ...props,
@@ -73,17 +74,6 @@ export class TamagotchiCharacter extends Character {
     
     super(scene, key, characterProps);
 
-    // const shadow = scene.add.circle( // TODO: how to destroy it?
-    //   characterProps.x + this.character.width/1.8,
-    //   characterProps.y + this.character.height,
-    //   12,
-    //   0x000000,
-    // );
-    // shadow.setOrigin(0.5);
-    // shadow.setAlpha(0.6);
-    // shadow.setScale(0.8, 0.3);
-    // shadow.setDepth(1);
-    // this.setFollowShadow(shadow);
     this.character.setDepth(2);
 
     // actions

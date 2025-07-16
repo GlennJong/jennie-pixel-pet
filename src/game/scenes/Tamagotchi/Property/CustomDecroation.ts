@@ -1,6 +1,7 @@
 import Phaser from 'phaser';
 import { getGlobalData, EventBus } from '../../../EventBus';
 
+const DEFAULT_DECORATION_KEY = 'tamagotchi_room';
 const DEFAULT_LEVEL = 1;
 
 export class CustomDecroation extends Phaser.GameObjects.Container {
@@ -13,7 +14,9 @@ export class CustomDecroation extends Phaser.GameObjects.Container {
     // Inherite from scene
     super(scene);
 
-    this.config = scene.cache.json.get('config')['tamagotchi_room'].decoration;
+    const key = DEFAULT_DECORATION_KEY;
+
+    this.config = scene.cache.json.get('config').tamagotchi[key].decoration || [];
 
     this.maxLevel = this.config.length;
     

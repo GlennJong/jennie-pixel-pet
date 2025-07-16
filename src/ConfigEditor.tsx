@@ -1,6 +1,5 @@
 
 import React, { useEffect, useState } from "react";
-
 // 定義 config 型別
 interface TamagotchiAfkBattleBase {
   max_hp: number;
