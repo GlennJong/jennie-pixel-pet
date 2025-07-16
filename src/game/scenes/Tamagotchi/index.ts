@@ -85,7 +85,6 @@ export default class Tamagotchi extends Scene {
     // Build Dialogue
     this.dialogue = new PrimaryDialogue(this);
     this.dialogue.initDialogue();
-    // this.add.existing(this.dialogue);
 
     // Build Keyboard
     this.keyboardHandler! = new KeyboardHandler(this, {
@@ -159,7 +158,7 @@ export default class Tamagotchi extends Scene {
   }
 
   private handleBuyDecoration = async (coin: number) => {
-    const decoration = this.cache.json.get('config').tamagotchi_room.decoration;
+    const decoration = this.cache.json.get('config').tamagotchi.tamagotchi_room.decoration;
 
     for(let i = 0; i < decoration.length; i++) {
       const { cost, level } = decoration[i];
