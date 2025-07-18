@@ -39,86 +39,15 @@
       "animations": [
         { "prefix": "idle", "qty": 1, "freq": 1, "repeat": -1 }
       ],
-      "battle": {
-        "base": {
-          "max_hp": 2,
-          "name": "沙包"
-        },
-        "actions": {
-          "attack": {
-            "animation": "attack",
-            "piority": 1,
-            "dialogs": [
-              {
-                "dialog": [
-                  {
-                    "face": {
-                      "key": "battle_default_opponent",
-                      "frame": "face_normal"
-                    },
-                    "text": "！！！！！！！！"
-                  }
-                ],
-                "piority": 20
-              },
-              {
-                "dialog": [
-                  {
-                    "face": {
-                      "key": "battle_default_opponent",
-                      "frame": "face_normal"
-                    },
-                    "text": "！！！"
-                  }
-                ],
-                "piority": 80
-              }
-            ],
-            "effect": {
-              "type": "damage",
-              "target": "self",
-              "value": 5
-            }
-          }
-        },
-        "reactions": {
-          "damage": {
-            "animation": "damage",
-            "dialogs": [
-              {
-                "dialog": [
-                  {
-                    "face": {
-                      "key": "battle_default_opponent",
-                      "frame": "face_normal"
-                    },
-                    "text": "！？！？！？！？！？！？"
-                  }
-                ],
-                "piority": 2
-              }
-            ]
-          },
-          "recover": {
-            "animation": "recover",
-            "dialogs": [
-              {
-                "dialog": [
-                  {
-                    "face": {
-                      "key": "battle_default_opponent",
-                      "frame": "face_normal"
-                    },
-                    "text": "＾＿＾！"
-                  }
-                ],
-                "piority": 2
-              }
-            ]
-          }
-        },
-        "common": {
-          "start": [
+      "base": {
+        "max_hp": 2,
+        "name": "沙包"
+      },
+      "actions": {
+        "attack": {
+          "animation": "attack",
+          "piority": 1,
+          "dialogs": [
             {
               "dialog": [
                 {
@@ -126,13 +55,11 @@
                     "key": "battle_default_opponent",
                     "frame": "face_normal"
                   },
-                  "text": "：）））））"
+                  "text": "！！！！！！！！"
                 }
               ],
-              "piority": 2
-            }
-          ],
-          "finish": [
+              "piority": 20
+            },
             {
               "dialog": [
                 {
@@ -140,46 +67,117 @@
                     "key": "battle_default_opponent",
                     "frame": "face_normal"
                   },
-                  "text": "ZzZzZzZzZz"
+                  "text": "！！！"
+                }
+              ],
+              "piority": 80
+            }
+          ],
+          "effect": {
+            "type": "damage",
+            "target": "self",
+            "value": 5
+          }
+        }
+      },
+      "reactions": {
+        "damage": {
+          "animation": "damage",
+          "dialogs": [
+            {
+              "dialog": [
+                {
+                  "face": {
+                    "key": "battle_default_opponent",
+                    "frame": "face_normal"
+                  },
+                  "text": "！？！？！？！？！？！？"
                 }
               ],
               "piority": 2
             }
           ]
         },
-        "results": {
-          "win": {
-            "dialogs": [
+        "recover": {
+          "animation": "recover",
+          "dialogs": [
+            {
+              "dialog": [
+                {
+                  "face": {
+                    "key": "battle_default_opponent",
+                    "frame": "face_normal"
+                  },
+                  "text": "＾＿＾！"
+                }
+              ],
+              "piority": 2
+            }
+          ]
+        }
+      },
+      "common": {
+        "start": [
+          {
+            "dialog": [
               {
-                "dialog": [
-                  {
-                    "face": {
-                      "key": "battle_default_opponent",
-                      "frame": "face_normal"
-                    },
-                    "text": "：ＤＤＤＤＤ"
-                  }
-                ],
-                "piority": 2
+                "face": {
+                  "key": "battle_default_opponent",
+                  "frame": "face_normal"
+                },
+                "text": "：）））））"
               }
-            ]
-          },
-          "lose": {
-            "dialogs": [
-              {
-                "dialog": [
-                  {
-                    "face": {
-                      "key": "battle_default_opponent",
-                      "frame": "face_normal"
-                    },
-                    "text": "：（（（（"
-                  }
-                ],
-                "piority": 2
-              }
-            ]
+            ],
+            "piority": 2
           }
+        ],
+        "finish": [
+          {
+            "dialog": [
+              {
+                "face": {
+                  "key": "battle_default_opponent",
+                  "frame": "face_normal"
+                },
+                "text": "ZzZzZzZzZz"
+              }
+            ],
+            "piority": 2
+          }
+        ]
+      },
+      "results": {
+        "win": {
+          "dialogs": [
+            {
+              "dialog": [
+                {
+                  "face": {
+                    "key": "battle_default_opponent",
+                    "frame": "face_normal"
+                  },
+                  "text": "：ＤＤＤＤＤ"
+                }
+              ],
+              "piority": 2
+            }
+          ]
+        },
+        "lose": {
+          "dialogs": [
+            {
+              "dialog": [
+                {
+                  "face": {
+                    "key": "battle_default_opponent",
+                    "frame": "face_normal"
+                  },
+                  "text": "：（（（（"
+                }
+              ],
+              "piority": 2
+            }
+          ]
         }
       }
     },
@@ -1653,7 +1651,6 @@
         },
         "buy": {
           "animation": "none",
-          "point": 0,
           "dialogs": [
             {
               "dialog": [
@@ -1684,14 +1681,24 @@
       }
     }
   },
-  "tamagotchi_action_mapping": [
-    {
+  "mapping": {
+    "drink": {
       "action": "drink",
       "matches": {
         "content": ["補充水分"]
       }
     },
-    {
+    "write": {
+      "action": "write",
+      "matches": {
+        "content": ["提醒大家存檔"]
+      }
+    },
+    "sleep": {
+      "action": "sleep",
+      "matches": []
+    },
+    "battle_currycat": {
       "action": "battle",
       "matches": {
         "user": ["curry_cat"],
@@ -1699,7 +1706,7 @@
       },
       "params": { "opponent": "currycat" }
     },
-    {
+    "battle_jennie": {
       "action": "battle",
       "matches": {
         "user": ["jennie_congee"],
@@ -1707,29 +1714,19 @@
       },
       "params": { "opponent": "jennie" }
     },
-    {
+    "battle_shangshang": {
       "action": "battle",
       "matches": {
         "content": ["上上打招呼", "上上刷存在感"]
       },
       "params": { "opponent": "shangshang" }
     },
-    {
+    "battle_beibei": {
       "action": "battle",
       "matches": {
         "content": ["貝貝打招呼", "貝貝刷存在感"]
       },
       "params": { "opponent": "beibei" }
-    },
-    {
-      "action": "write",
-      "matches": {
-        "content": ["提醒大家存檔"]
-      }
-    },
-    {
-      "action": "sleep",
-      "matches": []
     }
-  ]
+  }
 }

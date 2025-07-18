@@ -141,12 +141,12 @@ export default class Tamagotchi extends Scene {
 
   private handleConvertActionQueue = (queue: Task[]) => {
     if (queue.length === 0) return;
-    const mappingList: MappingList[] = this.cache.json.get('config').tamagotchi_action_mapping;
+    const mappingList: MappingList[] = this.cache.json.get('config').mapping;
 
     for(let i = 0; i < queue.length; i++) {
       const { user, content } = queue[i];
       
-      const result = filterFromMatchList({ user, content }, mappingList)
+      const result = filterFromMatchList({ user, content }, Object.values(mappingList))
       
       if (result) {
         const action = result.action;

@@ -9,6 +9,8 @@ import ConfigEditor from './ConfigEditor';
 const isDev = import.meta.env['VITE_ENV'] === 'dev';
 
 function App() {
+  const [ isConfigOpen, setIsConfigOpen ] = useState(false);
+  const [ isAutoSaved, setIsAutoSaved ] = useState(false);
   const [ isGameStart, setIsGameStart ] = useState(true);
   const { twitchState, startOauthConnect, startWebsocket } = useTwitchOauth();
   const [ record, setRecord ] = useState<{user?: string, content?: string}[]>([]);
@@ -37,7 +39,6 @@ function App() {
   
   return (
     <div id="app" style={{ background: bgColor }}>
-      
       <div style={{ zIndex: 1, position: "relative" }}>
         {
           twitchState &&
@@ -62,21 +63,27 @@ function App() {
             </div>
           </div>
         }
-        { isDev && isGameStart &&
-          <div style={{ position: 'fixed', bottom: 0, left: 0, width: '100%' }}>
-            <ConfigEditor />
-            <div style={{ display: 'flex', gap: '12px', alignItems: 'center', justifyContent: 'center', marginBottom: '12px' }}>
-              <button className="button" onClick={() => setGlobalData('tamagotchi_level', 1)}>
-                level=1
-              </button>
-              <button className="button" onClick={() => setGlobalData('tamagotchi_coin', 0)}>
-                coin=0
-              </button>
-              <button className="button" onClick={() => setGlobalData('tamagotchi_coin', getGlobalData('tamagotchi_coin') + 20)}>
-                coin+20
-              </button>
+        <div  style={{ position: 'fixed', bottom: '12px', right: '12px', zIndex: 2 }}>
+          <label style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+            <input type="checkbox" defaultChecked={isConfigOpen} onChange={() => setIsConfigOpen(!isConfigOpen)} />
+            <span>Config</span>
+          </label>
+          <label style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+            <input type="checkbox" defaultChecked={isAutoSaved} onChange={() => setIsAutoSaved(!isAutoSaved)} />
+            <span>Auto Save</span>
+          </label>
+        </div>
+        { isConfigOpen && isGameStart &&
+          <div style={{ position: 'fixed', bottom: 0, left: 0, width: '100%', padding: '12px', zIndex: 1, backgroundColor: bgColor }}>
+            <div style={{ marginBottom: '12px'}}>
+              <ConfigEditor />
             </div>
-            <div style={{ display: 'flex', gap: '12px', alignItems: 'center', justifyContent: 'center' }}>
+            <div style={{ display: 'flex', gap: '12px', alignItems: 'center', justifyContent: 'flex-start', marginBottom: '12px' }}>
+              <button className="button" onClick={() => setGlobalData('tamagotchi_level', 1)}>level=1</button>
+              <button className="button" onClick={() => setGlobalData('tamagotchi_coin', 0)}>coin=0</button>
+              <button className="button" onClick={() => setGlobalData('tamagotchi_coin', getGlobalData('tamagotchi_coin') + 20)}>coin+20</button>
+            </div>
+            <div style={{ display: 'flex', gap: '12px', alignItems: 'center', justifyContent: 'flex-start' }}>
               <button className="button" onClick={() => handleClickManualBattle('test', '補充水分')}>補充水分</button>
               <button className="button" onClick={() => handleClickManualBattle('test', '貝貝打招呼')}>battle 貝貝</button>
               <button className="button" onClick={() => handleClickManualBattle('test', '上上打招呼')}>battle 上上</button>
