@@ -9,7 +9,7 @@ import { canvas } from '@/game/constants';
 
 // Battle Scene
 import Battle from '@/game/scenes/Battle';
-import Tamagotchi from '@/game/scenes/Tamagotchi/scenes/Main';
+import Tamagotchi from '@/game/scenes/Tamagotchi';
 import TestScene from '@/game/scenes/Test';
 import { MainScene } from '@/game/scenes/MainScene';
 

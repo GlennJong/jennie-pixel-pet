@@ -1,5 +1,5 @@
 import { Scene } from 'phaser';
-import { initStore } from '../store';
+import { initStore } from '@/game/store';
 
 const DEFAULT_HP = 5;
 const DEFAULT_COIN = 20;

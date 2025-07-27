@@ -1,4 +1,4 @@
-import { store, setStoreState } from "./store";
+import { store, setStoreState } from "@/game/store";
 
 export type MessageQueueItem = {
   user: string;

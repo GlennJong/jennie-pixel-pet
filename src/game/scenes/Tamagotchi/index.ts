@@ -2,22 +2,22 @@ import Phaser, { Scene } from 'phaser';
 import { EventBus, setGlobalData } from '@/game/EventBus';
 
 // common components
+import { setStoreState, store, getStoreState } from '@/game/store';
+import { originalHeight, originalWidth } from '@/game/constants';
 import { PrimaryDialogue } from '@/game/components/PrimaryDialogue';
 import { sceneConverter, sceneStarter } from '@/game/components/CircleSceneTransition';
-import { originalHeight, originalWidth } from '@/game/constants';
-import { setStoreState, store, getStoreState } from '@/game/store';
 
 // partial components
-import { Header } from '../components/Header';
-import { Property } from '../components/Property';
-import { TamagotchiCharacter } from '../components/TamagotchiCharacter';
+import { Header } from './components/Header';
+import { Property } from './components/Property';
+import { TamagotchiCharacter } from './components/TamagotchiCharacter';
 
 // services
-import KeyboardHandler from '../services/KeyboardHander';
-import { TaskQueueHandler } from '../services/TaskQueueHandler';
-import { TamagotchiGameController } from '../services/TamagotchiGameController';
-import { PropertyHandler } from '../services/PropertyHandler';
-import { HpHandler } from '../services/HpHandler';
+import KeyboardHandler from './services/KeyboardHander';
+import { TaskQueueHandler } from './services/TaskQueueHandler';
+import { TamagotchiGameController } from './services/TamagotchiGameController';
+import { PropertyHandler } from './services/PropertyHandler';
+import { HpHandler } from './services/HpHandler';
 
 
 const DEFAULT_TAMAGOTCHI_POSITION = {
