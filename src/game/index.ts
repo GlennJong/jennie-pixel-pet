@@ -1,17 +1,17 @@
 import 'phaser';
 import { AUTO, Game } from 'phaser';
-import { Preloader } from './scenes/Preloader';
+import { Preloader } from '@/game/scenes/Preloader';
 
 // General
-import { canvas } from './constants';
+import { canvas } from '@/game/constants';
 
 // Tamagotchi Scene
-import Tamagotchi from './scenes/Tamagotchi';
 
 // Battle Scene
-import Battle from './scenes/Battle';
-import TestScene from './scenes/Test';
-import { MainScene } from './scenes/MainScene';
+import Battle from '@/game/scenes/Battle';
+import Tamagotchi from '@/game/scenes/Tamagotchi/scenes/Main';
+import TestScene from '@/game/scenes/Test';
+import { MainScene } from '@/game/scenes/MainScene';
 
 const config: Phaser.Types.Core.GameConfig = {
   type: AUTO,

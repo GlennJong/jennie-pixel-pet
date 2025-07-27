@@ -77,6 +77,6 @@ export class Preloader extends Scene {
   }
 
   create() {
-    this.scene.start('Tamagotchi');
+    this.scene.start('MainScene');
   }
 }

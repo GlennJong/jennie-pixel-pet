@@ -1525,10 +1525,10 @@
       "functional_action": {
         "drink": {
           "animation": "drink",
-          "point": 10,
+          "hp": 10,
           "dialogs": [
             {
-              "dialog": [
+              "sentences": [
                 {
                   "face": {
                     "key": "tamagotchi_afk",
@@ -1542,11 +1542,12 @@
           ]
         },
         "battle": {
-          "animation": "drink",
-          "point": 0,
+          "animation": "none",
+          "hp": 0,
+          "nextScene": "battle",
           "dialogs": [
             {
-              "dialog": [
+              "sentences": [
                 {
                   "face": {
                     "key": "tamagotchi_afk",
@@ -1561,10 +1562,10 @@
         },
         "write": {
           "animation": "write",
-          "point": 10,
+          "hp": 10,
           "dialogs": [
             {
-              "dialog": [
+              "sentences": [
                 {
                   "face": {
                     "key": "tamagotchi_afk",
@@ -1579,10 +1580,10 @@
         },
         "sleep": {
           "animation": "sleep",
-          "point": 0,
+          "hp": 0,
           "dialogs": [
             {
-              "dialog": [
+              "sentences": [
                 {
                   "face": {
                     "key": "tamagotchi_afk",
@@ -1597,10 +1598,10 @@
         },
         "awake": {
           "animation": "awake",
-          "point": 0,
+          "hp": 0,
           "dialogs": [
             {
-              "dialog": [
+              "sentences": [
                 {
                   "face": {
                     "key": "tamagotchi_afk",
@@ -1613,18 +1614,19 @@
             }
           ]
         },
-        "win": {
+        "award": {
           "animation": "none",
-          "point": 0,
+          "hp": 0,
+          "coin": 30,
           "dialogs": [
             {
-              "dialog": [
+              "sentences": [
                 {
                   "face": {
                     "key": "tamagotchi_afk",
                     "frame": "face_normal"
                   },
-                  "text": "我贏了！賺到零用錢！"
+                  "text": "我贏了！賺到 10 元零用錢！"
                 }
               ],
               "piority": 2
@@ -1633,16 +1635,17 @@
         },
         "lose": {
           "animation": "none",
-          "point": 0,
+          "hp": 0,
+          "coin": -10,
           "dialogs": [
             {
-              "dialog": [
+              "sentences": [
                 {
                   "face": {
                     "key": "tamagotchi_afk",
                     "frame": "face_sad"
                   },
-                  "text": "輸了，零用錢不見了"
+                  "text": "輸了，損失 10 元零用錢！"
                 }
               ],
               "piority": 2
@@ -1653,7 +1656,7 @@
           "animation": "none",
           "dialogs": [
             {
-              "dialog": [
+              "sentences": [
                 {
                   "face": {
                     "key": "tamagotchi_afk",
@@ -1665,7 +1668,7 @@
               "piority": 2
             },
             {
-              "dialog": [
+              "sentences": [
                 {
                   "face": {
                     "key": "tamagotchi_afk",
@@ -1675,6 +1678,44 @@
                 }
               ],
               "piority": 4
+            }
+          ]
+        },
+        "born": {
+          "animation": "born",
+          "hp": 0,
+          "coin": 0,
+          "dialogs": [
+            {
+              "sentences": [
+                {
+                  "face": {
+                    "key": "tamagotchi_afk",
+                    "frame": "face_normal"
+                  },
+                  "text": "復活"
+                }
+              ],
+              "piority": 2
+            }
+          ]
+        },
+        "dead": {
+          "animation": "dead",
+          "hp": 0,
+          "coin": -10,
+          "dialogs": [
+            {
+              "sentences": [
+                {
+                  "face": {
+                    "key": "tamagotchi_afk",
+                    "frame": "face_sad"
+                  },
+                  "text": "死了"
+                }
+              ],
+              "piority": 2
             }
           ]
         }

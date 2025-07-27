@@ -1,5 +1,11 @@
 import { Scene } from 'phaser';
-import { setupGlobalEventListener } from '../EventBus';
+import { initStore } from '../store';
+
+const DEFAULT_HP = 5;
+const DEFAULT_COIN = 20;
+const DEFAULT_LEVEL = 1;
+const DEFAULT_GLOBAL_TRANSMIT = {};
+// const DEFAULT_GLOBAL_TRANSMIT = { battleResult: 'win' };
 
 export class MainScene extends Scene {
     constructor() {
@@ -8,7 +14,21 @@ export class MainScene extends Scene {
 
     create() {
         // Use the reusable function to set up the global event listener
-        setupGlobalEventListener(this);
+        // setupGlobalEventListener(this);
+
+        initStore('global.isPaused', false);
+        initStore('global.transmit', DEFAULT_GLOBAL_TRANSMIT);
+        initStore('global.messageQueue', []);
+        
+        initStore('tamagotchi.hp', DEFAULT_HP);
+        initStore('tamagotchi.isAlive', true);
+        initStore('tamagotchi.isSleep', false);
+        initStore('tamagotchi.taskQueue', []);
+
+        initStore('tamagotchi.coin', DEFAULT_COIN);
+        initStore('tamagotchi.level', DEFAULT_LEVEL);
+        initStore('tamagotchi.battleResult', 'win');
+        
         this.scene.start('Tamagotchi');
     }
 

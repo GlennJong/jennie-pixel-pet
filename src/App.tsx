@@ -1,15 +1,16 @@
 import { useRef, useState } from "react";
-import { PhaserGame } from "./PhaserGame";
-import useTwitchOauth from "./hooks/useTwitchOauth";
-import { EventBus, setGlobalData, getGlobalData } from './game/EventBus';
-import Console from "./game/Console";
-import ColorPicker from './ColorPicker';
-import ConfigEditor from './ConfigEditor';
+import { PhaserGame } from "@/PhaserGame";
+import useTwitchOauth from "@/hooks/useTwitchOauth";
+import { EventBus, setGlobalData, getGlobalData } from '@/game/EventBus';
+import Console from "@/game/Console";
+import ColorPicker from '@/ColorPicker';
+import ConfigEditor from '@/ConfigEditor';
+import { setStoreState, store } from "@/game/store";
 
 const isDev = import.meta.env['VITE_ENV'] === 'dev';
 
 function App() {
-  const [ isConfigOpen, setIsConfigOpen ] = useState(false);
+  const [ isConfigOpen, setIsConfigOpen ] = useState(true);
   const [ isAutoSaved, setIsAutoSaved ] = useState(false);
   const [ isGameStart, setIsGameStart ] = useState(true);
   const { twitchState, startOauthConnect, startWebsocket } = useTwitchOauth();
@@ -30,10 +31,15 @@ function App() {
   }
 
   const handleClickManualBattle = (user: string, content: string) => {
-    setGlobalData('message_queue', [
-      ...getGlobalData('message_queue'),
+    const myStore = store('global.messageQueue');
+    setStoreState('global.messageQueue', [
+      ...(Array.isArray(myStore?.get()) ? myStore.get() as { user?: string, content?: string }[] : []),
       { user, content }
-    ]);
+    ])
+    // setGlobalData('message_queue', [
+    //   ...getGlobalData('message_queue'),
+    //   { user, content }
+    // ]);
   }
 
   
@@ -74,10 +80,10 @@ function App() {
           </label>
         </div>
         { isConfigOpen && isGameStart &&
-          <div style={{ position: 'fixed', bottom: 0, left: 0, width: '100%', padding: '12px', zIndex: 1, backgroundColor: bgColor }}>
-            <div style={{ marginBottom: '12px'}}>
+          <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', padding: '12px', zIndex: 1, backgroundColor: bgColor }}>
+            {/* <div style={{ marginBottom: '12px'}}>
               <ConfigEditor />
-            </div>
+            </div> */}
             <div style={{ display: 'flex', gap: '12px', alignItems: 'center', justifyContent: 'flex-start', marginBottom: '12px' }}>
               <button className="button" onClick={() => setGlobalData('tamagotchi_level', 1)}>level=1</button>
               <button className="button" onClick={() => setGlobalData('tamagotchi_coin', 0)}>coin=0</button>

@@ -93,6 +93,8 @@ const MOCK_TEXTBOX_CONFIT = {
 
 
 export class PrimaryDialogue extends Phaser.GameObjects.Container {
+  private onDialogueStart?: () => void;
+  private onDialogueEnd?: () => void;
 
   // Elements
   private portraitBackground?: Phaser.GameObjects.NineSlice;
@@ -110,10 +112,9 @@ export class PrimaryDialogue extends Phaser.GameObjects.Container {
 
   private currentDialogueSegment: string = "";
   private currentLetterIndex: number = 0;
-  private dialogueFinishedTypingCurrentPage: boolean = false;
   private letterDisplaySpeed = DEFAULT_LETTER_DISPLAY_SPEED;
   private autoPageSwitchDelay = DEFAULT_AUTO_PAGE_SWITCH_DELAY;
-
+  private dialogueFinishedTypingCurrentPage = false;
   private resolvePromise: ((value?: unknown) => void) | null = null;
 
   private setAvatar = (avatarKey: string, avatarFrame: string) => {
@@ -300,6 +301,7 @@ export class PrimaryDialogue extends Phaser.GameObjects.Container {
 
   // Public
   public runDialogue(dialogs: TDialogData[]) {
+    if (this.onDialogueStart) this.onDialogueStart();
     this.dialogueData = dialogs;
     this.currentDialogueEntryIndex = 0;
     this.setShowDialogueBox();
@@ -307,10 +309,16 @@ export class PrimaryDialogue extends Phaser.GameObjects.Container {
     return new Promise((resolve) => {
       this.resolvePromise = resolve;
       this.handleStartDialogueEntry();
+    }).finally(() => {
+      if (this.onDialogueEnd) this.onDialogueEnd();
     });
   }
 
-  public initDialogue() {
+  public initDialogue(params?: {onDialogueStart?: () => void, onDialogueEnd?: () => void}) {
+    const { onDialogueStart, onDialogueEnd } = params || {};
+    this.onDialogueStart = onDialogueStart;
+    this.onDialogueEnd = onDialogueEnd;
+    
     this.textboxBackground = this.scene.make.nineslice({
       ...DIALOGUE_FRAME_CONFIG,
     }).setOrigin(0)
@@ -340,11 +348,11 @@ export class PrimaryDialogue extends Phaser.GameObjects.Container {
       .setOrigin(0)
       .setDepth(999)
       .setVisible(false);
-
   }
 
   // Destory
   destroy() {
+    // Release UI elements
     if (this.textboxBackground) {
       this.textboxBackground.destroy();
       this.textboxBackground = undefined;
@@ -361,6 +369,7 @@ export class PrimaryDialogue extends Phaser.GameObjects.Container {
       this.portrait.destroy();
       this.portrait = undefined;
     }
+    // Release timers
     if (this.dialogueTimer) {
       this.dialogueTimer.remove();
       this.dialogueTimer = null;
@@ -369,7 +378,12 @@ export class PrimaryDialogue extends Phaser.GameObjects.Container {
       this.autoPageSwitchTimer.remove();
       this.autoPageSwitchTimer = null;
     }
+    // Release promise reference
     this.resolvePromise = null;
+    // Release callback references to avoid closure leaks
+    this.onDialogueStart = undefined;
+    this.onDialogueEnd = undefined;
+    // Release event listeners (if any)
     // this.scene.input.off('pointerdown', this.boundAdvancePage);
   }
 }

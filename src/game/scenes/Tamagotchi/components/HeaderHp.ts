@@ -1,11 +1,13 @@
 import Phaser from 'phaser';
 import { EventBus, getGlobalData } from '../../../EventBus';
+import { store } from '../../../store';
 
-const DEFAULT = 88;
+const DEFAULT_HP = 88;
 const FONT_FAMILY = 'Tiny5';
 const FONT_SIZE = 8;
 
 export class IconHp extends Phaser.GameObjects.Container {
+  private hpState = store<number>('tamagotchi.hp');
   private icon: Phaser.GameObjects.Sprite;
   private text: Phaser.GameObjects.Text;
   private value: number;
@@ -15,15 +17,11 @@ export class IconHp extends Phaser.GameObjects.Container {
   constructor(scene: Phaser.Scene, option: { x: number; y: number }) {
     super(scene);
 
-    this.value = typeof getGlobalData('tamagotchi_hp') !== 'undefined' ?
-      getGlobalData('tamagotchi_hp')
-      :
-      DEFAULT;
-
+    this.value = this.hpState?.get() || DEFAULT_HP;
+    this.hpState?.watch(this.handleSetValue);
+    
+    
     const { x, y } = option;
-
-    // Watch hp change
-    EventBus.on('tamagotchi_hp-updated', this.handleSetValue);
 
     // Icon
     this.icon = scene.make.sprite({

@@ -1,13 +1,14 @@
 import Phaser from 'phaser';
-import { Character } from '../../components/Character';
-import { selectFromPiority } from '../../utils/selectFromPiority';
-import { TDialogData } from '../../components/PrimaryDialogue';
-import { getGlobalData, setGlobalData } from '../../EventBus';
+import { Character } from '@/game/components/Character';
+import { selectFromPiority } from '@/game/utils/selectFromPiority';
+import { TDialogData } from '@/game/components/PrimaryDialogue';
+import { setGlobalData } from '@/game/EventBus';
+import { getStoreState, setStoreState, store, Store } from '@/game/store';
 
 type TDirection = 'none' | 'left' | 'right';
 
 type TFunctionalActionDialogItem = {
-  dialog: TDialogData[];
+  sentences: TDialogData[];
   piority: number;
 };
 
@@ -34,8 +35,10 @@ type TamagotchiCharacterProps = {
 };
 
 const DEFAULT_CHARACTER_KEY = 'tamagotchi_afk';
+const DEFAULT_CHARACTER_HP = 100;
+
+
 const defaultIdlePrefix = 'idle'; // TODO: idle right
-const defaultHp = 50;
 const defaultRecoverHpByTime = 2;
 const defaultDecreaseHpByTime = -1;
 const defaultXSec = 3;
@@ -45,10 +48,29 @@ const defaultEdge = { from: 50, to: 120 };
 const defaultMoveDistance = 32;
 
 export class TamagotchiCharacter extends Character {
+  public async runFuntionalActionAsync(action: string, user?: string): Promise<{ dialog: TDialogData[] } | undefined> {
+  await new Promise<void>(resolve => {
+    const timer = this.scene.time.addEvent({
+      delay: 50,
+      loop: true,
+      callback: () => {
+        if (!this.isActing) {
+          timer.remove();
+          resolve();
+        }
+      }
+    });
+  });
+  return this.runFuntionalAction(action, user);
+}
+
   private isAlive: boolean = true;
   private isSleep: boolean = false;
   private isBorn: boolean = false;
   private isActing: boolean = false;
+
+  private isAliveState?: Store<boolean> = store('tamagotchi.isAlive');
+  private isSleepState?: Store<boolean> = store('tamagotchi.isSleep');
 
   private idleActions: { [key: string]: TIdleAction };
   private unavailableActions: { [key: string]: TAction };
@@ -57,22 +79,31 @@ export class TamagotchiCharacter extends Character {
   private spaceEdge: { from: number; to: number };
   private direction: TDirection = 'left';
 
+  private hpState?: Store<number>;
+  // private 
   public hp: number;
 
   private isReady: boolean = false;
 
   constructor(scene: Phaser.Scene, props: TamagotchiCharacterProps) {
-    const key = DEFAULT_CHARACTER_KEY; // static character here
-    const hp = getGlobalData('tamagotchi_hp');
-
-    const config = scene.cache.json.get('config').tamagotchi[DEFAULT_CHARACTER_KEY]; // get current character config
-
-    const characterProps = {
-      ...props,
-      animations: config.animations,
-    };
     
-    super(scene, key, characterProps);
+    // const key = DEFAULT_CHARACTER_KEY; // static character here
+    const config = scene.cache.json.get('config').tamagotchi[DEFAULT_CHARACTER_KEY]; // get current character config
+    super(scene, DEFAULT_CHARACTER_KEY, { ...props, animations: config.animations });
+    
+    // global state handler
+    this.hpState = store('tamagotchi.hp');
+    if (!this.hpState) console.warn('Global hp state not found, please check MainScene.ts');
+    
+    // this.hpState?.watch(this.watchCharacterIsAlive)
+    
+    // this.globalIsAlive = getStore('tamagotchi.isAlive');
+    // this.globalIsAlive.watch(this.damageOrRecoverByTime);
+    
+    
+    this.hp = this.hpState?.get() || DEFAULT_CHARACTER_HP;
+
+
 
     this.character.setDepth(2);
 
@@ -81,8 +112,6 @@ export class TamagotchiCharacter extends Character {
     this.unavailableActions = config.unavailable_actions;
     this.functionalAction = config.functional_action;
 
-    // temp
-    this.hp = hp || defaultHp;
 
     // define moving limitation
     this.spaceEdge = props.edge || defaultEdge;
@@ -91,9 +120,12 @@ export class TamagotchiCharacter extends Character {
     this.handleDefaultIdleAction();
 
   }
+  private getIsAvaliable() {
+    return this.isAliveState?.get() && this.isSleepState?.get();
+  }
 
   private handleDefaultIdleAction() {
-    if (this.isActing) return;
+    if (this.isActing || !this.isAliveState?.get()) return;
     this.playAnimation(`${defaultIdlePrefix}-${this.direction}`);
   }
 
@@ -106,7 +138,8 @@ export class TamagotchiCharacter extends Character {
   }
 
   private async handleAutomaticAction() {
-    if (this.isActing) return;
+    const isUnavaliable = this.getIsAvaliable();
+    if (this.isActing || isUnavaliable) return;
 
     const currentAction = selectFromPiority<TIdleAction>(this.idleActions);
 
@@ -127,7 +160,8 @@ export class TamagotchiCharacter extends Character {
   }
 
   public handleMoveDirection(animation: string) {
-    if (this.isActing) return;
+    const isUnavaliable = this.getIsAvaliable();
+    if (this.isActing || isUnavaliable) return;
 
     // change direction if character close to edge
     this.direction =
@@ -144,11 +178,11 @@ export class TamagotchiCharacter extends Character {
     });
   }
 
-  private async handleUnavailableAction() {
-    const animation = this.unavailableActions.egg.animation;
-    this.playAnimation(animation);
-    this.isActing = false;
-  }
+  // private async handleUnavailableAction() {
+  //   const animation = this.unavailableActions.egg.animation;
+  //   this.playAnimation(animation);
+  //   this.isActing = false;
+  // }
 
   private handleChangeHp(value: number) {
     const result = this.hp + value;
@@ -166,6 +200,19 @@ export class TamagotchiCharacter extends Character {
       this.isBorn = true;
     }
   }
+  private watchCharacterIsAlive(value) {
+
+    // const isAlive = getStore('tamagotchi.isAlive');
+    // if (value) { ... }
+    // else { ... }
+    
+    // if (this.isAlive && this.hp <= 0) {
+    //   this.isAlive = false;
+    // } else if (!this.isAlive && this.hp >= 100) {
+    //   this.isAlive = true;
+    //   this.isBorn = true;
+    // }
+  }
 
   private fireEachXsec?: number = undefined;
 
@@ -178,69 +225,86 @@ export class TamagotchiCharacter extends Character {
 
   public runFuntionalAction(
     action: string,
+    user: string,
   ): { dialog: TDialogData[] } | undefined {
-    if (!this.isAlive || this.isActing) return;
+    if (this.isActing) return;
 
-    const currentAction = action === 'sleep' ? this.isSleep ? 'awake' : 'sleep' : action;
+    const isAlive = this.isAliveState?.get();
+    const isSleep = this.isSleepState?.get();
 
-    const { point, dialogs } = this.functionalAction[currentAction];
+    if (!isAlive && action !== 'born') return;
 
-    if (point) {
-      const currentHp = this.hp + point;
+    if ((isSleep && action == 'sleep') || (!isSleep && action === 'awake')) return;
 
-      // TODO: change hp
-      this.hp = currentHp >= 100 ? 100 : currentHp <= 0 ? 0 : currentHp;
-      setGlobalData('tamagotchi_hp', this.hp);
+    const needWakeUp = isSleep && action !== 'sleep' && action !== 'awake';
+
+    const result = this.functionalAction[action];
+
+    const list = {
+      drink: {
+        play: async () => await this.playAnimation('drink'),
+        state: () => {},
+      },
+      write: {
+        play: async () => await this.playAnimation('write'),
+        state: () => {},
+      },
+      sleep: {
+        play: async () => {
+          await this.playAnimation('lay-down');
+          this.playAnimation('sleep');
+        },
+        state: () => this.isSleepState?.set(true),
+      },
+      awake: {
+        play: async () => await this.playAnimation('wake-up'),
+        state: () => this.isSleepState?.set(false)
+      },
+      dead: {
+        play: async () => this.playAnimation('egg'),
+        state: () => this.isAliveState?.set(false),
+      },
+      born: {
+        play: async () => await this.playAnimation('born'),
+        state: () => this.isAliveState?.set(true),
+      },
     }
 
-    const runAnimation = async () => {
-      if (currentAction === 'drink') {
-        this.isActing = true;
-        this.isSleep && await this.playAnimation('wake-up');
-
-        await this.playAnimation('drink');
-        this.isActing = false;
-        if (this.isSleep) {
-          this.isActing = true;
-          await this.playAnimation('lay-down');
-          this.playAnimation('sleep');
-          this.isActing = false;
-        }
-        
-      } else if (currentAction === 'write') {
-        this.isActing = true;
-        this.isSleep && await this.playAnimation('wake-up');
-
-        await this.playAnimation('write');
-        this.isActing = false;
-        if (this.isSleep) {
-          this.isActing = true;
-          await this.playAnimation('lay-down');
-          this.playAnimation('sleep');
-          this.isActing = false;
-        }
-
-      } else if (currentAction === 'sleep') {
-        this.isActing = true;
-        await this.playAnimation('lay-down');
-        this.playAnimation('sleep');
-        this.isActing = false;
-        this.isSleep = true;
-      } else if (currentAction === 'awake')  {
-        this.isActing = true;
-        await this.playAnimation('wake-up');
-        this.isActing = false;
-        this.isSleep = false;
-      }
+    const runAnimation = async (func: () => Promise<void>) => {
+      this.isActing = true;
+      await func();
+      this.isActing = false;
     };
 
-    runAnimation();
+    if (action in list) {
+      if (needWakeUp) {
+        runAnimation(async () => {
+          await list.awake.play();
+          await list[action as keyof typeof list].play();
+          await list.sleep.play();
+          list[action as keyof typeof list].state();
+        });
+      } else {
+        runAnimation(async () => {
+          await list[action as keyof typeof list].play();
+          list[action as keyof typeof list].state();
+        });
+      }
+    }
 
     // send dialog back to tamagottchi
-    if (dialogs) {
-      const result = selectFromPiority<TFunctionalActionDialogItem>(dialogs);
-      return result;
+    const { dialogs } = result;
+    
+    if (dialogs && user) {
+      const selectedDialog = selectFromPiority<TFunctionalActionDialogItem>(dialogs);
+      const selectedSentences = selectedDialog.sentences.map((_sentence) => ({
+        ..._sentence,
+        text: _sentence.text.replaceAll('{{user_name}}', user),
+      }))
+      result.sentences = selectedSentences;
     }
+    
+    return result;
   }
 
   public currentAction = undefined;
@@ -264,16 +328,16 @@ export class TamagotchiCharacter extends Character {
 
       if (this.isAlive) {
         if (this.isBorn) {
-          this.handleBornAction();
+          // this.handleBornAction();
         }
 
         if (!this.isSleep) {
-          this.handleChangeHp(defaultDecreaseHpByTime);
+          // this.handleChangeHp(defaultDecreaseHpByTime);
           this.handleAutomaticAction();
         }
       } else {
-        this.handleChangeHp(defaultRecoverHpByTime);
-        this.handleUnavailableAction();
+        // this.handleChangeHp(defaultRecoverHpByTime);
+        // this.handleUnavailableAction();
       }
     }
   }

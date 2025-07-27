@@ -1,7 +1,10 @@
 import Phaser from 'phaser';
-import { HeaderSelector } from './Selector';
-import { IconHp } from './Hp';
-import { IconCoin } from './Coin';
+
+import { getStoreState } from '@/game/store';
+
+import { HeaderSelector } from './HeaderSelector';
+import { IconHp } from './HeaderHp';
+import { IconCoin } from './HeaderCoin';
 
 const DEFAULT_WIDTH = 160;
 const DEFAULT_HEIGHT = 25;
@@ -162,6 +165,11 @@ export class Header extends Phaser.GameObjects.Container {
   }
 
   public select() {
+    const isSleep = getStoreState('tamagotchi.isSleep');
+
+    // special condition
+    if (isSleep && this.currentSelector === 'sleep') return 'awake';
+    
     return this.currentSelector;
   }
 
