@@ -82,13 +82,12 @@ const ConfigEditor: React.FC = () => {
       <JsonEditor
         title="放置遊戲設定"
         wording={{
-          unavailable_actions: '無法行動',
-          idle_actions: '靜止時行動',
+          idleness: '靜止時行動',
+          activities: '功能性行動',
           idle: '靜止',
           stare: '偷看',
           walk: '走路',
           wink: '扎眼睛',
-          functional_action: '功能性行動',
           drink: '讓角色喝水',
           write: '讓角色寫字',
           battle: '讓角色戰鬥',

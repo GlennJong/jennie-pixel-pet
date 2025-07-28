@@ -13,12 +13,6 @@ const AUTO_HIDE_TIME = 10000;
 const selectors = ['drink', 'battle', 'write', 'sleep'];
 
 // TODO Constant Naming
-// const DRINK_ACTION_NAME = 'drink';
-// const BATTLE_ACTION_NAME = 'battle';
-// const WRITE_ACTION_NAME = 'write';
-// const SLEEP_ACTION_NAME = 'sleep';
-// const AWAKE_ACTION_NAME = 'awake';
-
 export class Header extends Phaser.GameObjects.Container {
   public currentSelector: string = selectors[0];
   private selectors: { [key: string]: HeaderSelector } = {};

@@ -2,8 +2,7 @@ import Phaser from 'phaser';
 import { Character } from '@/game/components/Character';
 import { selectFromPiority } from '@/game/utils/selectFromPiority';
 import { TDialogData } from '@/game/components/PrimaryDialogue';
-import { setGlobalData } from '@/game/EventBus';
-import { getStoreState, setStoreState, store, Store } from '@/game/store';
+import { store, Store } from '@/game/store';
 
 type TDirection = 'none' | 'left' | 'right';
 
@@ -18,29 +17,26 @@ type TAction = {
   has_direction?: boolean;
 };
 
-type TIdleAction = {
+type TIdleness = {
   piority: number;
 } & TAction;
 
-type TFunctionAction = {
+type TActivity = {
   point: number;
   dialogs?: TFunctionalActionDialogItem[];
 } & TAction;
 
-// type TSpecialAction = string;
-type TamagotchiCharacterProps = {
-  x: number;
-  y: number;
-  edge: { from: number; to: number };
-};
 
 const DEFAULT_CHARACTER_KEY = 'tamagotchi_afk';
 const DEFAULT_CHARACTER_HP = 100;
 
+const DEFAULT_TAMAGOTCHI_POSITION = {
+  x: 60,
+  y: 68,
+  edge: { from: 50, to: 120 }
+}
 
 const defaultIdlePrefix = 'idle'; // TODO: idle right
-const defaultRecoverHpByTime = 2;
-const defaultDecreaseHpByTime = -1;
 const defaultXSec = 3;
 const defaultEdge = { from: 50, to: 120 };
 
@@ -48,73 +44,49 @@ const defaultEdge = { from: 50, to: 120 };
 const defaultMoveDistance = 32;
 
 export class TamagotchiCharacter extends Character {
-  public async runFuntionalActionAsync(action: string, user?: string): Promise<{ dialog: TDialogData[] } | undefined> {
-  await new Promise<void>(resolve => {
-    const timer = this.scene.time.addEvent({
-      delay: 50,
-      loop: true,
-      callback: () => {
-        if (!this.isActing) {
-          timer.remove();
-          resolve();
-        }
-      }
-    });
-  });
-  return this.runFuntionalAction(action, user);
-}
-
+  private isAliveState?: Store<boolean> = store('tamagotchi.isAlive');
+  private isSleepState?: Store<boolean> = store('tamagotchi.isSleep');
+  
   private isAlive: boolean = true;
   private isSleep: boolean = false;
   private isBorn: boolean = false;
   private isActing: boolean = false;
-
-  private isAliveState?: Store<boolean> = store('tamagotchi.isAlive');
-  private isSleepState?: Store<boolean> = store('tamagotchi.isSleep');
-
-  private idleActions: { [key: string]: TIdleAction };
-  private unavailableActions: { [key: string]: TAction };
-  public functionalAction: { [key: string]: TFunctionAction };
-
-  private spaceEdge: { from: number; to: number };
-  private direction: TDirection = 'left';
-
-  private hpState?: Store<number>;
-  // private 
-  public hp: number;
-
   private isReady: boolean = false;
 
-  constructor(scene: Phaser.Scene, props: TamagotchiCharacterProps) {
+
+  private idleness: { [key: string]: TIdleness };
+  private spaceEdge: { from: number; to: number };
+  private direction: TDirection = 'left';
+  private hpState?: Store<number>;
+
+  public activities: { [key: string]: TActivity };
+  public hp: number;
+
+
+  constructor(scene: Phaser.Scene) {
+
+    // get current character config
+    const config = scene.cache.json.get('config').tamagotchi[DEFAULT_CHARACTER_KEY]; 
     
-    // const key = DEFAULT_CHARACTER_KEY; // static character here
-    const config = scene.cache.json.get('config').tamagotchi[DEFAULT_CHARACTER_KEY]; // get current character config
-    super(scene, DEFAULT_CHARACTER_KEY, { ...props, animations: config.animations });
+    super(scene, DEFAULT_CHARACTER_KEY, {
+      ...DEFAULT_TAMAGOTCHI_POSITION,
+      animations: config.animations
+    });
     
     // global state handler
     this.hpState = store('tamagotchi.hp');
     if (!this.hpState) console.warn('Global hp state not found, please check MainScene.ts');
     
-    // this.hpState?.watch(this.watchCharacterIsAlive)
-    
-    // this.globalIsAlive = getStore('tamagotchi.isAlive');
-    // this.globalIsAlive.watch(this.damageOrRecoverByTime);
-    
-    
     this.hp = this.hpState?.get() || DEFAULT_CHARACTER_HP;
-
-
 
     this.character.setDepth(2);
 
     // actions
-    this.idleActions = config.idle_actions;
-    this.unavailableActions = config.unavailable_actions;
-    this.functionalAction = config.functional_action;
-
+    this.idleness = config.idleness;
+    this.activities = config.activities;
 
     // define moving limitation
-    this.spaceEdge = props.edge || defaultEdge;
+    this.spaceEdge = DEFAULT_TAMAGOTCHI_POSITION.edge || defaultEdge;
 
     // default animation
     this.handleDefaultIdleAction();
@@ -129,19 +101,11 @@ export class TamagotchiCharacter extends Character {
     this.playAnimation(`${defaultIdlePrefix}-${this.direction}`);
   }
 
-  private async handleBornAction() {
-    this.isActing = true;
-    const bornAnimation = this.unavailableActions.born.animation;
-    await this.playAnimation(bornAnimation);
-    this.isActing = false;
-    this.isBorn = false;
-  }
-
   private async handleAutomaticAction() {
     const isUnavaliable = this.getIsAvaliable();
     if (this.isActing || isUnavaliable) return;
 
-    const currentAction = selectFromPiority<TIdleAction>(this.idleActions);
+    const currentAction = selectFromPiority<TIdleness>(this.idleness);
 
     if (currentAction) {
       const currentAnimation = currentAction.has_direction
@@ -178,42 +142,6 @@ export class TamagotchiCharacter extends Character {
     });
   }
 
-  // private async handleUnavailableAction() {
-  //   const animation = this.unavailableActions.egg.animation;
-  //   this.playAnimation(animation);
-  //   this.isActing = false;
-  // }
-
-  private handleChangeHp(value: number) {
-    const result = this.hp + value;
-
-    this.hp = result >= 100 ? 100 : result <= 0 ? 0 : result;
-    setGlobalData('tamagotchi_hp', this.hp);
-    this.handleDetectCharacterIsAlive();
-  }
-
-  private handleDetectCharacterIsAlive() {
-    if (this.isAlive && this.hp <= 0) {
-      this.isAlive = false;
-    } else if (!this.isAlive && this.hp >= 100) {
-      this.isAlive = true;
-      this.isBorn = true;
-    }
-  }
-  private watchCharacterIsAlive(value) {
-
-    // const isAlive = getStore('tamagotchi.isAlive');
-    // if (value) { ... }
-    // else { ... }
-    
-    // if (this.isAlive && this.hp <= 0) {
-    //   this.isAlive = false;
-    // } else if (!this.isAlive && this.hp >= 100) {
-    //   this.isAlive = true;
-    //   this.isBorn = true;
-    // }
-  }
-
   private fireEachXsec?: number = undefined;
 
   public startTamagotchi() {
@@ -238,7 +166,7 @@ export class TamagotchiCharacter extends Character {
 
     const needWakeUp = isSleep && action !== 'sleep' && action !== 'awake';
 
-    const result = this.functionalAction[action];
+    const result = this.activities[action];
 
     const list = {
       drink: {
@@ -335,11 +263,24 @@ export class TamagotchiCharacter extends Character {
           // this.handleChangeHp(defaultDecreaseHpByTime);
           this.handleAutomaticAction();
         }
-      } else {
-        // this.handleChangeHp(defaultRecoverHpByTime);
-        // this.handleUnavailableAction();
       }
     }
+  }
+
+  public async runFuntionalActionAsync(action: string, user?: string): Promise<{ dialog: TDialogData[] } | undefined> {
+    await new Promise<void>(resolve => {
+      const timer = this.scene.time.addEvent({
+        delay: 50,
+        loop: true,
+        callback: () => {
+          if (!this.isActing) {
+            timer.remove();
+            resolve();
+          }
+        }
+      });
+    });
+    return this.runFuntionalAction(action, user);
   }
 
 }

@@ -1,6 +1,5 @@
 import Phaser from 'phaser';
-import { EventBus, getGlobalData } from '../../../EventBus';
-import { store } from '../../../store';
+import { store } from '@/game/store';
 
 const DEFAULT_HP = 88;
 const FONT_FAMILY = 'Tiny5';
@@ -136,7 +135,6 @@ export class IconHp extends Phaser.GameObjects.Container {
   }
 
   public destroy() {
-    EventBus.off('tamagotchi_hp-updated', this.handleSetValue);
     this.icon.destroy();
     this.text.destroy();
   }

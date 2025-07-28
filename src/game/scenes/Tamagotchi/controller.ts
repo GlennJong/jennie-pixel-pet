@@ -2,36 +2,39 @@ import { setStoreState, getStoreState, store } from '@/game/store';
 import { sceneConverter } from '@/game/components/CircleSceneTransition';
 import { PrimaryDialogue } from '@/game/components/PrimaryDialogue';
 
-import { Task } from '../services/TaskQueueHandler';
-import { Header } from '../components/Header';
-import { TamagotchiCharacter } from '../components/TamagotchiCharacter';
+import { Task } from './tasks/types';
+import { Header } from './elements/Header';
+import { TamagotchiCharacter } from './elements/TamagotchiCharacter';
 
-export class TamagotchiGameController {
+type TTask = {
+  action: string;
+  user: string;
+  params: any;
+}
+const HEADER_DISPLAY_DURATION = 5000;
+
+
+export default class Controller {
   private isTamagotchiReady: boolean = false;
   private character: TamagotchiCharacter;
   private header: Header;
   private dialogue: PrimaryDialogue;
   private scene: Phaser.Scene;
-  private HEADER_DISPLAY_DURATION: number;
 
-  constructor({
-    character,
-    header,
-    dialogue,
-    scene,
-    headerDisplayDuration
-  }: {
+  constructor(scene: Phaser.Scene,
+    {
+      character,
+      header,
+      dialogue,
+    }: {
     character: TamagotchiCharacter,
     header: Header,
     dialogue: PrimaryDialogue,
-    scene: Phaser.Scene,
-    headerDisplayDuration: number
   }) {
     this.character = character;
     this.header = header;
     this.dialogue = dialogue;
     this.scene = scene;
-    this.HEADER_DISPLAY_DURATION = headerDisplayDuration;
   }
 
   setReady(ready: boolean) {
@@ -44,9 +47,10 @@ export class TamagotchiGameController {
     let success = false;
     try {
       const result = await this.character?.runFuntionalActionAsync(action, user);
-      this.header.showHeader(this.HEADER_DISPLAY_DURATION);
+
+      this.header.showHeader(HEADER_DISPLAY_DURATION);
       if (result) {
-        const { sentences, hp, coin, nextScene } = { ...result, ...params };
+        const { sentences, hp, coin, nextScene }: TTask = { ...result, ...params };
         await this.dialogue.runDialogue(sentences);
         if (hp) setStoreState('tamagotchi.hp', getStoreState('tamagotchi.hp') + hp);
         if (coin) setStoreState('tamagotchi.coin', getStoreState('tamagotchi.coin') + coin);

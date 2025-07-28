@@ -1491,15 +1491,7 @@
         { "prefix": "wink-left", "qty": 3, "freq": 4, "repeat": 0 },
         { "prefix": "wink-right", "qty": 3, "freq": 4, "repeat": 0 }
       ],
-      "unavailable_actions": {
-        "egg": {
-          "animation": "egg"
-        },
-        "born": {
-          "animation": "born"
-        }
-      },
-      "idle_actions": {
+      "idleness": {
         "idle": {
           "animation": "idle",
           "piority": 10,
@@ -1522,7 +1514,7 @@
           "has_direction": true
         }
       },
-      "functional_action": {
+      "activities": {
         "drink": {
           "animation": "drink",
           "hp": 10,

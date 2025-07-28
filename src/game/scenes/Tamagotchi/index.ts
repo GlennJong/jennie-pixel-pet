@@ -1,33 +1,28 @@
 import Phaser, { Scene } from 'phaser';
-import { EventBus, setGlobalData } from '@/game/EventBus';
 
 // common components
-import { setStoreState, store, getStoreState } from '@/game/store';
+import { setStoreState } from '@/game/store';
 import { originalHeight, originalWidth } from '@/game/constants';
 import { PrimaryDialogue } from '@/game/components/PrimaryDialogue';
-import { sceneConverter, sceneStarter } from '@/game/components/CircleSceneTransition';
+import { sceneStarter } from '@/game/components/CircleSceneTransition';
 
 // partial components
-import { Header } from './components/Header';
-import { Property } from './components/Property';
-import { TamagotchiCharacter } from './components/TamagotchiCharacter';
+import { Header } from './elements/Header';
+import { Property } from './elements/Property';
+import { TamagotchiCharacter } from './elements/TamagotchiCharacter';
 
 // services
-import KeyboardHandler from './services/KeyboardHander';
-import { TaskQueueHandler } from './services/TaskQueueHandler';
-import { TamagotchiGameController } from './services/TamagotchiGameController';
-import { PropertyHandler } from './services/PropertyHandler';
-import { HpHandler } from './services/HpHandler';
+import { TaskQueueHandler } from './tasks/TaskQueueHandler';
 
+// handlers
+import { KeyboardHandler } from './handlers/KeyboardHander';
+import { PropertyHandler } from './handlers/PropertyHandler';
+import { HpHandler } from './handlers/HpHandler';
 
-const DEFAULT_TAMAGOTCHI_POSITION = {
-  x: 60,
-  y: 68,
-  edge: { from: 50, to: 120 }
-}
+// controller
+import Controller from './controller';
 
-const DEFAULT_USER = 'user';
-const HEADER_DISPLAY_DURATION = 10000;
+const DEFAULT_USER_NAME = 'user';
 
 export default class TamagotchiScene extends Scene {
   private background?: Phaser.GameObjects.Image;
@@ -37,11 +32,10 @@ export default class TamagotchiScene extends Scene {
   private dialogue?: PrimaryDialogue;
   private keyboardHandler?: KeyboardHandler;
 
-  private isTamagotchiReady: boolean = false;
   private taskQueueHandler?: TaskQueueHandler;
   private propertyHandler?: PropertyHandler;
   private hpHandler?: HpHandler;
-  private gameController?: TamagotchiGameController;
+  private gameController?: Controller;
   
   constructor() {
     super('Tamagotchi');
@@ -49,7 +43,7 @@ export default class TamagotchiScene extends Scene {
   create() {
     // ============= Mechanism =============
     // charactor
-    this.character = new TamagotchiCharacter(this, DEFAULT_TAMAGOTCHI_POSITION);
+    this.character = new TamagotchiCharacter(this);
 
     // background
     this.background = this.make.image({
@@ -87,13 +81,13 @@ export default class TamagotchiScene extends Scene {
     this.hpHandler = new HpHandler(this);
 
     // game controller
-    this.gameController = new TamagotchiGameController({
-      character: this.character,
-      header: this.header,
-      dialogue: this.dialogue,
-      scene: this,
-      headerDisplayDuration: HEADER_DISPLAY_DURATION
-    });
+    this.gameController = new Controller(this,
+      {
+        character: this.character,
+        header: this.header,
+        dialogue: this.dialogue,
+      }
+    );
 
     // queue init
     this.taskQueueHandler.init({
@@ -112,9 +106,6 @@ export default class TamagotchiScene extends Scene {
       onZeroHp: () => this.gameController!.handleZeroHp(this.taskQueueHandler)
     });
 
-    // outside controller
-    EventBus.on('trigger-button', this.handleControlButton);
-
     // Build Keyboard 
     this.keyboardHandler = new KeyboardHandler(this, {
       onLeft: () => this.handleControlButton('left'),
@@ -127,13 +118,11 @@ export default class TamagotchiScene extends Scene {
       await sceneStarter(this);
       this.gameController!.handleBattleAward(this.taskQueueHandler);
       this.character?.startTamagotchi();
-      this.isTamagotchiReady = true;
       this.gameController!.setReady(true);
     })();
 
     this.events.on('shutdown', this.shutdown, this);
   }
-
 
   private handleControlButton = (key: string) => {
     if (key === 'left' ) {
@@ -142,13 +131,8 @@ export default class TamagotchiScene extends Scene {
       this.header!.moveNext()
     } else if (key === 'space') {
       const action = this.header!.select();
-      this.taskQueueHandler?.addTask({ user: DEFAULT_USER, action });
+      this.taskQueueHandler?.addTask({ user: DEFAULT_USER_NAME, action });
     }
-  }
-
-  private handleSwitchToBattleScene = async(opponent?: string) => {
-    setGlobalData('battle_opponent', opponent);
-    await sceneConverter(this, 'Battle');
   }
 
   update(time: number) {
@@ -159,7 +143,6 @@ export default class TamagotchiScene extends Scene {
   }
 
   shutdown = () => {
-    this.isTamagotchiReady = false;
     this.gameController?.setReady(false);
     this.character?.destroy();
     this.background?.destroy();
@@ -167,6 +150,5 @@ export default class TamagotchiScene extends Scene {
     this.property?.destroy();
     this.dialogue?.destroy();
     this.taskQueueHandler?.destroy();
-    EventBus.off('trigger-button', this.handleControlButton);
   }
 }

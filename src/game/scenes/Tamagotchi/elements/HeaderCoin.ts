@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-import { store } from '../../../store';
+import { store } from '@/game/store';
 
 const DEFAULT_COIN = 888;
 
