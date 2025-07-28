@@ -2,12 +2,12 @@ import Phaser, { Scene } from 'phaser';
 import { PrimaryDialogue } from '../../components/PrimaryDialogue';
 
 import BattleCharacter from './BattleCharacter';
-import { getGlobalData, setGlobalData } from '../../EventBus';
 import {
   sceneConverter,
   sceneStarter,
 } from '../../components/CircleSceneTransition';
 import { originalHeight, originalWidth } from '../../constants';
+import { getStoreState, setStoreState } from '@/game/store';
 
 type TProcess = {
   from: 'self' | 'opponent';
@@ -34,7 +34,8 @@ export default class Battle extends Scene {
     // background
     this.background = this.add.rectangle(0, 0, originalWidth, originalHeight, 0xeeeeee).setOrigin(0);
 
-    const opponent = getGlobalData('battle_opponent') || 'default';
+    const transmit = getStoreState('global.transmit') || {};
+    const opponent = transmit.opponent || 'default';
 
     // init characters
     this.opponent = new BattleCharacter(
@@ -139,7 +140,7 @@ export default class Battle extends Scene {
   private async handleFinishGame() {
     const selfFinishDialog = this.self!.runFinish();
     await this.dialogue!.runDialogue(selfFinishDialog);
-    setGlobalData('battle_result', this.self!.hp.current > 0 ? 'win' : 'lose');
+    setStoreState('global.transmit', { battleResult: this.self!.hp.current > 0 ? 'win' : 'lose' });
     sceneConverter(this, 'Tamagotchi');
   }
 

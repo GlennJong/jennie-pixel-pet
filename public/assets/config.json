@@ -1536,7 +1536,7 @@
         "battle": {
           "animation": "none",
           "hp": 0,
-          "nextScene": "battle",
+          "nextScene": "Battle",
           "dialogs": [
             {
               "sentences": [

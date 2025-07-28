@@ -1,7 +1,8 @@
 import Phaser from 'phaser';
 
-import { getStoreState } from '@/game/store';
+import { getStoreState, setStoreState } from '@/game/store';
 
+// elements
 import { HeaderSelector } from './HeaderSelector';
 import { IconHp } from './HeaderHp';
 import { IconCoin } from './HeaderCoin';
@@ -9,21 +10,28 @@ import { IconCoin } from './HeaderCoin';
 const DEFAULT_WIDTH = 160;
 const DEFAULT_HEIGHT = 25;
 const AUTO_HIDE_TIME = 10000;
+const HEADER_DISPLAY_DURATION = 10000;
 
-const selectors = ['drink', 'battle', 'write', 'sleep'];
+const SELECTORS = ['drink', 'battle', 'write', 'sleep'];
+const DEFAULT_CHARACTER_KEY = 'tamagotchi_afk';
 
 // TODO Constant Naming
 export class Header extends Phaser.GameObjects.Container {
-  public currentSelector: string = selectors[0];
-  private selectors: { [key: string]: HeaderSelector } = {};
+  private selectors = SELECTORS;
+  public currentSelector: string = SELECTORS[0];
+
+  private config;
+  private iconSelector: { [key: string]: HeaderSelector } = {};
   private iconHp: IconHp;
   private iconCoin: IconCoin;
   private timer: number | undefined;
 
+  
   constructor(scene: Phaser.Scene) {
     super(scene);
 
-    // 2. background
+    this.config = scene.cache.json.get('config').tamagotchi[DEFAULT_CHARACTER_KEY].activities || {};
+
     const background = scene.make
       .nineslice({
         key: 'tamagotchi_header_frame',
@@ -40,7 +48,6 @@ export class Header extends Phaser.GameObjects.Container {
       .setOrigin(0.5);
     this.add(background);
 
-    // 3. defined button
     const drink = new HeaderSelector(scene, {
       key: 'tamagotchi_header_icons',
       frame: 'drink',
@@ -52,7 +59,7 @@ export class Header extends Phaser.GameObjects.Container {
     });
 
     this.add(drink);
-    this.selectors['drink'] = drink;
+    this.iconSelector['drink'] = drink;
 
     const battle = new HeaderSelector(scene, {
       key: 'tamagotchi_header_icons',
@@ -65,7 +72,7 @@ export class Header extends Phaser.GameObjects.Container {
     });
 
     this.add(battle);
-    this.selectors['battle'] = battle;
+    this.iconSelector['battle'] = battle;
 
     const write = new HeaderSelector(scene, {
       key: 'tamagotchi_header_icons',
@@ -78,7 +85,7 @@ export class Header extends Phaser.GameObjects.Container {
     });
 
     this.add(write);
-    this.selectors['write'] = write;
+    this.iconSelector['write'] = write;
 
     const sleep = new HeaderSelector(scene, {
       key: 'tamagotchi_header_icons',
@@ -91,7 +98,7 @@ export class Header extends Phaser.GameObjects.Container {
     });
 
     this.add(sleep);
-    this.selectors['sleep'] = sleep;
+    this.iconSelector['sleep'] = sleep;
 
     this.iconHp = new IconHp(scene, { x: 100, y: 7 });
     this.add(this.iconHp);
@@ -115,10 +122,10 @@ export class Header extends Phaser.GameObjects.Container {
   private handleUpdateSelector() {
     this.setAlpha(1);
 
-    Object.keys(this.selectors).map((_key) => {
-      this.selectors[_key].unselect();
+    Object.keys(this.iconSelector).map((_key) => {
+      this.iconSelector[_key].unselect();
     });
-    this.selectors[this.currentSelector].select();
+    this.iconSelector[this.currentSelector].select();
 
     this.hideHeader();
   }
@@ -136,20 +143,20 @@ export class Header extends Phaser.GameObjects.Container {
   }
 
   public moveNext() {
-    const currentIndex = selectors.indexOf(this.currentSelector);
+    const currentIndex = this.selectors.indexOf(this.currentSelector);
     this.currentSelector =
-      currentIndex !== selectors.length - 1
-        ? selectors[currentIndex + 1]
-        : selectors[0];
+      currentIndex !== this.selectors.length - 1
+        ? this.selectors[currentIndex + 1]
+        : this.selectors[0];
     this.handleUpdateSelector();
   }
 
   public movePrev() {
-    const currentIndex = selectors.indexOf(this.currentSelector);
+    const currentIndex = this.selectors.indexOf(this.currentSelector);
     this.currentSelector =
       currentIndex === 0
-        ? selectors[selectors.length - 1]
-        : selectors[currentIndex - 1];
+        ? this.selectors[this.selectors.length - 1]
+        : this.selectors[currentIndex - 1];
     this.handleUpdateSelector();
   }
 
@@ -165,6 +172,13 @@ export class Header extends Phaser.GameObjects.Container {
     if (isSleep && this.currentSelector === 'sleep') return 'awake';
     
     return this.currentSelector;
+  }
+
+  public runAction(action: string) {
+    const { hp, coin } = this.config[action] || {};
+    this.showHeader(HEADER_DISPLAY_DURATION);
+    if (hp) setStoreState('tamagotchi.hp', getStoreState('tamagotchi.hp') + hp);
+    if (coin) setStoreState('tamagotchi.coin', getStoreState('tamagotchi.coin') + coin);
   }
 
   public update() {
