@@ -114,3 +114,30 @@ export function setStoreState<T>(key: string, value: T): void {
   if (!storeRef) throw new Error(`[Store] '${key}' 尚未初始化`);
   storeRef.set(value);
 }
+
+// 儲存所有 global store 到 localStorage
+export function saveAllStoresToLocalStorage(storageKey: string = 'tamagotchi_store') {
+  const data: Record<string, any> = {};
+  for (const [key, store] of globalStoreMap.entries()) {
+    data[key] = store.get();
+  }
+  localStorage.setItem(storageKey, JSON.stringify(data));
+}
+
+// 從 localStorage 還原所有 global store (async 版本)
+export function loadAllStoresFromLocalStorage(storageKey: string = 'tamagotchi_store'): Promise<void> {
+  return new Promise((resolve) => {
+    const raw = localStorage.getItem(storageKey);
+    if (!raw) return resolve();
+    try {
+      const data = JSON.parse(raw);
+      console.log(data)
+      for (const key in data) {
+        initStore(key, data[key]);
+      }
+    } catch (e) {
+      console.warn('[Store] localStorage 還原失敗', e);
+    }
+    resolve();
+  });
+}

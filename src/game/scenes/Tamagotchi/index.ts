@@ -3,6 +3,8 @@ import Phaser, { Scene } from 'phaser';
 // common components
 import { originalHeight, originalWidth } from '@/game/constants';
 import { sceneConverter, sceneStarter } from '@/game/components/CircleSceneTransition';
+import { setStoreState, store } from '@/game/store';
+import { EventBus } from '@/game/EventBus';
 
 // partial elements
 import { Header } from './elements/Header';
@@ -18,8 +20,7 @@ import { KeyboardHandler } from './handlers/KeyboardHander';
 import { PropertyHandler } from './handlers/PropertyHandler';
 import { HpHandler } from './handlers/HpHandler';
 import { Task } from './services/types';
-import { setStoreState, store } from '@/game/store';
-import { EventBus } from '@/game/EventBus';
+
 
 const DEFAULT_USER_NAME = 'user';
 const DEFAULT_CHARACTER_KEY = 'tamagotchi_afk';

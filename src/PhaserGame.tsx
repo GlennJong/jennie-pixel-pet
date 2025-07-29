@@ -1,19 +1,37 @@
+
 import { useEffect, useRef } from "react";
 import StartGame from "./game";
-import { loadGame, saveGame } from './game/EventBus';
+import { loadAllStoresFromLocalStorage, saveAllStoresToLocalStorage } from "./game/store";
+
 
 
 export const PhaserGame = () => {
   const gameRef = useRef<Phaser.Game | null>(null);
-  
+
   useEffect(() => {
+    // 啟動時還原 store 狀態
+    loadAllStoresFromLocalStorage();
     gameRef.current = StartGame('game-container');
-    loadGame();
-    window.addEventListener('beforeunload', saveGame);
+
+    // 關閉視窗時自動儲存
+    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+      const isEnableAutoSave = localStorage.getItem('isEnableAutoSave') === 'true';
+      if (isEnableAutoSave) {
+        saveAllStoresToLocalStorage();
+      } else {
+        // 顯示離開警告
+        e.preventDefault();
+        e.returnValue = '';
+        return '';
+      }
+    };
+    window.addEventListener('beforeunload', handleBeforeUnload);
+
     return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
       gameRef.current?.destroy(true);
-      gameRef.current === null;
-    }
-  }, [])
+      gameRef.current = null;
+    };
+  }, []);
   return <div id="game-container"></div>;
 };

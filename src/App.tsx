@@ -5,6 +5,7 @@ import Console from "@/game/Console";
 import ColorPicker from '@/ColorPicker';
 import ConfigEditor from '@/ConfigEditor';
 import { getStoreState, setStoreState, store } from "@/game/store";
+import AutoSaveTrigger from "./AutoSaveTrigger";
 
 const isDev = import.meta.env['VITE_ENV'] === 'dev';
 
@@ -69,10 +70,7 @@ function App() {
             <input type="checkbox" defaultChecked={isConfigOpen} onChange={() => setIsConfigOpen(!isConfigOpen)} />
             <span>Config</span>
           </label>
-          <label style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-            <input type="checkbox" defaultChecked={isAutoSaved} onChange={() => setIsAutoSaved(!isAutoSaved)} />
-            <span>Auto Save</span>
-          </label>
+          <AutoSaveTrigger />
         </div>
         { isConfigOpen && isGameStart &&
           <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', padding: '12px', zIndex: 1, backgroundColor: bgColor }}>

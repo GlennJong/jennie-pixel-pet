@@ -5,9 +5,7 @@ import { Preloader } from '@/game/scenes/Preloader';
 // General
 import { canvas } from '@/game/constants';
 
-// Tamagotchi Scene
-
-// Battle Scene
+// Scenes
 import Battle from '@/game/scenes/Battle';
 import Tamagotchi from '@/game/scenes/Tamagotchi';
 import TestScene from '@/game/scenes/Test';
