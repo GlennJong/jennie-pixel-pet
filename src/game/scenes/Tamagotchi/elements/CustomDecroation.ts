@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-import { getGlobalData, EventBus } from '../../../EventBus';
+import { store } from '@/game/store';
 
 const DEFAULT_DECORATION_KEY = 'tamagotchi_room';
 const DEFAULT_LEVEL = 1;
@@ -8,7 +8,8 @@ export class CustomDecroation extends Phaser.GameObjects.Container {
   private item: Phaser.GameObjects.Sprite;
   private currentLevel: number = 1;
   private maxLevel: number = 4;
-  private config = undefined;
+  private config = [];
+  private levelStore = store<number>('tamagotchi.level');
 
   constructor(scene: Phaser.Scene) {
     // Inherite from scene
@@ -20,7 +21,7 @@ export class CustomDecroation extends Phaser.GameObjects.Container {
 
     this.maxLevel = this.config.length;
     
-    this.currentLevel = Math.min(this.maxLevel, getGlobalData('tamagotchi_level') || DEFAULT_LEVEL);
+    this.currentLevel = Math.min(this.maxLevel, this.levelStore?.get() || DEFAULT_LEVEL);
 
     // Item
     this.item = scene.make.sprite({
@@ -34,16 +35,22 @@ export class CustomDecroation extends Phaser.GameObjects.Container {
     scene.add.existing(this);
 
     // Watch level change
-    EventBus.on('tamagotchi_level-updated', this.handleLevelUpdate);
+    this.levelStore?.watch(this.handleLevelUpdate.bind(this));
   }
 
-  private handleLevelUpdate = (value: number) => {
+  private handleLevelUpdate (value: number) {
     this.currentLevel = Math.min(this.maxLevel, value);
     this.item.setTexture(this.config[this.currentLevel - 1].key, this.config[this.currentLevel - 1].frame);
   }
 
+  public levelUp() {
+    if (this.currentLevel < this.maxLevel) {
+      this.levelStore?.set(this.currentLevel + 1);
+    }
+  }
+
   public destroy() {
     this.item.destroy();
-    EventBus.off('tamagotchi_level-updated', this.handleLevelUpdate);
+    this.levelStore?.unwatch(this.handleLevelUpdate.bind(this));
   }
 }

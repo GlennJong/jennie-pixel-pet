@@ -4,11 +4,7 @@ import { store, setStoreState } from "@/game/store";
 import { filterFromMatchList } from "@/game/utils/filterFromMatchList";
 
 import { Message, TaskMappingItem, Task } from "./types";
-
-
-const MESSAGE_QUEUE_STORE_KEY = 'global.messageQueue';
-const TASK_QUEUE_STORE_KEY = 'tamagotchi.taskQueue';
-const CONFIG_MAPPING_LIST_KEY = 'mapping';
+import { CONFIG_MAPPING_LIST_KEY, MESSAGE_QUEUE_STORE_KEY, TASK_QUEUE_STORE_KEY } from "./constants";
 
 export class TaskQueueHandler {
   private taskQueueState = store<Task[]>(TASK_QUEUE_STORE_KEY);
@@ -28,13 +24,12 @@ export class TaskQueueHandler {
     this.onTask = onTask;
     this.interval = interval || this.interval;
     this.mappingList = Object.values(this.scene.cache.json.get('config')[CONFIG_MAPPING_LIST_KEY]);
-    // 監聽 global message queue，將 message 轉換為 task 並加入 task queue
+
     this.messageQueueState?.watch(this.handleMessageQueueChange);
-    // 監聽 task queue 狀態，負責執行任務
+
     this.taskQueueState?.watch(this.handleTaskQueueChange);
   }
 
-  // 處理 global message queue 轉換
   private handleMessageQueueChange = (messages: Message[]) => {
     if (!messages.length) return;
     const tasks: Task[] = [];
@@ -47,14 +42,12 @@ export class TaskQueueHandler {
       }
     });
     if (updated) {
-      // 將轉換後的 task 加入 task queue，並清空 message queue
       const currentTasks = this.taskQueueState?.get() || [];
       setStoreState(TASK_QUEUE_STORE_KEY, [...currentTasks, ...tasks]);
       setStoreState(MESSAGE_QUEUE_STORE_KEY, []);
     }
   };
 
-  // 處理 task queue 執行
   private handleTaskQueueChange = (tasks: Task[]) => {
     if (!this.timerEvent && tasks.length > 0) {
       this.startNextTask();
@@ -88,7 +81,6 @@ export class TaskQueueHandler {
 
     const task = queue[0];
 
-    // Retry 機制，最多重試 3 次
     let retryCount = 0;
     const maxRetry = 3;
 
@@ -108,12 +100,10 @@ export class TaskQueueHandler {
       } else {
         retryCount++;
         if (retryCount > maxRetry) {
-          // 超過重試次數，直接移除，避免 queue 卡死
           console.warn('TaskQueueHandler: task failed too many times, removing from queue.', task);
           this.removeTask(0);
           retryCount = 0;
         } else {
-          // 不移除，等下次 timer 再嘗試
           console.warn('TaskQueueHandler: task failed, will retry.', task);
         }
       }

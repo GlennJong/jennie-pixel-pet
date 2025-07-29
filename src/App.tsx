@@ -1,11 +1,10 @@
 import { useRef, useState } from "react";
 import { PhaserGame } from "@/PhaserGame";
 import useTwitchOauth from "@/hooks/useTwitchOauth";
-import { EventBus, setGlobalData, getGlobalData } from '@/game/EventBus';
 import Console from "@/game/Console";
 import ColorPicker from '@/ColorPicker';
 import ConfigEditor from '@/ConfigEditor';
-import { setStoreState, store } from "@/game/store";
+import { getStoreState, setStoreState, store } from "@/game/store";
 
 const isDev = import.meta.env['VITE_ENV'] === 'dev';
 
@@ -21,8 +20,8 @@ function App() {
   const handleClickConnectButton = async () => {
     startWebsocket('chat', {
       onMessage: (data) => {
-        const { user, content } = data;
-        EventBus.emit('queue', { user, content });
+        const { user, content }: {user?: string, content?: string} = data;
+        handlePushMessage(user || '', content || '');
         recordRef.current.push({ user, content });
         setRecord(recordRef.current);
       }
@@ -30,16 +29,12 @@ function App() {
     setIsGameStart(true);
   }
 
-  const handleClickManualBattle = (user: string, content: string) => {
+  const handlePushMessage = (user: string, content: string) => {
     const myStore = store('global.messageQueue');
     setStoreState('global.messageQueue', [
       ...(Array.isArray(myStore?.get()) ? myStore.get() as { user?: string, content?: string }[] : []),
       { user, content }
     ])
-    // setGlobalData('message_queue', [
-    //   ...getGlobalData('message_queue'),
-    //   { user, content }
-    // ]);
   }
 
   
@@ -85,16 +80,16 @@ function App() {
               <ConfigEditor />
             </div> */}
             <div style={{ display: 'flex', gap: '12px', alignItems: 'center', justifyContent: 'flex-start', marginBottom: '12px' }}>
-              <button className="button" onClick={() => setGlobalData('tamagotchi_level', 1)}>level=1</button>
-              <button className="button" onClick={() => setGlobalData('tamagotchi_coin', 0)}>coin=0</button>
-              <button className="button" onClick={() => setGlobalData('tamagotchi_coin', getGlobalData('tamagotchi_coin') + 20)}>coin+20</button>
+              <button className="button" onClick={() => setStoreState('tamagotchi.level', 1)}>level=1</button>
+              <button className="button" onClick={() => setStoreState('tamagotchi.coin', 0)}>coin=0</button>
+              <button className="button" onClick={() => setStoreState('tamagotchi.coin', getStoreState('tamagotchi.coin') + 20)}>coin+20</button>
             </div>
             <div style={{ display: 'flex', gap: '12px', alignItems: 'center', justifyContent: 'flex-start' }}>
-              <button className="button" onClick={() => handleClickManualBattle('test', '補充水分')}>補充水分</button>
-              <button className="button" onClick={() => handleClickManualBattle('test', '貝貝打招呼')}>battle 貝貝</button>
-              <button className="button" onClick={() => handleClickManualBattle('test', '上上打招呼')}>battle 上上</button>
-              <button className="button" onClick={() => handleClickManualBattle('curry_cat', '上上打招呼')}>battle curry_cat</button>
-              <button className="button" onClick={() => handleClickManualBattle('jennie_congee', '上上打招呼')}>battle jennie_congee</button>
+              <button className="button" onClick={() => handlePushMessage('test', '補充水分')}>補充水分</button>
+              <button className="button" onClick={() => handlePushMessage('test', '貝貝打招呼')}>battle 貝貝</button>
+              <button className="button" onClick={() => handlePushMessage('test', '上上打招呼')}>battle 上上</button>
+              <button className="button" onClick={() => handlePushMessage('curry_cat', '上上打招呼')}>battle curry_cat</button>
+              <button className="button" onClick={() => handlePushMessage('jennie_congee', '上上打招呼')}>battle jennie_congee</button>
             </div>
             <div>
               { twitchState && JSON.stringify(twitchState) }

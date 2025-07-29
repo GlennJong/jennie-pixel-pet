@@ -1646,6 +1646,7 @@
         },
         "buy": {
           "animation": "none",
+          "coin": -100,
           "dialogs": [
             {
               "sentences": [

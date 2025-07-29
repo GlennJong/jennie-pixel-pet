@@ -72,18 +72,21 @@ export class TamagotchiCharacter extends Character {
     this.handleDefaultIdleAction();
 
   }
-  private getIsAvaliable() {
-    return this.isAliveState?.get() && this.isSleepState?.get();
+  private getIsUnavaliableAll() {
+    return this.isActing || !this.isAliveState?.get() || this.isSleepState?.get();
+  }
+
+  private getIsUnavaliableIdle() {
+    return this.isActing || !this.isAliveState?.get();
   }
 
   private handleDefaultIdleAction() {
-    if (this.isActing || !this.isAliveState?.get()) return;
+    if (this.getIsUnavaliableAll()) return;
     this.playAnimation(`${DEFAULT_IDLE_PREFEX}-${this.direction}`);
   }
 
   private async handleAutomaticAction() {
-    const isUnavaliable = this.getIsAvaliable();
-    if (this.isActing || isUnavaliable) return;
+    if (this.getIsUnavaliableAll()) return;
 
     const currentAction = selectFromPiority<TIdleness>(this.idleness);
 
@@ -104,8 +107,7 @@ export class TamagotchiCharacter extends Character {
   }
 
   public handleMoveDirection(animation: string) {
-    const isUnavaliable = this.getIsAvaliable();
-    if (this.isActing || isUnavaliable) return;
+    if (this.getIsUnavaliableIdle()) return;
 
     // change direction if character close to edge
     this.direction =

@@ -1,7 +1,7 @@
 import { Scene } from 'phaser';
 import { initStore } from '@/game/store';
 
-const DEFAULT_HP = 1;
+const DEFAULT_HP = 100;
 const DEFAULT_COIN = 20;
 const DEFAULT_LEVEL = 1;
 // const DEFAULT_GLOBAL_TRANSMIT = {};

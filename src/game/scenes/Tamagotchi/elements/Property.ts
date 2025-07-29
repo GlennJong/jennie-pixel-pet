@@ -27,6 +27,12 @@ export class Property extends Phaser.GameObjects.Container {
   }
 
 
+  public runAction(action: string) {
+    if (action === 'buy') {
+      this.decoration.levelUp();
+    }
+  }
+  
   public update() {
   }
 

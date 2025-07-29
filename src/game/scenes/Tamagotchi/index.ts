@@ -11,14 +11,15 @@ import { TamagotchiCharacter } from './elements/TamagotchiCharacter';
 import { TamagotchiDialogue } from './elements/TamagotchiDialogue';
 
 // services
-import { TaskQueueHandler } from './tasks/TaskQueueHandler';
+import { TaskQueueHandler } from './services/TaskQueueService';
 
 // handlers
 import { KeyboardHandler } from './handlers/KeyboardHander';
 import { PropertyHandler } from './handlers/PropertyHandler';
 import { HpHandler } from './handlers/HpHandler';
-import { Task } from './tasks/types';
+import { Task } from './services/types';
 import { setStoreState, store } from '@/game/store';
+import { EventBus } from '@/game/EventBus';
 
 const DEFAULT_USER_NAME = 'user';
 const DEFAULT_CHARACTER_KEY = 'tamagotchi_afk';
@@ -104,6 +105,9 @@ export default class TamagotchiScene extends Scene {
       onRight: () => this.handleControlButton('right'),
       onSpace: () => this.handleControlButton('space')
     });
+    EventBus.on('game-left-keydown', () => this.handleControlButton('left'));
+    EventBus.on('game-right-keydown', () => this.handleControlButton('right'));
+    EventBus.on('game-select-keydown', () => this.handleControlButton('select'));
 
     // Run opening scene and start tamagotchi
     (async() => {
@@ -147,6 +151,10 @@ export default class TamagotchiScene extends Scene {
       if (this.header) {
         this.header.showHeader(HEADER_DISPLAY_DURATION);
         this.header.runAction(action);
+      }
+
+      if (this.property) {
+        this.property.runAction(action);
       }
       
       // Change scene if need

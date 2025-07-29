@@ -1,11 +1,11 @@
-import Phaser from "phaser";
-import { store, getStoreState, setStoreState } from "@/game/store";
+import Phaser from 'phaser';
+import { store, getStoreState, setStoreState } from '@/game/store';
 
 const STORE_KEY = 'tamagotchi.hp';
 
 const DEFAULT_CONSUMED_HP = 1;
 const DEFAULT_RECOVER_HP = 33;
-const HP_DECREASE_INTERVAL = 1000;
+const DEFAULT_HP_DECREASE_INTERVAL = 1000;
 
 export class HpHandler {
   private timer?: Phaser.Time.TimerEvent;
@@ -28,7 +28,7 @@ export class HpHandler {
     if (onZeroHp) this.onZeroHp = onZeroHp;
 
     this.timer = this.scene.time.addEvent({
-      delay: HP_DECREASE_INTERVAL,
+      delay: DEFAULT_HP_DECREASE_INTERVAL,
       loop: true,
       callback: () => {
         const isStopped = getStoreState('global.isPaused') || getStoreState('tamagotchi.isSleep');
@@ -41,16 +41,16 @@ export class HpHandler {
       }
     });
   }
-  private handleHpChange = (currentHp: number) => {
+  private handleHpChange(currentHp: number) {
     if (currentHp === 100) {
       if (this.onFullHp) this.onFullHp();
     } else if (currentHp === 0) {
       if (this.onZeroHp) this.onZeroHp();
     }
-  };
+  }
 
   destroy() {
-    this.hpState?.unwatch(this.handleHpChange);
+    this.hpState?.unwatch(this.handleHpChange.bind(this));
     if (this.timer) {
       this.timer.remove();
       this.timer = undefined;
