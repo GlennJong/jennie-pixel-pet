@@ -7,13 +7,14 @@ interface Props {
   onChange: (value: JSONValue) => void;
   keyName?: string;
   wording?: Record<string, string>;
+  template?: Record<string, any>;
   hide?: string[];
   lock?: string[];
   title?: string;
 }
 
-const JsonEditor: React.FC<Props> = ({ value, onChange, keyName, wording = {}, hide = [], lock = [], title }) => {
-  const [collapsed, setCollapsed] = React.useState(false);
+const JsonEditor: React.FC<Props> = ({ value, onChange, keyName, template = {}, wording = {}, hide = [], lock = [], title }) => {
+  const [collapsed, setCollapsed] = React.useState(true);
 
   // 只在最外層渲染 title
   if (title) {
@@ -23,13 +24,12 @@ const JsonEditor: React.FC<Props> = ({ value, onChange, keyName, wording = {}, h
           style={{
             cursor: 'pointer',
             fontWeight: 'bold',
-            fontSize: 18,
-            marginBottom: 8,
+            fontSize: 14,
             position: 'sticky',
-            top: '-24px',
+            top: '0',
             background: 'rgba(30,30,30,0.5)',
             zIndex: 10,
-            padding: '8px 0',
+            padding: '6px 4px',
             borderBottom: '1px solid #444',
           }}
           onClick={() => setCollapsed(c => !c)}
@@ -37,13 +37,16 @@ const JsonEditor: React.FC<Props> = ({ value, onChange, keyName, wording = {}, h
           {collapsed ? '▶ ' : '▼ '}{title}
         </div>
         {!collapsed && (
-          <JsonEditor
-            value={value}
-            onChange={onChange}
-            wording={wording}
-            hide={hide}
-            lock={lock}
-          />
+          <div style={{ overflowY: 'auto', maxHeight: 'calc(100vh - 100px)' }}>
+            <JsonEditor
+              value={value}
+              template={template}
+              onChange={onChange}
+              wording={wording}
+              hide={hide}
+              lock={lock}
+            />
+          </div>
         )}
       </div>
     );
@@ -54,23 +57,39 @@ const JsonEditor: React.FC<Props> = ({ value, onChange, keyName, wording = {}, h
     const labelText = keyName ? (wording[keyName] ?? keyName) : undefined;
     const isLocked = keyName ? lock.includes(keyName) : false;
     return (
-      <label>
-        {labelText && <span>{labelText}: </span>}
-        <input
-          type="text"
-          value={value === null ? "" : value}
-          onChange={e => onChange(e.target.value)}
-          disabled={isLocked}
-        />
-      </label>
+      <div>
+        <label style={{ fontSize: '12px', whiteSpace: 'nowrap' }}>
+          { isNaN(Number(labelText)) ?
+            <span>{labelText}: </span>
+            :
+            <span>{Number(labelText)+1} </span>
+          }
+          <input
+            type="text"
+            value={value === null ? "" : value}
+            onChange={e => onChange(e.target.value)}
+            style={{ fontSize: '12px' }}
+            disabled={isLocked}
+          />
+        </label>
+      </div>
     );
   }
   if (Array.isArray(value)) {
     if (keyName && hide.includes(keyName)) return null;
     const labelText = keyName ? (wording[keyName] ?? keyName) : undefined;
     const isLocked = keyName ? lock.includes(keyName) : false;
+    // 依照 template[keyName][0] 產生預設物件
+    const getDefaultItem = () => {
+      console.log({keyName, template}, template[keyName])
+      if (keyName && template && template[keyName]) {
+        // 深拷貝，避免 reference 問題
+        return JSON.parse(JSON.stringify(template[keyName]));
+      }
+      return "";
+    };
     const handleAdd = () => {
-      onChange([...value, ""]);
+      onChange([...value, getDefaultItem()]);
     };
     const handleRemove = (idx: number) => {
       const newArr = value.slice();
@@ -79,9 +98,9 @@ const JsonEditor: React.FC<Props> = ({ value, onChange, keyName, wording = {}, h
     };
     return (
       <fieldset style={{ border: '1px solid hsla(0, 0%, 100%, 0.2)', marginBottom: 8 }}>
-        {labelText && <legend>{labelText}</legend>}
+        {labelText && <legend style={{ fontSize: '12px' }}>{labelText}</legend>}
         {value.map((v, i) => (
-          <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 8}}>
             <JsonEditor
               value={v}
               onChange={nv => {
@@ -90,6 +109,7 @@ const JsonEditor: React.FC<Props> = ({ value, onChange, keyName, wording = {}, h
                 onChange(newArr);
               }}
               keyName={String(i)}
+              template={template}
               wording={wording}
               hide={hide}
               lock={lock}
@@ -97,7 +117,7 @@ const JsonEditor: React.FC<Props> = ({ value, onChange, keyName, wording = {}, h
             <button type="button" onClick={() => handleRemove(i)} disabled={isLocked}>-</button>
           </div>
         ))}
-        <button type="button" onClick={handleAdd} disabled={isLocked}>新增</button>
+        <button style={{ width: '100%' }} type="button" className="button" onClick={handleAdd} disabled={isLocked}>新增{labelText}</button>
       </fieldset>
     );
   }
@@ -105,8 +125,18 @@ const JsonEditor: React.FC<Props> = ({ value, onChange, keyName, wording = {}, h
     if (keyName && hide.includes(keyName)) return null;
     const labelText = keyName ? (wording[keyName] ?? keyName) : undefined;
     return (
-      <fieldset style={{ border: '1px solid hsla(0, 0%, 100%, 0.2)', marginBottom: 8 }}>
-        {labelText && <legend>{labelText}</legend>}
+      // <fieldset style={{ border: '0px', borderLeft: '1px solid hsla(0, 0%, 100%, 0.2)', marginBottom: 8 }}>
+      <fieldset style={{ border: '1px solid hsla(0, 0%, 100%, 0.2)', marginBottom: 4 }}>
+        {
+          labelText &&
+          <legend style={{ fontSize: '12px' }}>
+            { isNaN(Number(labelText)) ?
+              <span>{labelText}: </span>
+              :
+              <span>{Number(labelText)+1} </span>
+            }
+          </legend>
+        }
         {Object.entries(value).map(([k, v]) => (
           <JsonEditor
             key={k}
@@ -116,6 +146,7 @@ const JsonEditor: React.FC<Props> = ({ value, onChange, keyName, wording = {}, h
             }}
             keyName={k}
             wording={wording}
+            template={template}
             hide={hide}
             lock={lock}
           />

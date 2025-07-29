@@ -82,6 +82,10 @@ export default class TamagotchiScene extends Scene {
 
     // hp
     this.hpHandler = new HpHandler(this);
+    this.hpHandler.init({
+      onFullHp: () => this.handleFullHp(this.taskQueueHandler),
+      onZeroHp: () => this.handleZeroHp(this.taskQueueHandler)
+    });
 
     // queue init
     this.taskQueueHandler.init({
@@ -92,12 +96,6 @@ export default class TamagotchiScene extends Scene {
     // property
     this.propertyHandler.init({
       onUpgrade: (params) => this.handleUpgrade(this.taskQueueHandler, params)
-    });
-
-    // hp
-    this.hpHandler.init({
-      onFullHp: () => this.handleFullHp(this.taskQueueHandler),
-      onZeroHp: () => this.handleZeroHp(this.taskQueueHandler)
     });
 
     // Build Keyboard 
@@ -190,6 +188,7 @@ export default class TamagotchiScene extends Scene {
   }
 
   handleFullHp(taskQueueHandler: any) {
+    console.log('work')
     if (!this.isTamagotchiReady) return false;
     taskQueueHandler?.addEmergentTask({ action: 'born', user: 'system' });
     return true;

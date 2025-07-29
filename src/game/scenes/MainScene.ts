@@ -4,8 +4,7 @@ import { initStore, loadAllStoresFromLocalStorage } from '@/game/store';
 const DEFAULT_HP = 100;
 const DEFAULT_COIN = 20;
 const DEFAULT_LEVEL = 1;
-// const DEFAULT_GLOBAL_TRANSMIT = {};
-const DEFAULT_GLOBAL_TRANSMIT = { battleResult: 'win' };
+const DEFAULT_GLOBAL_TRANSMIT = {};
 
 export class MainScene extends Scene {
     constructor() {

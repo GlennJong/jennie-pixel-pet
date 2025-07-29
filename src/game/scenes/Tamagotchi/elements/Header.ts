@@ -177,7 +177,7 @@ export class Header extends Phaser.GameObjects.Container {
   public runAction(action: string) {
     const { hp, coin } = this.config[action] || {};
     this.showHeader(HEADER_DISPLAY_DURATION);
-    if (hp) setStoreState('tamagotchi.hp', getStoreState('tamagotchi.hp') + hp);
+    if (hp) setStoreState('tamagotchi.hp', Math.min(100, getStoreState('tamagotchi.hp') + hp));
     if (coin) setStoreState('tamagotchi.coin', getStoreState('tamagotchi.coin') + coin);
   }
 

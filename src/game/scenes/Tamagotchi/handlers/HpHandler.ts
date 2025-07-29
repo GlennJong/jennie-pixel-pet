@@ -22,7 +22,7 @@ export class HpHandler {
   init(params: { onFullHp?: () => void, onZeroHp?: () => void }) {
     const { onFullHp, onZeroHp } = params || {};
 
-    this.hpState?.watch(this.handleHpChange);
+    this.hpState?.watch(this.handleHpChange.bind(this));
     
     if (onFullHp) this.onFullHp = onFullHp;
     if (onZeroHp) this.onZeroHp = onZeroHp;
@@ -43,7 +43,7 @@ export class HpHandler {
   }
   private handleHpChange(currentHp: number) {
     if (currentHp === 100) {
-      if (this.onFullHp) this.onFullHp();
+      if (this.onFullHp && !this.isAliveState?.get()) this.onFullHp();
     } else if (currentHp === 0) {
       if (this.onZeroHp) this.onZeroHp();
     }

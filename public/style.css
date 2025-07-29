@@ -10,7 +10,11 @@ body {
   color: rgba(255, 255, 255, 0.87);
   /* background-color: hsla(240, 100%, 96%, 0.75); */
   background-color: #482e79;
-  font-family: "BoutiqueBitmap", Arial, Helvetica, sans-serif;
+  /* font-family: "BoutiqueBitmap", Arial, Helvetica, sans-serif; */
+}
+
+* {
+  box-sizing: border-box;
 }
 
 #app {
