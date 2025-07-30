@@ -30,6 +30,7 @@ export class MainScene extends Scene {
             initStore('tamagotchi.battleResult', 'win');
         }
         this.scene.start('Tamagotchi');
+
     }
 
     shutdown() {

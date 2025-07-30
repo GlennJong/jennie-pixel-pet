@@ -106,7 +106,7 @@ export default class TamagotchiScene extends Scene {
     });
     EventBus.on('game-left-keydown', () => this.handleControlButton('left'));
     EventBus.on('game-right-keydown', () => this.handleControlButton('right'));
-    EventBus.on('game-select-keydown', () => this.handleControlButton('select'));
+    EventBus.on('game-select-keydown', () => this.handleControlButton('space'));
 
     // Run opening scene and start tamagotchi
     (async() => {

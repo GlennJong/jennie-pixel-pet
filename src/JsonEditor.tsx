@@ -1,4 +1,5 @@
 import React from "react";
+import './JsonEditor.css';
 
 type JSONValue = string | number | boolean | null | JSONValue[] | { [key: string]: JSONValue };
 
@@ -6,20 +7,25 @@ interface Props {
   value: JSONValue;
   onChange: (value: JSONValue) => void;
   keyName?: string;
+  prefixName?: string;
   wording?: Record<string, string>;
   template?: Record<string, any>;
   hide?: string[];
   lock?: string[];
   title?: string;
+  hintPic?: Record<string, string>;
 }
 
-const JsonEditor: React.FC<Props> = ({ value, onChange, keyName, template = {}, wording = {}, hide = [], lock = [], title }) => {
+const JsonEditor: React.FC<Props> = ({ value, onChange, prefixName, keyName, template = {}, wording = {}, hide = [], lock = [], title, hintPic = {} }) => {
   const [collapsed, setCollapsed] = React.useState(true);
+  const [localCollapsed, setLocalCollapsed] = React.useState(false);
+  const [showHint, setShowHint] = React.useState<string | null>(null);
+  const hintUrl = keyName && hintPic[keyName] ? hintPic[keyName] : null;
 
   // 只在最外層渲染 title
   if (title) {
     return (
-      <div style={{ position: 'relative' }}>
+      <div className="json-editor" style={{ position: 'relative' }}>
         <div
           style={{
             cursor: 'pointer',
@@ -45,6 +51,7 @@ const JsonEditor: React.FC<Props> = ({ value, onChange, keyName, template = {}, 
               wording={wording}
               hide={hide}
               lock={lock}
+              hintPic={hintPic}
             />
           </div>
         )}
@@ -54,16 +61,13 @@ const JsonEditor: React.FC<Props> = ({ value, onChange, keyName, template = {}, 
   if (typeof value === "string" || typeof value === "number" || typeof value === "boolean" || value === null) {
     // 隱藏欄位
     if (keyName && hide.includes(keyName)) return null;
+    
     const labelText = keyName ? (wording[keyName] ?? keyName) : undefined;
     const isLocked = keyName ? lock.includes(keyName) : false;
     return (
-      <div>
+      <div style={{ marginBottom: 4 }}>
         <label style={{ fontSize: '12px', whiteSpace: 'nowrap' }}>
-          { isNaN(Number(labelText)) ?
-            <span>{labelText}: </span>
-            :
-            <span>{Number(labelText)+1} </span>
-          }
+          {isNaN(Number(labelText)) ? <span>{labelText}: </span> : <span>{prefixName}{Number(labelText)+1} </span>}
           <input
             type="text"
             value={value === null ? "" : value}
@@ -72,6 +76,22 @@ const JsonEditor: React.FC<Props> = ({ value, onChange, keyName, template = {}, 
             disabled={isLocked}
           />
         </label>
+        {hintUrl && (
+          <span
+            className="hint-icon"
+            style={{ marginLeft: 8, cursor: 'pointer', position: 'relative' }}
+            onMouseEnter={() => setShowHint(hintUrl)}
+            onMouseLeave={() => setShowHint(null)}
+          >
+            <span className="hint-trigger">?</span>
+            {showHint && (
+              <div style={{ position: 'absolute', left: '110%', top: 0, zIndex: 100, background: '#222', border: '1px solid #444', padding: 2 }}>
+                <img src={showHint} alt="hint" style={{ maxWidth: 200, maxHeight: 200 }} />
+              </div>
+            )}
+          </span>
+        )}
+        
       </div>
     );
   }
@@ -81,7 +101,6 @@ const JsonEditor: React.FC<Props> = ({ value, onChange, keyName, template = {}, 
     const isLocked = keyName ? lock.includes(keyName) : false;
     // 依照 template[keyName][0] 產生預設物件
     const getDefaultItem = () => {
-      console.log({keyName, template}, template[keyName])
       if (keyName && template && template[keyName]) {
         // 深拷貝，避免 reference 問題
         return JSON.parse(JSON.stringify(template[keyName]));
@@ -97,10 +116,27 @@ const JsonEditor: React.FC<Props> = ({ value, onChange, keyName, template = {}, 
       onChange(newArr);
     };
     return (
-      <fieldset style={{ border: '1px solid hsla(0, 0%, 100%, 0.2)', marginBottom: 8 }}>
-        {labelText && <legend style={{ fontSize: '12px' }}>{labelText}</legend>}
+      <fieldset style={{ border: '1px solid hsla(0, 0%, 100%, 0.2)', marginBottom: 8, width: '100%' }}>
+        {labelText && <legend style={{ fontSize: '12px' }}>
+          {labelText}
+          {hintUrl && (
+            <span
+              className="hint-icon"
+              style={{ marginLeft: 8, cursor: 'pointer', position: 'relative' }}
+              onMouseEnter={() => setShowHint(hintUrl)}
+              onMouseLeave={() => setShowHint(null)}
+            >
+              <span className="hint-trigger">?</span>
+              {showHint && (
+                <div style={{ position: 'absolute', left: '110%', top: 0, zIndex: 100, background: '#222', border: '1px solid #444', padding: 2 }}>
+                  <img src={showHint} alt="hint" style={{ maxWidth: 200, maxHeight: 200 }} />
+                </div>
+              )}
+            </span>
+          )}
+        </legend>}
         {value.map((v, i) => (
-          <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 8}}>
+          <div className="field-container" key={i} style={{ display: 'flex', alignItems: 'center', gap: 8}}>
             <JsonEditor
               value={v}
               onChange={nv => {
@@ -109,35 +145,44 @@ const JsonEditor: React.FC<Props> = ({ value, onChange, keyName, template = {}, 
                 onChange(newArr);
               }}
               keyName={String(i)}
+              prefixName={labelText}
               template={template}
               wording={wording}
               hide={hide}
               lock={lock}
+              hintPic={hintPic}
             />
-            <button type="button" onClick={() => handleRemove(i)} disabled={isLocked}>-</button>
+            <button className="remove-btn" type="button" onClick={() => handleRemove(i)} disabled={isLocked}>x</button>
           </div>
         ))}
-        <button style={{ width: '100%' }} type="button" className="button" onClick={handleAdd} disabled={isLocked}>新增{labelText}</button>
+        <button className="add-btn" style={{ marginTop: '4px', width: '100%' }} type="button" onClick={handleAdd} disabled={isLocked}>+新增{labelText}</button>
       </fieldset>
     );
   }
   if (typeof value === "object" && value !== null) {
     if (keyName && hide.includes(keyName)) return null;
     const labelText = keyName ? (wording[keyName] ?? keyName) : undefined;
+    // 判斷是否有可遞迴的子層
+    const hasRecursiveChild = Object.values(value).some(v => typeof v === "object" && v !== null);
+    
     return (
-      // <fieldset style={{ border: '0px', borderLeft: '1px solid hsla(0, 0%, 100%, 0.2)', marginBottom: 8 }}>
-      <fieldset style={{ border: '1px solid hsla(0, 0%, 100%, 0.2)', marginBottom: 4 }}>
-        {
-          labelText &&
-          <legend style={{ fontSize: '12px' }}>
-            { isNaN(Number(labelText)) ?
-              <span>{labelText}: </span>
-              :
-              <span>{Number(labelText)+1} </span>
-            }
+      <fieldset style={{ border: '1px solid hsla(0, 0%, 100%, 0.2)', marginBottom: 4, width: '100%', position: 'relative' }}>
+        {labelText && (
+          <legend style={{ fontSize: '12px', display: 'flex', alignItems: 'center', gap: 8, position: 'relative' }}>
+            {isNaN(Number(labelText)) ? <span>{labelText}: </span> : <span>{prefixName}{Number(labelText)+1} </span>}
+            {hasRecursiveChild && (
+              <button
+                className="collapse-btn"
+                type="button"
+                style={{ transform: `rotate(${localCollapsed ? 0 : 90}deg)` }}
+                onClick={() => setLocalCollapsed(c => !c)}
+              >
+                {'>'}
+              </button>
+            )}
           </legend>
-        }
-        {Object.entries(value).map(([k, v]) => (
+        )}
+        {!localCollapsed && Object.entries(value).map(([k, v]) => (
           <JsonEditor
             key={k}
             value={v}
@@ -149,6 +194,7 @@ const JsonEditor: React.FC<Props> = ({ value, onChange, keyName, template = {}, 
             template={template}
             hide={hide}
             lock={lock}
+            hintPic={hintPic}
           />
         ))}
         {/* 可加上新增/刪除 key 的功能 */}

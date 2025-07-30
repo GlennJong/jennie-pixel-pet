@@ -7,6 +7,7 @@ import ConfigEditor from '@/ConfigEditor';
 import { getStoreState, setStoreState, store } from "@/game/store";
 import AutoSaveTrigger from "./AutoSaveTrigger";
 import CommandBoard from './CommandBoard';
+import { EventBus } from "./game/EventBus";
 
 const isDev = import.meta.env['VITE_ENV'] === 'dev';
 
@@ -46,12 +47,12 @@ function App() {
               {/* Side */}
               <div style={{ height: '100vh'}}>
                 <ConfigEditor onChange={() => {
-                    window.alert('設定已更新，將重新啟動');
-                    window.location.reload()
+                    EventBus.emit('config-updated');
+                    // window.alert('設定已更新，將重新啟動');
+                    // window.location.reload()
                   }}
                 />
               </div>
-              
               
               {/* Main */}
               <div style={{
