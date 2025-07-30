@@ -39,21 +39,21 @@ function CommandBoard() {
 
   return (
     <div>
-      <div style={{ display: 'flex', gap: '8px', justifyContent: 'center', alignItems: 'center' }}>
+      <div style={{ display: 'flex', gap: '8px', justifyContent: 'flex-end', alignItems: 'center', marginBottom: '4px' }}>
         <select onChange={(e) => setSelectedStateOptionIndex(Number(e.target.value))}>
           { stateOptions.map((option, index) => 
             <option key={index} value={index}>{ option.label }</option>
           ) }
         </select>
-        <button onClick={handleClickStateButton}>GO</button>
+        <button className="button" onClick={handleClickStateButton}>UPDATE STATUS</button>
       </div>
-      <div  style={{ display: 'flex', gap: '8px', justifyContent: 'center', alignItems: 'center' }}>
+      <div style={{ display: 'flex', gap: '8px', justifyContent: 'flex-end', alignItems: 'center' }}>
         <select onChange={(e) => setSelectedCommandOptionIndex(Number(e.target.value))}>
           { commandOptions.map((option, index) => 
             <option key={index} value={index}>{ option.label }</option>
           ) }
         </select>
-        <button onClick={handleClickCommandButton}>GO</button>
+        <button className="button" onClick={handleClickCommandButton}>RUN COMMAND</button>
       </div>
     </div>
   );

@@ -61,7 +61,7 @@ const ConfigEditor = ({ onChange } : { onChange: () => void }): JSX.Element => {
   if (!config) return <div>Config not found</div>;
 
   return (
-    <div style={{ position: 'relative', padding: '24px 0', minWidth: '400px', boxSizing: 'border-box' }}>
+    <div style={{ position: 'relative', padding: '32px 0', minWidth: '400px', boxSizing: 'border-box' }}>
       <div style={{ fontWeight: 'bold', padding: '0 12px', fontSize: '16px', marginBottom: '6px' }}>Config Editor（土炮版）</div>
       <div style={{ display: 'flex', padding: '0 12px', justifyContent: 'flex-start', gap: '4px', marginBottom: '12px' }}>
         <button className="button" onClick={handleClickSaveButton}>SAVE</button>

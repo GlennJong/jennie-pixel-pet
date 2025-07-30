@@ -62,7 +62,7 @@ body {
   outline: none;
 }
 
-.button:hover {
+.button:hover, .button.open {
   background-color: #472f74;
 }
 
