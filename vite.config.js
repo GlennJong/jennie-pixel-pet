@@ -8,7 +8,7 @@ export default defineConfig({
   base: "./",
   plugins: [
     react(),
-    eruda(),
+    // eruda(),
   ],
   watch: {
     // usePolling: true,

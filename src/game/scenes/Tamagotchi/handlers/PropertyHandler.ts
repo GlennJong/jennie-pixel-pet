@@ -10,13 +10,17 @@ type PropertyItem = {
 
 const STORE_KEY = 'tamagotchi.coin';
 
+const RETRY_MAX_TRY = 3;
+const RETRY_DELAY = 1000;
+
+
 export class PropertyHandler {
   private timer?: Phaser.Time.TimerEvent;
   private scene: Phaser.Scene;
   private coinState = store<number>(STORE_KEY);
   private propertyList: PropertyItem[] = [];
 
-  private onUpgrade?: (params: { coin: number}) => boolean | Promise<boolean>;
+  private onUpgrade?: (params: { coin: number, level: number}) => boolean | Promise<boolean>;
   constructor(scene: Phaser.Scene) {
     this.scene = scene;
   }
@@ -24,14 +28,25 @@ export class PropertyHandler {
   init(params: { onUpgrade?: (params: { coin: number}) => boolean | Promise<boolean> }) {
     const { onUpgrade } = params || {};
 
-    this.coinState?.watch(this.handleCoinChange.bind(this));
+    this.coinState?.watch(this.handleCoinChange);
     this.onUpgrade = onUpgrade;
     this.propertyList = this.scene.cache.json.get('config').tamagotchi.tamagotchi_room.decoration;
 
   }
 
-  private async handleCoinChange(currentCoin: number) {
+  private handleCoinChange = async (currentCoin: number) => {
     const currentLevel: number = getStoreState('tamagotchi.level');
+
+    // 新增 retry 機制
+    const retry = async (fn: (() => Promise<boolean> | boolean) | undefined): Promise<boolean> => {
+      for (let i = 0; i < RETRY_MAX_TRY; i++) {
+        if (!fn) return true;
+        const result = await fn();
+        if (result) return true;
+        if (i < RETRY_MAX_TRY - 1) await new Promise(res => setTimeout(res, RETRY_DELAY));
+      }
+      return false;
+    };
 
     for(let i = 0; i < this.propertyList.length; i++) {
       const { cost, level } = this.propertyList[i];
@@ -40,10 +55,11 @@ export class PropertyHandler {
         let upgradeSuccess = true;
         try {
           if (this.onUpgrade) {
-            const result = await this.onUpgrade({
-              coin: -1 * this.propertyList[i].cost
+            upgradeSuccess = await retry(() => {
+              const result = this.onUpgrade!({ coin: -1 * this.propertyList[i].cost, level: this.propertyList[i].level });
+              if (typeof result === 'boolean') return result;
+              return Promise.resolve(result);
             });
-            upgradeSuccess = !!result;
           }
         } catch (err) {
           upgradeSuccess = false;
@@ -58,7 +74,8 @@ export class PropertyHandler {
   }
 
   destroy() {
-    this.coinState?.unwatch(this.handleCoinChange);
+    this.coinState?.unwatchAll();
+    this.onUpgrade = undefined;
     if (this.timer) {
       this.timer.remove();
       this.timer = undefined;

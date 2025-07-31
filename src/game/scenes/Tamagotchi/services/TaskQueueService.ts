@@ -125,6 +125,7 @@ export class TaskQueueHandler {
       this.timerEvent.remove();
       this.timerEvent = undefined;
     }
+    this.onTask = undefined;
     this.messageQueueState?.unwatch(this.handleMessageQueueChange);
     this.taskQueueState?.unwatch(this.handleTaskQueueChange);
   }

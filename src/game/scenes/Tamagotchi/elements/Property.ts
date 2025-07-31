@@ -21,7 +21,12 @@ export class Property extends Phaser.GameObjects.Container {
 
     // Custom Decroation
     this.decoration = new CustomDecroation(scene);
+
+    // Add this container to scene
+    this.scene.add.existing(this);
   }
+
+
 
   create() {
   }
@@ -39,6 +44,6 @@ export class Property extends Phaser.GameObjects.Container {
   public destroy() {
     this.window.destroy();
     this.recorder.destroy();
-    this.decoration.destroy();
+    // this.decoration.destroy();
   } 
 }

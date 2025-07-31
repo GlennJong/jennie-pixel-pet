@@ -1462,6 +1462,11 @@
         "png": "tamagotchi/afk.png",
         "json": "tamagotchi/afk.json"
       },
+      "base": {
+        "consume": 1,
+        "recover": 3,
+        "interval": 5000
+      },
       "animations": [
         { "prefix": "born", "qty": 7, "freq": 8, "repeat": 0 },
         { "prefix": "egg", "qty": 2, "freq": 1, "repeat": -1 },
@@ -1526,7 +1531,7 @@
                     "key": "tamagotchi_afk",
                     "frame": "face_normal"
                   },
-                  "text": "感謝 {{user_name}} 兌換\n補充喝水，為AFK增加了 10 點生命！"
+                  "text": "感謝 {{user}} 兌換\n補充喝水，為AFK增加了 10 點生命！"
                 }
               ],
               "piority": 2
@@ -1545,7 +1550,7 @@
                     "key": "tamagotchi_afk",
                     "frame": "face_normal"
                   },
-                  "text": "{{user_name}} 兌換打招呼！\n有人來挑戰了！"
+                  "text": "{{user}} 兌換打招呼！\n有人來挑戰了！"
                 }
               ],
               "piority": 2
@@ -1563,7 +1568,7 @@
                     "key": "tamagotchi_afk",
                     "frame": "face_normal"
                   },
-                  "text": "感謝 {{user_name}} 兌換存檔紀錄，為AFK增加了 10 點生命！"
+                  "text": "感謝 {{user}} 兌換存檔紀錄，為AFK增加了 10 點生命！"
                 }
               ],
               "piority": 2
@@ -1655,7 +1660,7 @@
                     "key": "tamagotchi_afk",
                     "frame": "face_normal"
                   },
-                  "text": "用賺來的錢錢買東西！"
+                  "text": "用賺來的錢錢買東西！花了 {{coin}} 元零用錢！"
                 }
               ],
               "piority": 2
@@ -1667,7 +1672,7 @@
                     "key": "tamagotchi_afk",
                     "frame": "face_normal"
                   },
-                  "text": "把錢錢變成喜歡的樣子！"
+                  "text": "把錢錢變成喜歡的樣子！！花了 {{coin}} 元零用錢！"
                 }
               ],
               "piority": 4

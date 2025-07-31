@@ -64,6 +64,9 @@ export const tamagotchiSceneHideKey = [
 ]
 
 export const tamagotchiSceneWording = {
+  consume: '扣血',
+  recover: '回血',
+  interval: '發生時間(ms)',
   idleness: '靜止時行動',
   activities: '功能性行動',
   idle: '靜止',

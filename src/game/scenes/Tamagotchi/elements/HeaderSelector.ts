@@ -80,4 +80,9 @@ export class HeaderSelector extends Phaser.GameObjects.Container {
     this.icon.anims.complete();
     this.icon.setFrame(`${this.frameName}-default`);
   }
+
+  public destroy() {
+    this.icon.destroy();
+    this.arrow.destroy();
+  }
 }

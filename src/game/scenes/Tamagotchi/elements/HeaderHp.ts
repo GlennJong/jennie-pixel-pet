@@ -16,7 +16,7 @@ export class IconHp extends Phaser.GameObjects.Container {
   constructor(scene: Phaser.Scene, option: { x: number; y: number }) {
     super(scene);
 
-    this.value = this.hpState?.get() || DEFAULT_HP;
+    this.value = typeof this.hpState?.get() === 'number' ? this.hpState?.get() : DEFAULT_HP;
     this.hpState?.watch(this.handleSetValue);
     
     
@@ -29,16 +29,19 @@ export class IconHp extends Phaser.GameObjects.Container {
       x: x,
       y: y,
     }).setOrigin(0);
-    scene.anims.create({
-      key: 'hp-100',
-      frames: scene.anims.generateFrameNames('tamagotchi_header_icons', {
-        prefix: `hp-100-`,
-        start: 1,
-        end: 5,
-      }),
-      repeat: -1,
-      frameRate: 6,
-    });
+    
+    if (!scene.anims.exists('hp-100')) {
+      scene.anims.create({
+        key: 'hp-100',
+        frames: scene.anims.generateFrameNames('tamagotchi_header_icons', {
+          prefix: `hp-100-`,
+          start: 1,
+          end: 5,
+        }),
+        repeat: -1,
+        frameRate: 6,
+      });
+    }
     
     if (!scene.anims.exists('hp-75')) {
       scene.anims.create({

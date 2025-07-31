@@ -69,7 +69,12 @@ export class TamagotchiCharacter extends Character {
     this.spaceEdge = DEFAULT_TAMAGOTCHI_POSITION.edge;
 
     // default animation
-    this.handleDefaultIdleAction();
+    if (this.isAliveState?.get()) {
+      this.handleDefaultIdleAction();
+    }
+    else {
+      this.playAnimation('egg');
+    }
 
   }
   private getIsUnavaliableAll() {
@@ -198,7 +203,7 @@ export class TamagotchiCharacter extends Character {
       born: {
         play: async () => {
           await this.playAnimation('born');
-          this.playAnimation('idle');
+          this.playAnimation('idle-left');
         },
         state: () => this.isAliveState?.set(true),
       },

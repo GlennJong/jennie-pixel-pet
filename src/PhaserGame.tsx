@@ -29,8 +29,18 @@ export const PhaserGame = () => {
 
     return () => {
       window.removeEventListener('beforeunload', handleBeforeUnload);
-      gameRef.current?.destroy(true);
-      gameRef.current = null;
+      if (gameRef.current) {
+        // 取得目前 active scene
+        const sceneManager = gameRef.current.scene;
+        sceneManager.getScenes(true).forEach((scene: Phaser.Scene) => {
+          if (typeof scene.shutdown === 'function') {
+            scene.shutdown();
+          }
+          sceneManager.stop(scene.scene.key);
+        });
+        gameRef.current.destroy(true);
+        gameRef.current = null;
+      }
     };
   }, []);
   return <div id="game-container"></div>;

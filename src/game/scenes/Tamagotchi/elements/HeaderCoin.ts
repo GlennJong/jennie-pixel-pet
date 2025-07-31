@@ -14,7 +14,7 @@ export class IconCoin extends Phaser.GameObjects.Container {
     super(scene);
 
     // Watch coin change
-    this.value = this.coinState?.get() || DEFAULT_COIN;
+    this.value = typeof this.coinState?.get() === 'number' ? this.coinState?.get() : DEFAULT_COIN;
     this.coinState?.watch(this.handleSetValue);
       
     const { x, y } = option;

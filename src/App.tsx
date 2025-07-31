@@ -15,6 +15,7 @@ type TRecord = {
 }
 
 function App() {
+  const [ counter, setCounter ] = useState(0);
   const [ isConfigOpen, setIsConfigOpen ] = useState(false);
   const [ isLogOpen, setIsLogOpen ] = useState(false);
   const [ isCmdOpen, setIsCmdOpen ] = useState(false);
@@ -73,7 +74,8 @@ function App() {
           <div style={{ height: '100vh'}}>
             <ConfigEditor onChange={() => {
                 window.alert('設定已更新，將重新啟動');
-                window.location.reload()
+                setCounter(counter + 1);
+                // window.location.reload()
               }}
             />
           </div>
@@ -93,7 +95,7 @@ function App() {
             <button className="button" onClick={startOauthConnect}>Twitch login</button>
           }
           { !twitchState &&
-            <div style={{ position: 'relative' }}>
+            <div key={counter} style={{ position: 'relative' }}>
               { !isGameStart &&
                 <button
                   className="button"

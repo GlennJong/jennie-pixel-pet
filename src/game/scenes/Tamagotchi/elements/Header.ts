@@ -21,6 +21,7 @@ export class Header extends Phaser.GameObjects.Container {
   public currentSelector: string = SELECTORS[0];
 
   private config;
+  private background: Phaser.GameObjects.NineSlice;
   private iconSelector: { [key: string]: HeaderSelector } = {};
   private iconHp: IconHp;
   private iconCoin: IconCoin;
@@ -32,7 +33,7 @@ export class Header extends Phaser.GameObjects.Container {
 
     this.config = scene.cache.json.get('config').tamagotchi[DEFAULT_CHARACTER_KEY].activities || {};
 
-    const background = scene.make
+    this.background = scene.make
       .nineslice({
         key: 'tamagotchi_header_frame',
         frame: 'frame',
@@ -46,7 +47,7 @@ export class Header extends Phaser.GameObjects.Container {
         bottomHeight: 8,
       })
       .setOrigin(0.5);
-    this.add(background);
+    this.add(this.background);
 
     const drink = new HeaderSelector(scene, {
       key: 'tamagotchi_header_icons',
@@ -57,7 +58,6 @@ export class Header extends Phaser.GameObjects.Container {
       end: 5,
       freq: 4,
     });
-
     this.add(drink);
     this.iconSelector['drink'] = drink;
 
@@ -108,6 +108,8 @@ export class Header extends Phaser.GameObjects.Container {
 
     this.currentSelector = 'drink';
     this.handleUpdateSelector();
+
+    this.scene.add.existing(this);
   }
 
   private hideHeader() {
@@ -187,8 +189,13 @@ export class Header extends Phaser.GameObjects.Container {
   }
 
   public destroy() {
+    this.background.destroy();
     this.iconHp.destroy();
     this.iconCoin.destroy();
+    this.iconSelector['drink'].destroy();
+    this.iconSelector['battle'].destroy();
+    this.iconSelector['write'].destroy();
+    this.iconSelector['sleep'].destroy();
     clearTimeout(this.timer);
   }
 

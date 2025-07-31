@@ -69,9 +69,22 @@ const JsonEditor: React.FC<Props> = ({ value, onChange, prefixName, keyName, tem
         <label style={{ fontSize: '12px', whiteSpace: 'nowrap' }}>
           {isNaN(Number(labelText)) ? <span>{labelText}: </span> : <span>{prefixName}{Number(labelText)+1} </span>}
           <input
-            type="text"
+            type={typeof value === "number" ? "number" : "text"}
             value={value === null ? "" : value}
-            onChange={e => onChange(e.target.value)}
+            onChange={e => {
+              if (typeof value === 'number') {
+                const v = e.target.value;
+                // 僅允許合法數字
+                if (v === '' || v === null) {
+                  onChange(0);
+                } else if (!isNaN(Number(v))) {
+                  onChange(Number(v));
+                }
+                // 非合法數字則不更新
+              } else {
+                onChange(e.target.value);
+              }
+            }}
             style={{ fontSize: '12px' }}
             disabled={isLocked}
           />

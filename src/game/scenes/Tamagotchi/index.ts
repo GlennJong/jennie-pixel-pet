@@ -40,14 +40,14 @@ export default class TamagotchiScene extends Scene {
   private hpHandler?: HpHandler;
 
   private isTamagotchiReady: boolean = false;
-  
+
   constructor() {
     super('Tamagotchi');
   }
   create() {
     // ============= Mechanism =============
     setStoreState('global.isPaused', true);
-    
+
     // charactor
     this.character = new TamagotchiCharacter(this);
     this.config = this.cache.json.get('config').tamagotchi[DEFAULT_CHARACTER_KEY].activities || {};
@@ -65,20 +65,19 @@ export default class TamagotchiScene extends Scene {
 
     // property
     this.property = new Property(this);
-    this.add.existing(this.property);
+    // this.add.existing(this.property);
 
     // header
     this.header = new Header(this);
-    this.add.existing(this.header);
-
+    
     // dialogue
     this.dialogue = new TamagotchiDialogue(this);
 
-    // queue
-    this.taskQueueHandler = new TaskQueueHandler(this);
-
     // property
     this.propertyHandler = new PropertyHandler(this);
+    this.propertyHandler.init({
+      onUpgrade: (params) => this.handleUpgrade(this.taskQueueHandler, params)
+    });
 
     // hp
     this.hpHandler = new HpHandler(this);
@@ -88,14 +87,10 @@ export default class TamagotchiScene extends Scene {
     });
 
     // queue init
+    this.taskQueueHandler = new TaskQueueHandler(this);
     this.taskQueueHandler.init({
       onTask: (task) => this.handleActionQueueTask(task),
       interval: 300
-    });
-
-    // property
-    this.propertyHandler.init({
-      onUpgrade: (params) => this.handleUpgrade(this.taskQueueHandler, params)
     });
 
     // Build Keyboard 
@@ -104,9 +99,10 @@ export default class TamagotchiScene extends Scene {
       onRight: () => this.handleControlButton('right'),
       onSpace: () => this.handleControlButton('space')
     });
-    EventBus.on('game-left-keydown', () => this.handleControlButton('left'));
-    EventBus.on('game-right-keydown', () => this.handleControlButton('right'));
-    EventBus.on('game-select-keydown', () => this.handleControlButton('space'));
+
+    EventBus.on('game-left-keydown', () => {this.handleControlButton('left')}),
+    EventBus.on('game-right-keydown', () => this.handleControlButton('right')),
+    EventBus.on('game-select-keydown', () => this.handleControlButton('space')),
 
     // Run opening scene and start tamagotchi
     (async() => {
@@ -143,7 +139,7 @@ export default class TamagotchiScene extends Scene {
 
       // Run Dialogue
       if (this.dialogue) {
-        await this.dialogue.runDialogue(action, user);
+        await this.dialogue.runDialogue(action, {...params, user});
       }
       
       // Change header elements
@@ -176,7 +172,7 @@ export default class TamagotchiScene extends Scene {
     if (params.battleResult === 'win') {
       taskQueueHandler?.addEmergentTask({ action: 'award', user: 'system' });
     } else if (params.battleResult === 'lose') {
-      taskQueueHandler?.addEmergentTask({ action: 'lost', user: 'system' });
+      taskQueueHandler?.addEmergentTask({ action: 'lose', user: 'system' });
     }
     globalParamsStore.set('undefined');
   }
@@ -188,7 +184,6 @@ export default class TamagotchiScene extends Scene {
   }
 
   handleFullHp(taskQueueHandler: any) {
-    console.log('work')
     if (!this.isTamagotchiReady) return false;
     taskQueueHandler?.addEmergentTask({ action: 'born', user: 'system' });
     return true;
@@ -214,6 +209,12 @@ export default class TamagotchiScene extends Scene {
     this.header?.destroy();
     this.property?.destroy();
     this.dialogue?.destroy();
+    this.hpHandler?.destroy();
+    this.propertyHandler?.destroy();
     this.taskQueueHandler?.destroy();
+
+    EventBus.off('game-left-keydown');
+    EventBus.off('game-right-keydown');
+    EventBus.off('game-select-keydown');
   }
 }

@@ -31,4 +31,8 @@ export class KeyboardHandler {
       if (this.onSpace) this.onSpace();
     }
   }
+
+  destory() {
+    this.spaceKey?.destroy();
+  }
 }

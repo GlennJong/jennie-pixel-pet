@@ -27,17 +27,28 @@ export class TamagotchiDialogue extends Phaser.GameObjects.Container {
     });
   }
 
-  public async runDialogue(action: string, user?: string) {
+  public async runDialogue(action: string, params?: { [key: string]: string | number }) {
     
     const result = this.config[action];
     const { dialogs } = result;
     
-    if (dialogs && user) {
+
+    if (dialogs && params) {
       const selectedDialog = selectFromPiority<TDialogItem>(dialogs);
-      const selectedSentences = selectedDialog.sentences.map((_sentence) => ({
-        ..._sentence,
-        text: _sentence.text.replaceAll('{{user_name}}', user),
-      }))
+      const selectedSentences = selectedDialog.sentences.map((_sentence) => {
+        let text = _sentence.text;
+        if (params) {
+          Object.entries(params).forEach(([key, value]) => {
+            let displayValue = value;
+            if (typeof value === 'number') displayValue = Math.abs(value);
+            text = text.replaceAll(`{{${key}}}`, String(displayValue));
+          });
+        }
+        return {
+          ..._sentence,
+          text,
+        };
+      });
       await this.dialogue.runDialogue(selectedSentences);
     }
     

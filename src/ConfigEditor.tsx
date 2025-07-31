@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import JsonEditor from './JsonEditor';
 import { battleSceneHideKey, battleSceneWording, mappingHideKey, mappingWording, tamagotchiSceneHideKey, tamagotchiSceneWording, templates } from "./config.constants";
+import { tamagotchi } from './game/constants';
 
 const CONFIG_PATH = "/assets/config.json";
 const LOCAL_KEY = "custom_config";
@@ -79,18 +80,33 @@ const ConfigEditor = ({ onChange } : { onChange: () => void }): JSX.Element => {
         }}
       />
       <JsonEditor
-        title="放置遊戲設定"
+        title="放置遊戲角色"
         wording={tamagotchiSceneWording}
         template={templates}
         hide={tamagotchiSceneHideKey}
-        value={config.tamagotchi}
+        value={config.tamagotchi.tamagotchi_afk}
         hintPic={{
-          hp: 'https://placehold.co/600x400/EEE/31343C',
-          dialogs: 'https://placehold.co/600x400/EEE/31343C',
-          sentences: 'https://placehold.co/600x400/EEE/31343C'
+          hp: 'https://placehold.co/600x400/EEE/31343C?text=[hint]',
+          dialogs: 'https://placehold.co/600x400/EEE/31343C?text=[hint]',
+          sentences: 'https://placehold.co/600x400/EEE/31343C?text=[hint]'
         }}
         onChange={data => {
-          config.tamagotchi = data;
+          config.tamagotchi.tamagotchi_afk = data;
+          setConfig({...config});
+        }}
+      />
+      <JsonEditor
+        title="放置遊戲房間"
+        wording={{
+          decoration: '房間裝飾',
+          cost: '花費',
+          level: '等級'
+        }}
+        template={templates}
+        hide={[ 'key', 'preload', 'frame', 'recorder', 'window' ]}
+        value={config.tamagotchi.tamagotchi_room}
+        onChange={data => {
+          config.tamagotchi.tamagotchi_room = data;
           setConfig({...config});
         }}
       />

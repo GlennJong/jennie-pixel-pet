@@ -24,7 +24,9 @@ export class Store<T> {
 
 
   watch(fn: ChangeHandler<T>): void {
-    this.handlers.push(fn);
+    if (!this.handlers.includes(fn)) {
+      this.handlers.push(fn);
+    }
   }
 
   unwatch(fn: ChangeHandler<T>): void {
@@ -131,7 +133,6 @@ export function loadAllStoresFromLocalStorage(storageKey: string = 'tamagotchi_s
     if (!raw) return resolve();
     try {
       const data = JSON.parse(raw);
-      console.log(data)
       for (const key in data) {
         initStore(key, data[key]);
       }

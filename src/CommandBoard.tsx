@@ -7,6 +7,8 @@ function CommandBoard() {
   const [ selectedCommandOptionIndex, setSelectedCommandOptionIndex ] = useState(0);
   const stateOptions = [
     { label: '裝潢等級 = 1', key: 'tamagotchi.level', value: () => 1 },
+    { label: '裝潢等級 = 2', key: 'tamagotchi.level', value: () => 2 },
+    { label: '裝潢等級 = 3', key: 'tamagotchi.level', value: () => 3 },
     { label: '角色血量 = 5', key: 'tamagotchi.hp', value: () => 5 },
     { label: '角色血量 + 5', key: 'tamagotchi.hp', value: () => getStoreState('tamagotchi.hp') + 5 },
     { label: '角色金錢 = 0', key: 'tamagotchi.coin', value: () => 0 },
