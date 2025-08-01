@@ -1,9 +1,11 @@
 import Phaser from 'phaser';
-import { getGlobalData, EventBus } from '../../../EventBus';
+import { store } from '@/game/store';
 
 const DEFAULT_COIN = 888;
 
 export class IconCoin extends Phaser.GameObjects.Container {
+  private coinState = store<number>('tamagotchi.coin');
+  
   private text: Phaser.GameObjects.Text;
   private value: number;
   private targetValue: number | undefined;
@@ -11,13 +13,9 @@ export class IconCoin extends Phaser.GameObjects.Container {
   constructor(scene: Phaser.Scene, option: { x: number, y: number }) {
     super(scene);
 
-    this.value = typeof getGlobalData('tamagotchi_coin') !== 'undefined' ?
-      getGlobalData('tamagotchi_coin')
-      :
-      DEFAULT_COIN;
-    
     // Watch coin change
-    EventBus.on('tamagotchi_coin-updated', this.handleSetValue);
+    this.value = typeof this.coinState?.get() === 'number' ? this.coinState?.get() : DEFAULT_COIN;
+    this.coinState?.watch(this.handleSetValue);
       
     const { x, y } = option;
 
@@ -27,7 +25,7 @@ export class IconCoin extends Phaser.GameObjects.Container {
       frame: 'coin-1',
       x: x,
       y: y,
-    });
+    }).setOrigin(0);
     if (!scene.anims.exists('coin')) {
       scene.anims.create({
         key: 'coin',
@@ -45,10 +43,10 @@ export class IconCoin extends Phaser.GameObjects.Container {
     this.add(coin);
 
     const text = scene.make.text({
-      x: x + 7,
-      y: y - 4,
+      x: x + 12,
+      y: y + 2,
       style: { fontFamily: 'Tiny5', fontSize: 8, color: '#000' },
-    });
+    }).setOrigin(0);
     text.setResolution(4);
 
     this.text = text;
@@ -85,7 +83,6 @@ export class IconCoin extends Phaser.GameObjects.Container {
   }
 
   public destroy() {
-    EventBus.off('tamagotchi_coin-updated', this.setValue);
     this.text.destroy();
   }
 }

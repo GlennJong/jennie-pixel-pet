@@ -51,7 +51,7 @@ function useTwitchOauth() {
     openTwitchOauthLogin(client_id, redirect_uri);
   }
 
-  function startWebsocket(mode: ConnectMode, events: WsEventHandler<{ user?: string, content?: string }> = {}) {
+  function startWebsocket(mode: ConnectMode, events: WsEventHandler<{ user?: string, content?: string, createdAt?: Date }> = {}) {
     const { onOpen, onClose, onMessage, onError } = events;
     if (!twitchState || !mode) return;
 
@@ -87,6 +87,7 @@ function useTwitchOauth() {
           onMessage && onMessage({
             user: _load(config[mode].userKey, newMsg),
             content: _load(config[mode].contentKey, newMsg),
+            createdAt: new Date()
           });
           receivedMsgRef.current = [...receivedMsgRef.current, newMsg];
           setReceivedMsg([...receivedMsgRef.current]);

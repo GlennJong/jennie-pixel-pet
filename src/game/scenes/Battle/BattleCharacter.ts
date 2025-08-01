@@ -18,7 +18,7 @@ export type TEffect = {
 };
 
 type TReaction = {
-  animation: 'damage' | 'recover' | string;
+  animation: 'damage' | 'recover' | string | { key: string };
   dialogs: TDialogItem[];
 };
 
@@ -50,8 +50,8 @@ export type TRunResult = {
 const fullWidth = 160;
 
 const defaultCharacterPosition = {
-  self: { x: 30, y: 90 },
-  opponent: { x: 130, y: 36 },
+  self: { x: 10, y: 70 },
+  opponent: { x: 96, y: 12 },
 };
 
 // const defaultShadow = {
@@ -60,19 +60,19 @@ const defaultCharacterPosition = {
 // };
 
 const defaultStatusBoardPosition = {
-  self: { x: 110, y: 80 },
-  opponent: { x: 50, y: 20 },
+  self: { x: 80, y: 70 },
+  opponent: { x: 10, y: 10 },
 };
 
 export default class BattleCharacter extends Character {
   public hp: { current: number; max: number } = { current: 0, max: 0 };
-  private actions: { [key: string]: TAction };
-  private reactions: { [key: string]: TReaction };
-  private common: { [key: string]: TDialogItem };
-  private results: { [key: string]: TResult };
-  private role: 'self' | 'opponent';
-  public board: StatusBoard;
-  public avaliableActions: string[];
+  private actions?: { [key: string]: TAction };
+  private reactions?: { [key: string]: TReaction };
+  private common?: { [key: string]: TDialogItem[] };
+  private results?: { [key: string]: TResult };
+  private role: 'self' | 'opponent' = 'self';
+  public board?: StatusBoard;
+  public avaliableActions?: string[];
   // private shadow: Phaser.GameObjects.Arc;
 
   constructor(
@@ -81,13 +81,15 @@ export default class BattleCharacter extends Character {
     role: 'self' | 'opponent',
   ) {
     // get current character config
+    const battleConfig = scene.cache.json.get('config').battle;
+    
     const currentBattleCharacterConfig =
-      scene.cache.json.get('config')[key] ||
-      scene.cache.json.get('config')['default'];
+      battleConfig[key] ||
+      battleConfig['default'];
 
     if (!currentBattleCharacterConfig) return;
 
-    const { animations, battle } = currentBattleCharacterConfig;
+    const { animations, base, actions, reactions, common, results } = currentBattleCharacterConfig;
 
     const characterProps = {
       ...defaultCharacterPosition[role],
@@ -96,14 +98,6 @@ export default class BattleCharacter extends Character {
 
     super(scene, key, characterProps);
 
-    // set shadow
-    // const { x, y, size } = defaultShadow[role];
-    // const shadow = scene.add.circle(x, y, size, 0x000000).setVisible(false);
-
-    // shadow.setAlpha(0.5);
-    // shadow.setScale(1, 0.25);
-    // shadow.setDepth(1);
-
     // this.shadow = shadow;
     this.character.setDepth(2);
 
@@ -111,26 +105,26 @@ export default class BattleCharacter extends Character {
     this.role = role;
 
     // define config
-    this.avaliableActions = Object.keys(battle.actions);
-    this.actions = battle.actions;
-    this.reactions = battle.reactions;
-    this.common = battle.common;
-    this.results = battle.results;
+    this.avaliableActions = Object.keys(actions);
+    this.actions = actions;
+    this.reactions = reactions;
+    this.common = common;
+    this.results = results;
 
     // define current action
     this.hp = {
-      current: battle.base.max_hp,
-      max: battle.base.max_hp,
+      current: base.max_hp,
+      max: base.max_hp,
     };
 
 
     // set default character status board and character animation
-    const { name } = battle.base;
+    const { name } = base;
     const boardPosition = defaultStatusBoardPosition[role];
     this.board = new StatusBoard(scene, boardPosition.x, boardPosition.y, {
       hp: this.hp,
       name,
-    });
+    }).setDepth(10);
 
     this.playAnimation('idle');
 
@@ -143,38 +137,33 @@ export default class BattleCharacter extends Character {
 
     this.character.setPosition(position.x + distance, position.y);
     await runTween(this.character, { x: position.x }, 1000);
-    // this.shadow.setVisible(true);
   }
 
   private handlePlayKeyFrameAnimation = async (key: string) => {
-    await this.board.setAlpha(0);
+    await this.board!.setAlpha(0);
     await this.playAnimation(key, 1000);
     this.playAnimation('idle');
-    await this.board.setAlpha(1);
+    await this.board!.setAlpha(1);
   };
 
   private handlePlayAttackReaction = async () => {
-    const distance = this.role === 'self' ? 10 : -10;
+    const distance = this.role === 'self' ? 8 : -8;
     const position = defaultCharacterPosition[this.role];
 
-    await this.board.setAlpha(0);
+    await this.board!.setAlpha(0);
     await runTween(this.character, { x: position.x + distance }, 200);
     await runTween(this.character, { x: position.x }, 200);
-    await this.board.setAlpha(1);
+    await this.board!.setAlpha(1);
   };
 
   public runAction(action = 'sp'): TRunAction | undefined {
-    const currentAction = this.actions[action];
+    const currentAction = this.actions![action];
 
     if (!currentAction) return;
 
     const { animation, dialogs } = currentAction;
 
     // Run key frame animation
-    // if (typeof animation !== 'string' && animation.key) {
-    //     this.handlePlayKeyFrameAnimation(animation.key);
-    // }
-    // else if (animation === 'attack') {
     if (animation === 'attack') {
       this.handlePlayAttackReaction();
     } else {
@@ -200,22 +189,28 @@ export default class BattleCharacter extends Character {
       easeInOutCubic,
     );
     this.character.setAlpha(1);
-    await this.board.setHP(this.hp.current);
+    await this.board!.setHP(this.hp.current);
   };
 
   private handlePlayRecoverReaction = async (value: number) => {
     const result = Math.min(this.hp.max, this.hp.current + value);
     this.hp.current = result;
+    this.character.setOrigin(0.5);
+    const originX = this.character.x;
+    const originY = this.character.y;
+    this.character.setPosition(this.character.x + this.character.width/2, this.character.y + this.character.height/2);
     await runTween(this.character, { scale: 1.15, yoyo: 1 }, 200);
+    this.character.setPosition(originX, originY);
+    this.character.setOrigin(0);
     this.character.setScale(1);
-    await this.board.setHP(this.hp.current);
+    await this.board!.setHP(this.hp.current);
   };
 
   public runReaction(
     reaction = 'damage',
     value: number,
   ): TRunReaction | undefined {
-    const currentReaction = this.reactions[reaction];
+    const currentReaction = this.reactions![reaction];
 
     if (!currentReaction) return;
 
@@ -239,13 +234,13 @@ export default class BattleCharacter extends Character {
   }
 
   public runResult(action: string): TRunResult | undefined {
-    const currentResult = this.results[action];
+    const currentResult = this.results![action];
     if (!currentResult) return;
 
     if (action === 'lose') {
       this.setAlpha(0.5);
     }
-    this.board.setAlpha(0);
+    this.board!.setAlpha(0);
 
     const { dialogs } = currentResult;
 
@@ -256,27 +251,28 @@ export default class BattleCharacter extends Character {
   }
 
   public runStart() {
-    const startDialog = this.common['start'];
+    const startDialog = this.common!['start'];
     if (!startDialog) return;
 
     return selectFromPiority(startDialog).dialog;
   }
 
   public runFinish() {
-    const finisgDialog = this.common['finish'];
-    if (!finisgDialog) return;
+    const finishDialog = this.common!['finish'];
+    if (!finishDialog) return;
 
-    return selectFromPiority(finisgDialog).dialog;
+    return selectFromPiority(finishDialog).dialog;
   }
 
   public getRandomAction() {
+    if (!this.actions) return;
     const allAction = Object.keys(this.actions);
     let sumPiority = 0;
 
     const allActionPoint: { [key: string]: number } = {};
 
     allAction.forEach((key) => {
-      allActionPoint[key] = sumPiority += this.actions[key].piority;
+      allActionPoint[key] = sumPiority += this.actions![key].piority;
     });
 
     const randomPoint = sumPiority * Math.random();
@@ -294,6 +290,6 @@ export default class BattleCharacter extends Character {
   }
 
   public characterHandler() {
-    this.board.updateStatusBoard();
+    this.board!.updateStatusBoard();
   }
 }

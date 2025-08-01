@@ -4,7 +4,7 @@
 }
 .console .base {
   display: flex;
-  padding: 24px 48px;
+  padding: 12px 16px;
   border-radius: 12px;
   overflow: hidden;
   position: relative;
@@ -17,10 +17,10 @@
 }
 
 .console .base .monitor {
-  padding: 36px;
+  padding: 12px;
   background: linear-gradient(to bottom, #ebeff9 0%, #afb7c9 100%);
   position: relative;
-  border-radius: 12px;
+  border-radius: 6px;
   box-shadow:  inset 0px 0px 0px 1px hsla(1200, 20%, 20%, .75), inset -1px -1px 0px 1px hsla(0, 0%, 100%, .5);
 
 }
@@ -87,11 +87,11 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  margin-left: 24px;
-  padding: 24px;
-  border-radius: 6px 36px;
+  justify-content: center;
+  gap: 6px;
+  margin-left: 6px;
+  padding: 12px 8px;
+  border-radius: 6px 12px;
   background: hsla(0, 0%, 0%, .2);
   box-shadow: 1px 1px 1px 0px hsla(0, 0%, 100%, .5);
 }
@@ -105,8 +105,8 @@
 
 .console .base .buttons .circle-btn {
   display: block;
-  width: 64px;
-  height: 64px;
+  width: 24px;
+  height: 24px;
   border-radius: 50%;
   position: relative;
   border: 0;
@@ -130,8 +130,8 @@
   display: inline-block;
   left: 50%;
   top: 50%;
-  width: 40px;
-  height: 40px;
+  width: 24px;
+  height: 24px;
   background: linear-gradient(to bottom, rgba(0,0,0,0.15) 0%, rgba(255,255,255,0.18) 60%, rgba(255,255,255,0.4) 100%);
   border-radius: 50%;
   box-shadow: 0 1px 1px rgba(255,255,255,.9), 0 -1px 1px rgba(0,0,0,0.25);

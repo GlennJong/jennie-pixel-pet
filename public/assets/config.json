@@ -1,58 +1,44 @@
 {
-  "tamagotchi_room": {
-    "key": "tamagotchi_room",
-    "preload": {
-      "png": "tamagotchi/room.png",
-      "json": "tamagotchi/room.json"
-    },
-    "decoration_config": {
-      "left": {}
-    },
-    "decoration": [
-      {
-        "key": "tamagotchi_room",
-        "frame": "customized_1",
-        "cost": 0,
-        "level": 1
-      },
-      {
-        "key": "tamagotchi_room",
-        "frame": "customized_2",
-        "cost": 100,
-        "level": 2
-      },
-      {
-        "key": "tamagotchi_room",
-        "frame": "customized_3",
-        "cost": 100,
-        "level": 3
-      },
-      {
-        "key": "tamagotchi_room",
-        "frame": "customized_4",
-        "cost": 100,
-        "level": 4
-      },
-      {
-        "key": "tamagotchi_room",
-        "frame": "customized_5",
-        "cost": 100,
-        "level": 5
+  "ui": {
+    "dialogue_frame": {
+      "key": "dialogue_frame",
+      "preload": {
+        "png": "dialogue/frame.png",
+        "json": "dialogue/frame.json"
       }
-    ],
-    "recorder": { "prefix": "recorder", "qty": 1, "freq": 1, "repeat": -1 },
-    "window": { "prefix": "window", "qty": 1, "freq": 1, "repeat": -1 }
-  },
-  "battle_default_opponent": {
-    "key": "battle_default_opponent",
-    "preload": {
-      "png": "battle/default.png",
-      "json": "battle/default.json"
     },
-    "animations": [
-      { "prefix": "idle", "qty": 1, "freq": 1, "repeat": -1 }
-    ],
-    "battle": {
+    "tamagotchi_header_icons": {
+      "key": "tamagotchi_header_icons",
+      "preload": {
+        "png": "tamagotchi/header/icons.png",
+        "json": "tamagotchi/header/icons.json"
+      }
+    },
+    "tamagotchi_header_frame": {
+      "key": "tamagotchi_header_frame",
+      "preload": {
+        "png": "tamagotchi/header/frame.png",
+        "json": "tamagotchi/header/frame.json"
+      }
+    },
+    "battle_board": {
+      "key": "battle_board",
+      "preload": {
+        "png": "battle/board.png",
+        "json": "battle/board.json"
+      }
+    }
+  },
+  "battle": {
+    "battle_default_opponent": {
+      "key": "battle_default_opponent",
+      "preload": {
+        "png": "battle/default.png",
+        "json": "battle/default.json"
+      },
+      "animations": [
+        { "prefix": "idle", "qty": 1, "freq": 1, "repeat": -1 }
+      ],
       "base": {
         "max_hp": 2,
         "name": "沙包"
@@ -194,19 +180,17 @@
           ]
         }
       }
-    }
-  },
-  "battle_currycat_opponent": {
-    "key": "battle_currycat_opponent",
-    "preload": {
-      "png": "battle/currycat.png",
-      "json": "battle/currycat.json"
     },
-    "animations": [
-      { "prefix": "idle", "qty": 1, "freq": 1, "repeat": -1 },
-      { "prefix": "sp", "qty": 17, "freq": 8, "repeat": 0 }
-    ],
-    "battle": {
+    "battle_currycat_opponent": {
+      "key": "battle_currycat_opponent",
+      "preload": {
+        "png": "battle/currycat.png",
+        "json": "battle/currycat.json"
+      },
+      "animations": [
+        { "prefix": "idle", "qty": 1, "freq": 1, "repeat": -1 },
+        { "prefix": "sp", "qty": 17, "freq": 8, "repeat": 0 }
+      ],
       "base": {
         "max_hp": 100,
         "name": "CurryCat"
@@ -232,7 +216,7 @@
           "effect": {
             "type": "damage",
             "target": "self",
-            "value": 999
+            "value": 10
           }
         },
         "sp1": {
@@ -334,7 +318,7 @@
                   "key": "battle_currycat_opponent",
                   "frame": "face_normal"
                 },
-                "text": "喵！！!"
+                "text": "喵！！"
               }
             ],
             "piority": 2
@@ -389,25 +373,23 @@
           ]
         }
       }
-    }
-  },
-  "battle_beibei_opponent": {
-    "key": "battle_beibei_opponent",
-    "preload": {
-      "png": "battle/beibei.png",
-      "json": "battle/beibei.json"
     },
-    "animations": [
-      {
-        "prefix": "idle",
-        "qty": 9,
-        "freq": 8,
-        "repeat": -1,
-        "repeat_delay": 1000
+    "battle_beibei_opponent": {
+      "key": "battle_beibei_opponent",
+      "preload": {
+        "png": "battle/beibei.png",
+        "json": "battle/beibei.json"
       },
-      { "prefix": "sp", "qty": 5, "freq": 8, "repeat": 0 }
-    ],
-    "battle": {
+      "animations": [
+        {
+          "prefix": "idle",
+          "qty": 9,
+          "freq": 8,
+          "repeat": -1,
+          "repeat_delay": 1000
+        },
+        { "prefix": "sp", "qty": 5, "freq": 8, "repeat": 0 }
+      ],
       "base": {
         "max_hp": 100,
         "name": "貝貝"
@@ -424,7 +406,7 @@
                     "key": "battle_beibei_opponent",
                     "frame": "face_normal"
                   },
-                  "text": "你欠打喔！"
+                  "text": "打！"
                 }
               ],
               "piority": 2
@@ -471,7 +453,7 @@
                     "key": "battle_beibei_opponent",
                     "frame": "face_sad"
                   },
-                  "text": "好痛啦！！"
+                  "text": "痛！！"
                 }
               ],
               "piority": 2
@@ -560,25 +542,23 @@
           ]
         }
       }
-    }
-  },
-  "battle_shangshang_opponent": {
-    "key": "battle_shangshang_opponent",
-    "preload": {
-      "png": "battle/shangshang.png",
-      "json": "battle/shangshang.json"
     },
-    "animations": [
-      {
-        "prefix": "idle",
-        "qty": 6,
-        "freq": 8,
-        "repeat": -1,
-        "repeat_delay": 1000
+    "battle_shangshang_opponent": {
+      "key": "battle_shangshang_opponent",
+      "preload": {
+        "png": "battle/shangshang.png",
+        "json": "battle/shangshang.json"
       },
-      { "prefix": "sp", "qty": 9, "freq": 8, "repeat": 0 }
-    ],
-    "battle": {
+      "animations": [
+        {
+          "prefix": "idle",
+          "qty": 6,
+          "freq": 8,
+          "repeat": -1,
+          "repeat_delay": 1000
+        },
+        { "prefix": "sp", "qty": 9, "freq": 8, "repeat": 0 }
+      ],
       "base": {
         "max_hp": 100,
         "name": "上上"
@@ -731,25 +711,23 @@
           ]
         }
       }
-    }
-  },
-  "battle_jennie_opponent": {
-    "key": "battle_jennie_opponent",
-    "preload": {
-      "png": "battle/jennie.png",
-      "json": "battle/jennie.json"
     },
-    "animations": [
-      {
-        "prefix": "idle",
-        "qty": 7,
-        "freq": 8,
-        "repeat": -1,
-        "repeat_delay": 1000
+    "battle_jennie_opponent": {
+      "key": "battle_jennie_opponent",
+      "preload": {
+        "png": "battle/jennie.png",
+        "json": "battle/jennie.json"
       },
-      { "prefix": "sp", "qty": 16, "freq": 8, "repeat": 0 }
-    ],
-    "battle": {
+      "animations": [
+        {
+          "prefix": "idle",
+          "qty": 7,
+          "freq": 8,
+          "repeat": -1,
+          "repeat_delay": 1000
+        },
+        { "prefix": "sp", "qty": 16, "freq": 8, "repeat": 0 }
+      ],
       "base": {
         "max_hp": 100,
         "name": "貞尼鹹粥"
@@ -914,25 +892,23 @@
           ]
         }
       }
-    }
-  },
-  "battle_bbb_opponent": {
-    "key": "battle_bbb_opponent",
-    "preload": {
-      "png": "battle/bbb.png",
-      "json": "battle/bbb.json"
     },
-    "animations": [
-      {
-        "prefix": "idle",
-        "qty": 1,
-        "freq": 1,
-        "repeat": -1,
-        "repeat_delay": 1000
+    "battle_bbb_opponent": {
+      "key": "battle_bbb_opponent",
+      "preload": {
+        "png": "battle/bbb.png",
+        "json": "battle/bbb.json"
       },
-      { "prefix": "sp", "qty": 32, "freq": 16, "repeat": 0 }
-    ],
-    "battle": {
+      "animations": [
+        {
+          "prefix": "idle",
+          "qty": 1,
+          "freq": 1,
+          "repeat": -1,
+          "repeat_delay": 1000
+        },
+        { "prefix": "sp", "qty": 32, "freq": 16, "repeat": 0 }
+      ],
       "base": {
         "max_hp": 100,
         "name": "BBB"
@@ -1092,25 +1068,23 @@
           ]
         }
       }
-    }
-  },
-  "battle_touching_opponent": {
-    "key": "battle_touching_opponent",
-    "preload": {
-      "png": "battle/touching.png",
-      "json": "battle/touching.json"
     },
-    "animations": [
-      {
-        "prefix": "idle",
-        "qty": 9,
-        "freq": 2,
-        "repeat": -1,
-        "repeat_delay": 1000
+    "battle_touching_opponent": {
+      "key": "battle_touching_opponent",
+      "preload": {
+        "png": "battle/touching.png",
+        "json": "battle/touching.json"
       },
-      { "prefix": "sp", "qty": 10, "freq": 8, "repeat": 0 }
-    ],
-    "battle": {
+      "animations": [
+        {
+          "prefix": "idle",
+          "qty": 9,
+          "freq": 2,
+          "repeat": -1,
+          "repeat_delay": 1000
+        },
+        { "prefix": "sp", "qty": 10, "freq": 8, "repeat": 0 }
+      ],
       "base": {
         "max_hp": 100,
         "name": "橙踏青"
@@ -1270,24 +1244,22 @@
           ]
         }
       }
-    }
-  },
-  "battle_afk_self": {
-    "key": "battle_afk_self",
-    "preload": {
-      "png": "battle/afk.png",
-      "json": "battle/afk.json"
     },
-    "animations": [
-      {
-        "prefix": "idle",
-        "qty": 1,
-        "freq": 1,
-        "repeat": -1,
-        "repeat_delay": 1000
-      }
-    ],
-    "battle": {
+    "battle_afk_self": {
+      "key": "battle_afk_self",
+      "preload": {
+        "png": "battle/afk.png",
+        "json": "battle/afk.json"
+      },
+      "animations": [
+        {
+          "prefix": "idle",
+          "qty": 1,
+          "freq": 1,
+          "repeat": -1,
+          "repeat_delay": 1000
+        }
+      ],
       "base": {
         "max_hp": 100,
         "name": "AFK君"
@@ -1442,253 +1414,355 @@
       }
     }
   },
-  "tamagotchi_afk": {
-    "key": "tamagotchi_afk",
-    "preload": {
-      "png": "tamagotchi/afk.png",
-      "json": "tamagotchi/afk.json"
+  "tamagotchi": {
+    "tamagotchi_room": {
+      "key": "tamagotchi_room",
+      "preload": {
+        "png": "tamagotchi/room.png",
+        "json": "tamagotchi/room.json"
+      },
+      "decoration": [
+        {
+          "key": "tamagotchi_room",
+          "frame": "customized_1",
+          "cost": 0,
+          "level": 1
+        },
+        {
+          "key": "tamagotchi_room",
+          "frame": "customized_2",
+          "cost": 100,
+          "level": 2
+        },
+        {
+          "key": "tamagotchi_room",
+          "frame": "customized_3",
+          "cost": 200,
+          "level": 3
+        },
+        {
+          "key": "tamagotchi_room",
+          "frame": "customized_4",
+          "cost": 400,
+          "level": 4
+        },
+        {
+          "key": "tamagotchi_room",
+          "frame": "customized_5",
+          "cost": 800,
+          "level": 5
+        }
+      ],
+      "recorder": { "prefix": "recorder", "qty": 1, "freq": 1, "repeat": -1 },
+      "window": { "prefix": "window", "qty": 1, "freq": 1, "repeat": -1 }
     },
-    "animations": [
-      { "prefix": "born", "qty": 7, "freq": 8, "repeat": 0 },
-      { "prefix": "egg", "qty": 2, "freq": 1, "repeat": -1 },
-      { "prefix": "walk-left", "qty": 6, "freq": 8, "repeat": 4 },
-      { "prefix": "walk-right", "qty": 6, "freq": 8, "repeat": 4 },
-      {
-        "prefix": "drink",
-        "qty": 7,
-        "freq": 4,
-        "repeat": 0,
-        "repeat_delay": 1000
+    "tamagotchi_afk": {
+      "key": "tamagotchi_afk",
+      "preload": {
+        "png": "tamagotchi/afk.png",
+        "json": "tamagotchi/afk.json"
       },
-      {
-        "prefix": "write",
-        "qty": 13,
-        "freq": 8,
-        "repeat": 0,
-        "repeat_delay": 1000
+      "base": {
+        "consume": 1,
+        "recover": 3,
+        "interval": 5000
       },
-      { "prefix": "lay-down", "qty": 4, "freq": 8, "repeat": 0 },
-      { "prefix": "wake-up", "qty": 5, "freq": 8, "repeat": 0 },
-      { "prefix": "sleep", "qty": 5, "freq": 2, "repeat": -1 },
-      { "prefix": "idle-left", "qty": 2, "freq": 1, "repeat": -1 },
-      { "prefix": "idle-right", "qty": 2, "freq": 1, "repeat": -1 },
-      { "prefix": "stare-left", "qty": 6, "freq": 4, "repeat": 0 },
-      { "prefix": "stare-right", "qty": 6, "freq": 4, "repeat": 0 },
-      { "prefix": "wink-left", "qty": 3, "freq": 4, "repeat": 0 },
-      { "prefix": "wink-right", "qty": 3, "freq": 4, "repeat": 0 }
-    ],
-    "unavailable_actions": {
-      "egg": {
-        "animation": "egg"
+      "animations": [
+        { "prefix": "born", "qty": 7, "freq": 8, "repeat": 0 },
+        { "prefix": "egg", "qty": 2, "freq": 1, "repeat": -1 },
+        { "prefix": "walk-left", "qty": 6, "freq": 8, "repeat": 4 },
+        { "prefix": "walk-right", "qty": 6, "freq": 8, "repeat": 4 },
+        {
+          "prefix": "drink",
+          "qty": 7,
+          "freq": 4,
+          "repeat": 0,
+          "repeat_delay": 1000
+        },
+        {
+          "prefix": "write",
+          "qty": 13,
+          "freq": 8,
+          "repeat": 0,
+          "repeat_delay": 1000
+        },
+        { "prefix": "lay-down", "qty": 4, "freq": 8, "repeat": 0 },
+        { "prefix": "wake-up", "qty": 5, "freq": 8, "repeat": 0 },
+        { "prefix": "sleep", "qty": 5, "freq": 2, "repeat": -1 },
+        { "prefix": "idle-left", "qty": 2, "freq": 1, "repeat": -1 },
+        { "prefix": "idle-right", "qty": 2, "freq": 1, "repeat": -1 },
+        { "prefix": "stare-left", "qty": 6, "freq": 4, "repeat": 0 },
+        { "prefix": "stare-right", "qty": 6, "freq": 4, "repeat": 0 },
+        { "prefix": "wink-left", "qty": 3, "freq": 4, "repeat": 0 },
+        { "prefix": "wink-right", "qty": 3, "freq": 4, "repeat": 0 }
+      ],
+      "idleness": {
+        "idle": {
+          "animation": "idle",
+          "piority": 10,
+          "has_direction": true
+        },
+        "stare": {
+          "animation": "stare",
+          "piority": 6,
+          "has_direction": true
+        },
+        "walk": {
+          "animation": "walk",
+          "piority": 4,
+          "is_move": true,
+          "has_direction": true
+        },
+        "wink": {
+          "animation": "wink",
+          "piority": 8,
+          "has_direction": true
+        }
       },
-      "born": {
-        "animation": "born"
-      }
-    },
-    "idle_actions": {
-      "idle": {
-        "animation": "idle",
-        "piority": 10,
-        "has_direction": true
-      },
-      "stare": {
-        "animation": "stare",
-        "piority": 6,
-        "has_direction": true
-      },
-      "walk": {
-        "animation": "walk",
-        "piority": 4,
-        "is_move": true,
-        "has_direction": true
-      },
-      "wink": {
-        "animation": "wink",
-        "piority": 8,
-        "has_direction": true
-      }
-    },
-    "functional_action": {
-      "drink": {
-        "animation": "drink",
-        "point": 10,
-        "dialogs": [
-          {
-            "dialog": [
-              {
-                "face": {
-                  "key": "tamagotchi_afk",
-                  "frame": "face_normal"
-                },
-                "text": "感謝{{user_name}}兌換\n補充喝水，為AFK增加了 10 點生命！"
-              }
-            ],
-            "piority": 2
-          }
-        ]
-      },
-      "battle": {
-        "animation": "drink",
-        "point": 0,
-        "dialogs": [
-          {
-            "dialog": [
-              {
-                "face": {
-                  "key": "tamagotchi_afk",
-                  "frame": "face_normal"
-                },
-                "text": "{{user_name}}兌換\n打招呼！\n有人來挑戰了！"
-              }
-            ],
-            "piority": 2
-          }
-        ]
-      },
-      "write": {
-        "animation": "write",
-        "point": 10,
-        "dialogs": [
-          {
-            "dialog": [
-              {
-                "face": {
-                  "key": "tamagotchi_afk",
-                  "frame": "face_normal"
-                },
-                "text": "感謝 {{user_name}} 兌換\n存檔紀錄，為AFK增加了 10 點生命！"
-              }
-            ],
-            "piority": 2
-          }
-        ]
-      },
-      "sleep": {
-        "animation": "sleep",
-        "point": 0,
-        "dialogs": [
-          {
-            "dialog": [
-              {
-                "face": {
-                  "key": "tamagotchi_afk",
-                  "frame": "face_normal"
-                },
-                "text": "休息一下"
-              }
-            ],
-            "piority": 2
-          }
-        ]
-      },
-      "awake": {
-        "animation": "awake",
-        "point": 0,
-        "dialogs": [
-          {
-            "dialog": [
-              {
-                "face": {
-                  "key": "tamagotchi_afk",
-                  "frame": "face_normal"
-                },
-                "text": "起床了"
-              }
-            ],
-            "piority": 2
-          }
-        ]
-      },
-      "win": {
-        "animation": "none",
-        "point": 0,
-        "dialogs": [
-          {
-            "dialog": [
-              {
-                "face": {
-                  "key": "tamagotchi_afk",
-                  "frame": "face_normal"
-                },
-                "text": "我贏了！賺到零用錢！"
-              }
-            ],
-            "piority": 2
-          }
-        ]
-      },
-      "lose": {
-        "animation": "none",
-        "point": 0,
-        "dialogs": [
-          {
-            "dialog": [
-              {
-                "face": {
-                  "key": "tamagotchi_afk",
-                  "frame": "face_sad"
-                },
-                "text": "輸了，零用錢不見了"
-              }
-            ],
-            "piority": 2
-          }
-        ]
-      },
-      "buy": {
-        "animation": "none",
-        "point": 0,
-        "dialogs": [
-          {
-            "dialog": [
-              {
-                "face": {
-                  "key": "tamagotchi_afk",
-                  "frame": "face_normal"
-                },
-                "text": "用賺來的錢錢買東西！"
-              }
-            ],
-            "piority": 2
-          },
-          {
-            "dialog": [
-              {
-                "face": {
-                  "key": "tamagotchi_afk",
-                  "frame": "face_normal"
-                },
-                "text": "把錢錢變成喜歡的樣子！"
-              }
-            ],
-            "piority": 4
-          }
-        ]
+      "activities": {
+        "drink": {
+          "animation": "drink",
+          "hp": 10,
+          "dialogs": [
+            {
+              "sentences": [
+                {
+                  "face": {
+                    "key": "tamagotchi_afk",
+                    "frame": "face_normal"
+                  },
+                  "text": "感謝 {{user}} 兌換\n補充喝水，為AFK增加了 10 點生命！"
+                }
+              ],
+              "piority": 2
+            }
+          ]
+        },
+        "battle": {
+          "animation": "none",
+          "hp": 0,
+          "nextScene": "Battle",
+          "dialogs": [
+            {
+              "sentences": [
+                {
+                  "face": {
+                    "key": "tamagotchi_afk",
+                    "frame": "face_normal"
+                  },
+                  "text": "{{user}} 兌換打招呼！\n有人來挑戰了！"
+                }
+              ],
+              "piority": 2
+            }
+          ]
+        },
+        "write": {
+          "animation": "write",
+          "hp": 10,
+          "dialogs": [
+            {
+              "sentences": [
+                {
+                  "face": {
+                    "key": "tamagotchi_afk",
+                    "frame": "face_normal"
+                  },
+                  "text": "感謝 {{user}} 兌換存檔紀錄，為AFK增加了 10 點生命！"
+                }
+              ],
+              "piority": 2
+            }
+          ]
+        },
+        "sleep": {
+          "animation": "sleep",
+          "hp": 0,
+          "dialogs": [
+            {
+              "sentences": [
+                {
+                  "face": {
+                    "key": "tamagotchi_afk",
+                    "frame": "face_normal"
+                  },
+                  "text": "休息一下"
+                }
+              ],
+              "piority": 2
+            }
+          ]
+        },
+        "awake": {
+          "animation": "awake",
+          "hp": 0,
+          "dialogs": [
+            {
+              "sentences": [
+                {
+                  "face": {
+                    "key": "tamagotchi_afk",
+                    "frame": "face_normal"
+                  },
+                  "text": "起床了"
+                }
+              ],
+              "piority": 2
+            }
+          ]
+        },
+        "award": {
+          "animation": "none",
+          "hp": 0,
+          "coin": 10,
+          "dialogs": [
+            {
+              "sentences": [
+                {
+                  "face": {
+                    "key": "tamagotchi_afk",
+                    "frame": "face_normal"
+                  },
+                  "text": "我贏了！\n賺到 {{coin}} 元零用錢！"
+                }
+              ],
+              "piority": 2
+            }
+          ]
+        },
+        "lose": {
+          "animation": "none",
+          "hp": 0,
+          "coin": -10,
+          "dialogs": [
+            {
+              "sentences": [
+                {
+                  "face": {
+                    "key": "tamagotchi_afk",
+                    "frame": "face_sad"
+                  },
+                  "text": "輸了，損失 10 元零用錢！"
+                }
+              ],
+              "piority": 2
+            }
+          ]
+        },
+        "buy": {
+          "animation": "none",
+          "coin": -100,
+          "dialogs": [
+            {
+              "sentences": [
+                {
+                  "face": {
+                    "key": "tamagotchi_afk",
+                    "frame": "face_normal"
+                  },
+                  "text": "用賺來的錢錢買東西！\n花了 {{coin}} 元零用錢！"
+                }
+              ],
+              "piority": 2
+            },
+            {
+              "sentences": [
+                {
+                  "face": {
+                    "key": "tamagotchi_afk",
+                    "frame": "face_normal"
+                  },
+                  "text": "把錢錢變成喜歡的樣子！！\n花了 {{coin}} 元零用錢！"
+                }
+              ],
+              "piority": 4
+            }
+          ]
+        },
+        "born": {
+          "animation": "born",
+          "dialogs": [
+            {
+              "sentences": [
+                {
+                  "face": {
+                    "key": "tamagotchi_afk",
+                    "frame": "face_normal"
+                  },
+                  "text": "復活"
+                }
+              ],
+              "piority": 2
+            }
+          ]
+        },
+        "dead": {
+          "animation": "dead",
+          "coin": -10,
+          "dialogs": [
+            {
+              "sentences": [
+                {
+                  "face": {
+                    "key": "tamagotchi_afk",
+                    "frame": "face_sad"
+                  },
+                  "text": "死了...\n損失 {{coin}} 元零用錢！"
+                }
+              ],
+              "piority": 2
+            }
+          ]
+        }
       }
     }
   },
-  "tamagotchi_action_mapping": [
-    {
+  "mapping": {
+    "drink": {
       "action": "drink",
-      "matches": ["補充水分"]
+      "matches": {
+        "content": ["補充水分"]
+      }
     },
-    {
-      "action": "battle",
-      "matches": ["上上打招呼", "上上刷存在感"],
-      "params": { "opponent": "shangshang" }
-    },
-    {
-      "action": "battle",
-      "matches": ["貝貝打招呼", "貝貝刷存在感"],
-      "params": { "opponent": "beibei" }
-    },
-    {
+    "write": {
       "action": "write",
-      "matches": ["提醒大家存檔"]
+      "matches": {
+        "content": ["提醒大家存檔"]
+      }
     },
-    {
+    "sleep": {
       "action": "sleep",
       "matches": []
+    },
+    "battle_currycat": {
+      "action": "battle",
+      "matches": {
+        "user": ["curry_cat"],
+        "content": ["貝貝打招呼", "貝貝刷存在感", "上上打招呼", "上上刷存在感"]
+      },
+      "params": { "opponent": "currycat" }
+    },
+    "battle_jennie": {
+      "action": "battle",
+      "matches": {
+        "user": ["jennie_congee"],
+        "content": ["貝貝打招呼", "貝貝刷存在感", "上上打招呼", "上上刷存在感"]
+      },
+      "params": { "opponent": "jennie" }
+    },
+    "battle_shangshang": {
+      "action": "battle",
+      "matches": {
+        "content": ["上上打招呼", "上上刷存在感"]
+      },
+      "params": { "opponent": "shangshang" }
+    },
+    "battle_beibei": {
+      "action": "battle",
+      "matches": {
+        "content": ["貝貝打招呼", "貝貝刷存在感"]
+      },
+      "params": { "opponent": "beibei" }
     }
-  ]
+  }
 }

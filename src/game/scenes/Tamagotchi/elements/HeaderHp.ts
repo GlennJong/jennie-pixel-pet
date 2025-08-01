@@ -1,29 +1,26 @@
 import Phaser from 'phaser';
-import { EventBus, getGlobalData } from '../../../EventBus';
+import { store } from '@/game/store';
 
-const DEFAULT = 88;
+const DEFAULT_HP = 88;
 const FONT_FAMILY = 'Tiny5';
 const FONT_SIZE = 8;
 
 export class IconHp extends Phaser.GameObjects.Container {
+  private hpState = store<number>('tamagotchi.hp');
   private icon: Phaser.GameObjects.Sprite;
   private text: Phaser.GameObjects.Text;
   private value: number;
   private targetValue: number | undefined;
-  private step: '100' | '75' | '50' | '25' | '10';
+  private step: '100' | '75' | '50' | '25' | '10' = '100';
 
   constructor(scene: Phaser.Scene, option: { x: number; y: number }) {
     super(scene);
 
-    this.value = typeof getGlobalData('tamagotchi_hp') !== 'undefined' ?
-      getGlobalData('tamagotchi_hp')
-      :
-      DEFAULT;
-
+    this.value = typeof this.hpState?.get() === 'number' ? this.hpState?.get() : DEFAULT_HP;
+    this.hpState?.watch(this.handleSetValue);
+    
+    
     const { x, y } = option;
-
-    // Watch hp change
-    EventBus.on('tamagotchi_hp-updated', this.handleSetValue);
 
     // Icon
     this.icon = scene.make.sprite({
@@ -31,17 +28,20 @@ export class IconHp extends Phaser.GameObjects.Container {
       frame: 'hp-empty',
       x: x,
       y: y,
-    });
-    scene.anims.create({
-      key: 'hp-100',
-      frames: scene.anims.generateFrameNames('tamagotchi_header_icons', {
-        prefix: `hp-100-`,
-        start: 1,
-        end: 5,
-      }),
-      repeat: -1,
-      frameRate: 6,
-    });
+    }).setOrigin(0);
+    
+    if (!scene.anims.exists('hp-100')) {
+      scene.anims.create({
+        key: 'hp-100',
+        frames: scene.anims.generateFrameNames('tamagotchi_header_icons', {
+          prefix: `hp-100-`,
+          start: 1,
+          end: 5,
+        }),
+        repeat: -1,
+        frameRate: 6,
+      });
+    }
     
     if (!scene.anims.exists('hp-75')) {
       scene.anims.create({
@@ -87,11 +87,11 @@ export class IconHp extends Phaser.GameObjects.Container {
 
     // Text
     this.text = scene.make.text({
-      x: x + 6,
-      y: y - 4,
+      x: x + 12,
+      y: y + 2,
       style: { fontFamily: FONT_FAMILY, fontSize: FONT_SIZE, color: '#000' },
       text: '',
-    });
+    }).setOrigin(0);
     this.text.setResolution(4);
     this.add(this.text);
 
@@ -138,7 +138,6 @@ export class IconHp extends Phaser.GameObjects.Container {
   }
 
   public destroy() {
-    EventBus.off('tamagotchi_hp-updated', this.setValue);
     this.icon.destroy();
     this.text.destroy();
   }

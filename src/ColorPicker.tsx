@@ -9,7 +9,10 @@ const ColorPicker: React.FC = ({ defaultColor, onChange }) => {
   }, [color]);
 
   return (
-    <div style={{ position: 'fixed', top: '12px', left: '12px', display: 'flex', alignItems: 'center', flexDirection: 'column' }}>
+    <div style={{ display: 'flex', alignItems: 'center', }}>
+      <div style={{ mixBlendMode: 'difference' }}>
+        {color}
+      </div>
       <label>
         <input
           type="color"
@@ -17,9 +20,6 @@ const ColorPicker: React.FC = ({ defaultColor, onChange }) => {
           onChange={e => setColor(e.target.value)}
         />
       </label>
-      <div style={{ mixBlendMode: 'difference' }}>
-        {color}
-      </div>
     </div>
   );
 };

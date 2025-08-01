@@ -1,33 +1,39 @@
 import Phaser from 'phaser';
-import { HeaderSelector } from './Selector';
-import { IconHp } from './Hp';
-import { IconCoin } from './Coin';
+
+import { getStoreState, setStoreState } from '@/game/store';
+
+// elements
+import { HeaderSelector } from './HeaderSelector';
+import { IconHp } from './HeaderHp';
+import { IconCoin } from './HeaderCoin';
 
 const DEFAULT_WIDTH = 160;
 const DEFAULT_HEIGHT = 25;
 const AUTO_HIDE_TIME = 10000;
+const HEADER_DISPLAY_DURATION = 10000;
 
-const selectors = ['drink', 'battle', 'write', 'sleep'];
+const SELECTORS = ['drink', 'battle', 'write', 'sleep'];
+const DEFAULT_CHARACTER_KEY = 'tamagotchi_afk';
 
 // TODO Constant Naming
-// const DRINK_ACTION_NAME = 'drink';
-// const BATTLE_ACTION_NAME = 'battle';
-// const WRITE_ACTION_NAME = 'write';
-// const SLEEP_ACTION_NAME = 'sleep';
-// const AWAKE_ACTION_NAME = 'awake';
-
 export class Header extends Phaser.GameObjects.Container {
-  public currentSelector: string = selectors[0];
-  private selectors: { [key: string]: HeaderSelector } = {};
+  private selectors = SELECTORS;
+  public currentSelector: string = SELECTORS[0];
+
+  private config;
+  private background: Phaser.GameObjects.NineSlice;
+  private iconSelector: { [key: string]: HeaderSelector } = {};
   private iconHp: IconHp;
-  private coin: IconCoin;
+  private iconCoin: IconCoin;
   private timer: number | undefined;
 
+  
   constructor(scene: Phaser.Scene) {
     super(scene);
 
-    // 2. background
-    const background = scene.make
+    this.config = scene.cache.json.get('config').tamagotchi[DEFAULT_CHARACTER_KEY].activities || {};
+
+    this.background = scene.make
       .nineslice({
         key: 'tamagotchi_header_frame',
         frame: 'frame',
@@ -41,69 +47,69 @@ export class Header extends Phaser.GameObjects.Container {
         bottomHeight: 8,
       })
       .setOrigin(0.5);
-    this.add(background);
+    this.add(this.background);
 
-    // 3. defined button
     const drink = new HeaderSelector(scene, {
       key: 'tamagotchi_header_icons',
       frame: 'drink',
-      x: 20,
-      y: 13,
+      x: 16,
+      y: 7,
       start: 1,
       end: 5,
       freq: 4,
     });
-
     this.add(drink);
-    this.selectors['drink'] = drink;
+    this.iconSelector['drink'] = drink;
 
     const battle = new HeaderSelector(scene, {
       key: 'tamagotchi_header_icons',
       frame: 'battle',
-      x: 40,
-      y: 13,
+      x: 36,
+      y: 7,
       start: 1,
       end: 4,
       freq: 4,
     });
 
     this.add(battle);
-    this.selectors['battle'] = battle;
+    this.iconSelector['battle'] = battle;
 
     const write = new HeaderSelector(scene, {
       key: 'tamagotchi_header_icons',
       frame: 'write',
-      x: 60,
-      y: 13,
+      x: 56,
+      y: 7,
       start: 1,
       end: 5,
       freq: 4,
     });
 
     this.add(write);
-    this.selectors['write'] = write;
+    this.iconSelector['write'] = write;
 
     const sleep = new HeaderSelector(scene, {
       key: 'tamagotchi_header_icons',
       frame: 'sleep',
-      x: 79,
-      y: 13,
+      x: 76,
+      y: 7,
       start: 1,
       end: 2,
       freq: 1,
     });
 
     this.add(sleep);
-    this.selectors['sleep'] = sleep;
+    this.iconSelector['sleep'] = sleep;
 
-    this.iconHp = new IconHp(scene, { x: 106, y: 13 });
+    this.iconHp = new IconHp(scene, { x: 100, y: 7 });
     this.add(this.iconHp);
 
-    this.iconCoin = new IconCoin(scene, { x: 134, y: 13 });
+    this.iconCoin = new IconCoin(scene, { x: 126, y: 7 });
     this.add(this.iconCoin);
 
     this.currentSelector = 'drink';
     this.handleUpdateSelector();
+
+    this.scene.add.existing(this);
   }
 
   private hideHeader() {
@@ -118,10 +124,10 @@ export class Header extends Phaser.GameObjects.Container {
   private handleUpdateSelector() {
     this.setAlpha(1);
 
-    Object.keys(this.selectors).map((_key) => {
-      this.selectors[_key].unselect();
+    Object.keys(this.iconSelector).map((_key) => {
+      this.iconSelector[_key].unselect();
     });
-    this.selectors[this.currentSelector].select();
+    this.iconSelector[this.currentSelector].select();
 
     this.hideHeader();
   }
@@ -139,30 +145,43 @@ export class Header extends Phaser.GameObjects.Container {
   }
 
   public moveNext() {
-    const currentIndex = selectors.indexOf(this.currentSelector);
+    const currentIndex = this.selectors.indexOf(this.currentSelector);
     this.currentSelector =
-      currentIndex !== selectors.length - 1
-        ? selectors[currentIndex + 1]
-        : selectors[0];
+      currentIndex !== this.selectors.length - 1
+        ? this.selectors[currentIndex + 1]
+        : this.selectors[0];
     this.handleUpdateSelector();
   }
 
   public movePrev() {
-    const currentIndex = selectors.indexOf(this.currentSelector);
+    const currentIndex = this.selectors.indexOf(this.currentSelector);
     this.currentSelector =
       currentIndex === 0
-        ? selectors[selectors.length - 1]
-        : selectors[currentIndex - 1];
+        ? this.selectors[this.selectors.length - 1]
+        : this.selectors[currentIndex - 1];
     this.handleUpdateSelector();
   }
 
-  public moveTo(string: string) {
-    this.currentSelector = string;
+  public moveToSelector(selector: string) {
+    this.currentSelector = selector;
     this.handleUpdateSelector();
   }
 
   public select() {
+    const isSleep = getStoreState('tamagotchi.isSleep');
+
+    // special condition
+    if (isSleep && this.currentSelector === 'sleep') return 'awake';
+    
     return this.currentSelector;
+  }
+
+  public runAction(action: string, params: { coin: number }) {
+    const hp = this.config[action].hp;
+    const coin = params?.coin || this.config[action].coin;
+    this.showHeader(HEADER_DISPLAY_DURATION);
+    if (hp) setStoreState('tamagotchi.hp', Math.min(100, getStoreState('tamagotchi.hp') + hp));
+    if (coin) setStoreState('tamagotchi.coin', getStoreState('tamagotchi.coin') + coin);
   }
 
   public update() {
@@ -171,8 +190,13 @@ export class Header extends Phaser.GameObjects.Container {
   }
 
   public destroy() {
+    this.background.destroy();
     this.iconHp.destroy();
     this.iconCoin.destroy();
+    this.iconSelector['drink'].destroy();
+    this.iconSelector['battle'].destroy();
+    this.iconSelector['write'].destroy();
+    this.iconSelector['sleep'].destroy();
     clearTimeout(this.timer);
   }
 

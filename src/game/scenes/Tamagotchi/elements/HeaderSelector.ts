@@ -27,7 +27,7 @@ export class HeaderSelector extends Phaser.GameObjects.Container {
       frame: `${frame}-default`,
       x: x,
       y: y,
-    });
+    }).setOrigin(0);
 
     this.frameName = frame;
 
@@ -53,7 +53,7 @@ export class HeaderSelector extends Phaser.GameObjects.Container {
       frame: 'arrow',
       x: x - 12,
       y: y,
-    });
+    }).setOrigin(0);
 
     // Defind Arrow Animation
     scene.tweens.add({
@@ -79,5 +79,10 @@ export class HeaderSelector extends Phaser.GameObjects.Container {
     this.arrow.visible = false;
     this.icon.anims.complete();
     this.icon.setFrame(`${this.frameName}-default`);
+  }
+
+  public destroy() {
+    this.icon.destroy();
+    this.arrow.destroy();
   }
 }

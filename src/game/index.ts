@@ -1,26 +1,15 @@
 import 'phaser';
 import { AUTO, Game } from 'phaser';
-import { Preloader } from './scenes/Preloader';
-
-// Pulugins
-import RexUIPlugin from 'phaser3-rex-plugins/templates/ui/ui-plugin.js';
-import BBCodeTextPlugin from 'phaser3-rex-plugins/plugins/bbcodetext-plugin.js';
-
-declare module 'phaser' {
-  interface Scene {
-    rexUI: RexUIPlugin;
-  }
-}
+import { Preloader } from '@/game/scenes/Preloader';
 
 // General
-import { canvas } from './constants';
+import { canvas } from '@/game/constants';
 
-// Tamagotchi Scene
-import Tamagotchi from './scenes/Tamagotchi';
-
-// Battle Scene
-import Battle from './scenes/Battle';
-import { MainScene } from './scenes/MainScene';
+// Scenes
+import Battle from '@/game/scenes/Battle';
+import Tamagotchi from '@/game/scenes/Tamagotchi';
+import TestScene from '@/game/scenes/Test';
+import { MainScene } from '@/game/scenes/MainScene';
 
 const config: Phaser.Types.Core.GameConfig = {
   type: AUTO,
@@ -28,28 +17,12 @@ const config: Phaser.Types.Core.GameConfig = {
   height: canvas.height,
   parent: 'game-container',
   zoom: 2,
-  plugins: {
-    global: [
-      {
-        key: 'rexBBCodeTextPlugin',
-        plugin: BBCodeTextPlugin,
-        start: true,
-      },
-    ],
-    scene: [
-      {
-        key: 'rexUI',
-        plugin: RexUIPlugin,
-        mapping: 'rexUI',
-        start: true,
-      },
-    ],
-  },
   backgroundColor: '#000',
-  canvasStyle: `display:block; image-rendering: pixelated`,
+  canvasStyle: `display:block; image-rendering: pixelated; transform: scale(0.5); transform-origin: top left;`,
   scene: [
     Preloader,
     MainScene,
+    TestScene,
     Tamagotchi,
     Battle
   ],

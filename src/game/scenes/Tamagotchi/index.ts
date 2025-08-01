@@ -1,220 +1,221 @@
 import Phaser, { Scene } from 'phaser';
-import { EventBus, getGlobalData, setGlobalData } from '../../EventBus';
 
-import { PrimaryDialogue } from '../../components/PrimaryDialogue';
-import { sceneConverter, sceneStarter } from '../../components/CircleSceneTransition';
+// common components
+import { originalHeight, originalWidth } from '@/game/constants';
+import { sceneConverter, sceneStarter } from '@/game/components/CircleSceneTransition';
+import { setStoreState, store } from '@/game/store';
+import { EventBus } from '@/game/EventBus';
 
-import { Header } from './Header';
-import { Property } from './Property';
-import { TamagotchiCharacter } from './TamagotchiCharacter';
-import KeyboardHandler from './KeyboardHander';
+// partial elements
+import { Header } from './elements/Header';
+import { Property } from './elements/Property';
+import { TamagotchiCharacter } from './elements/TamagotchiCharacter';
+import { TamagotchiDialogue } from './elements/TamagotchiDialogue';
 
-const DEFAULT_TAMAGOTCHI_POSITION = {
-  x: 80,
-  y: 84,
-  edge: { from: 50, to: 120 }
-}
+// services
+import { TaskQueueHandler } from './services/TaskQueueService';
 
-const WIN_COIN = 10;
-const LOSE_COIN = -5;
+// handlers
+import { KeyboardHandler } from './handlers/KeyboardHander';
+import { PropertyHandler } from './handlers/PropertyHandler';
+import { HpHandler } from './handlers/HpHandler';
+import { Task } from './services/types';
 
-const DEFAULT_USER = 'user';
-const HEADER_DISPLAY_DURATION = 10000;
 
-export default class Tamagotchi extends Scene {
-  private background: Phaser.GameObjects.Image;
-  private header: Header;
-  private property: Property;
-  private character: TamagotchiCharacter;
-  private dialogue: PrimaryDialogue;
-  private keyboardHandler: KeyboardHandler;
+const DEFAULT_USER_NAME = 'user';
+const DEFAULT_CHARACTER_KEY = 'tamagotchi_afk';
+const HEADER_DISPLAY_DURATION = 5000;
 
-  private actionQueue: { user: string; action: string }[] = [];
-  private isStart: boolean = false;
-  private isActionRunning: boolean = false;
-  
+export default class TamagotchiScene extends Scene {
+  private config: {[key: string]: any} = {};
+  private background?: Phaser.GameObjects.Image;
+  private header?: Header;
+  private property?: Property;
+  private character?: TamagotchiCharacter;
+  private dialogue?: TamagotchiDialogue;
+  private keyboardHandler?: KeyboardHandler;
+
+  private taskQueueHandler?: TaskQueueHandler;
+  private propertyHandler?: PropertyHandler;
+  private hpHandler?: HpHandler;
+
+  private isTamagotchiReady: boolean = false;
+
   constructor() {
     super('Tamagotchi');
   }
   create() {
-    // Build Background
+    // ============= Mechanism =============
+    setStoreState('global.isPaused', true);
+
+    // charactor
+    this.character = new TamagotchiCharacter(this);
+    this.config = this.cache.json.get('config').tamagotchi[DEFAULT_CHARACTER_KEY].activities || {};
+
+    // background
     this.background = this.make.image({
       key: 'tamagotchi_room',
       frame: 'room',
-      x: 160 / 2,
-      y: 144 / 2,
-    });
+      x: 0,
+      y: 0,
+    })
+    .setDisplayOrigin(originalWidth, originalHeight)
+    .setOrigin(0);
     this.add.existing(this.background);
-    
-    // Inherit queue or create new queue
-    this.actionQueue = getGlobalData('tamagotchi_queue') || [];
 
-    // Convert queue from message queue
-    EventBus.on('message_queue-updated', this.handleConvertActionQueue);
-
-    // handle update coin and level
-    EventBus.on('tamagotchi_coin-updated', this.handleBuyDecoration);
-    
-    // Build Tamagotchi Charactor
-    this.character = new TamagotchiCharacter(this, DEFAULT_TAMAGOTCHI_POSITION);
-
-    // Build Property
+    // property
     this.property = new Property(this);
-    this.add.existing(this.property);
+    // this.add.existing(this.property);
 
-    // Build Header
+    // header
     this.header = new Header(this);
-    this.add.existing(this.header);
+    
+    // dialogue
+    this.dialogue = new TamagotchiDialogue(this);
 
-    // Build Dialogue
-    this.dialogue = new PrimaryDialogue(this);
-    this.add.existing(this.dialogue);
+    // property
+    this.propertyHandler = new PropertyHandler(this);
+    this.propertyHandler.init({
+      onUpgrade: (params) => this.handleUpgrade(this.taskQueueHandler, params)
+    });
 
-    // Build Keyboard
+    // hp
+    this.hpHandler = new HpHandler(this);
+    this.hpHandler.init({
+      onFullHp: () => this.handleFullHp(this.taskQueueHandler),
+      onZeroHp: () => this.handleZeroHp(this.taskQueueHandler)
+    });
+
+    // queue init
+    this.taskQueueHandler = new TaskQueueHandler(this);
+    this.taskQueueHandler.init({
+      onTask: (task) => this.handleActionQueueTask(task),
+      interval: 300
+    });
+
+    // Build Keyboard 
     this.keyboardHandler = new KeyboardHandler(this, {
       onLeft: () => this.handleControlButton('left'),
       onRight: () => this.handleControlButton('right'),
       onSpace: () => this.handleControlButton('space')
     });
 
-    // outside controller
-    EventBus.on('trigger-button', this.handleControlButton);
-    
+    EventBus.on('game-left-keydown', () => {this.handleControlButton('left')}),
+    EventBus.on('game-right-keydown', () => this.handleControlButton('right')),
+    EventBus.on('game-select-keydown', () => this.handleControlButton('space')),
+
     // Run opening scene and start tamagotchi
     (async() => {
       await sceneStarter(this);
-      await this.handleBattleAward(); // handle battle reward
-      this.character.startTamagotchi();
-      this.isStart = true;
+      this.handleBattleAward(this.taskQueueHandler);
+      this.character?.startTamagotchi();
+      this.isTamagotchiReady = true;
+      setStoreState('global.isPaused', false);
     })();
 
     this.events.on('shutdown', this.shutdown, this);
   }
 
-  private handleControlButton = (key) => {
+  private handleControlButton = (key: string) => {
     if (key === 'left' ) {
-      this.header.movePrev()
+      this.header!.movePrev()
     } else if (key === 'right') {
-      this.header.moveNext()
+      this.header!.moveNext()
     } else if (key === 'space') {
-      const action = this.header.select();
-      this.actionQueue.push({ user: DEFAULT_USER, action });
+      const action = this.header!.select();
+      this.taskQueueHandler?.addTask({ user: DEFAULT_USER_NAME, action });
     }
   }
 
-  private handleBattleAward = async () => {
-    const battleResult = getGlobalData('battle_result');
-    if (battleResult === 'win') {
-      const result = this.character.runFuntionalAction('win');
-      if (result) {
-        await this.dialogue.runDialog(result.dialog);
-      }
-      setGlobalData('tamagotchi_coin', getGlobalData('tamagotchi_coin') + WIN_COIN);
-      this.header.showHeader(HEADER_DISPLAY_DURATION);
-    }
-    else if (battleResult === 'lose') {
-      const result = this.character.runFuntionalAction('lose');
-      if (result) {
-        await this.dialogue.runDialog(result.dialog);
-      }
-      setGlobalData('tamagotchi_coin', getGlobalData('tamagotchi_coin') + LOSE_COIN);
-      this.header.showHeader(HEADER_DISPLAY_DURATION);
-    }
-    setGlobalData('battle_result', 'null');
-  }
+  async handleActionQueueTask(task: Task) {
+    if (!this.isTamagotchiReady) return false;
+    let success = false;
 
-  private handleConvertActionQueue = (queue) => {
-    if (queue.length === 0) return;
-    const mapping = this.cache.json.get('config').tamagotchi_action_mapping;
+    const { nextScene } = this.config[task.action];
+    const { action, user, params } = task;
+    console.log({params})
+    try {
+      // Run Character Animation
+      await this.character?.runFuntionalActionAsync(action);
 
-    for(let i = 0; i < queue.length; i++) {
-      const { user, content } = queue[i];
-      const result = mapping.find(_item => _item.matches.includes(content));
-      if (result) {
-        const action = result.action;
-        const params = result.params;
-        this.actionQueue.push({ user, action, params });
-      }
-    }
-    setGlobalData('message_queue', []);
-  }
-
-  private handleBuyDecoration = async (coin) => {
-    const decoration = this.cache.json.get('config').tamagotchi_room.decoration;
-
-    for(let i = 0; i < decoration.length; i++) {
-      const { cost, level } = decoration[i];
-      if (coin >= cost && getGlobalData('tamagotchi_level') < level) {
-        const result = this.character.runFuntionalAction('buy');
-        if (result) {
-          await this.dialogue.runDialog(result.dialog);
-          this.header.showHeader(HEADER_DISPLAY_DURATION);
-          setGlobalData('tamagotchi_level', getGlobalData('tamagotchi_level') + 1);
-          setGlobalData('tamagotchi_coin', getGlobalData('tamagotchi_coin') - cost);
-          return;
-        }
-      }
-    }
-  }
-
-  private handleActionQueue = async () => {
-    this.isActionRunning = true;
-    const { user, action, params } = this.actionQueue[0];
-
-    const _run = async () => {
-      const result = this.character.runFuntionalAction(action);
-      this.header.showHeader(HEADER_DISPLAY_DURATION);
-
-      if (result) {
-        const currentDialog = result.dialog.map((_item) => ({
-          ..._item,
-          text: _item.text.replaceAll('{{user_name}}', user),
-        }));
-        await this.dialogue.runDialog(currentDialog);
-
-        if (action === 'battle') {
-          await this.handleSwitchToBattleScene(user, params);
-        }
+      // Run Dialogue
+      if (this.dialogue) {
+        await this.dialogue.runDialogue(action, {...params, user});
       }
       
-      this.actionQueue.splice(0, 1);
-      this.isActionRunning = false;
-    };
+      // Change header elements
+      if (this.header) {
+        this.header.showHeader(HEADER_DISPLAY_DURATION);
+        this.header.runAction(action, params);
+      }
 
-    _run();
-  };
-
-  private handleSwitchToBattleScene = async(user, params) => {
-    setGlobalData('battle_opponent', params?.opponent);
-    await sceneConverter(this, 'Battle');
+      if (this.property) {
+        this.property.runAction(action);
+      }
+      
+      // Change scene if need
+      if (params) setStoreState('global.transmit', params);
+      if (nextScene) await sceneConverter(this, nextScene);
+      
+      success = true;
+    } catch (err) {
+      console.error('handleActionQueueTask error:', err);
+      success = false;
+    }
+    return success;
   }
 
-  update(time: number) {
-    // compoents
-    this.character.update(time);
-    this.header.update();
-    this.property.update();
-    this.keyboardHandler.update();
-
-    // functions
-    if (this.actionQueue.length !== 0 && !this.isActionRunning && this.isStart) {
-      this.handleActionQueue();
+  handleBattleAward(taskQueueHandler: any) {
+    const globalParamsStore = store('global.transmit');
+    if (!globalParamsStore) return;
+    
+    const params: { battleResult?: string } = globalParamsStore.get() || {};
+    if (params.battleResult === 'win') {
+      taskQueueHandler?.addEmergentTask({ action: 'award', user: 'system' });
+    } else if (params.battleResult === 'lose') {
+      taskQueueHandler?.addEmergentTask({ action: 'lose', user: 'system' });
     }
+    globalParamsStore.set('undefined');
+  }
+
+  async handleUpgrade(taskQueueHandler: any, params: any) {
+    if (!this.isTamagotchiReady) return false;
+    taskQueueHandler?.addTask({ action: 'buy', user: 'system', params });
+    return true;
+  }
+
+  handleFullHp(taskQueueHandler: any) {
+    if (!this.isTamagotchiReady) return false;
+    taskQueueHandler?.addEmergentTask({ action: 'born', user: 'system' });
+    return true;
+  }
+
+  handleZeroHp(taskQueueHandler: any) {
+    if (!this.isTamagotchiReady) return false;
+    taskQueueHandler?.addEmergentTask({ action: 'dead', user: 'system' });
+    return true;
+  }
+
+  update() {
+    this.character?.update();
+    this.header!.update();
+    this.property!.update();
+    this.keyboardHandler!.update();
   }
 
   shutdown = () => {
-    this.isActionRunning = false;
-    this.character.destroy()
-    this.background.destroy();
-    this.header.destroy();
-    this.property.destroy();
+    this.isTamagotchiReady = false;
+    this.character?.destroy();
+    this.background?.destroy();
+    this.header?.destroy();
+    this.property?.destroy();
+    this.dialogue?.destroy();
+    this.hpHandler?.destroy();
+    this.propertyHandler?.destroy();
+    this.taskQueueHandler?.destroy();
 
-    // Event
-    EventBus.off('message_queue-updated', this.handleConvertActionQueue);
-    EventBus.off('tamagotchi_coin-updated', this.handleBuyDecoration);
-    EventBus.off('trigger-button', this.handleControlButton);
-
-    // store
-    setGlobalData('tamagotchi_queue', this.actionQueue);
+    EventBus.off('game-left-keydown');
+    EventBus.off('game-right-keydown');
+    EventBus.off('game-select-keydown');
   }
 }

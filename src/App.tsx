@@ -1,51 +1,117 @@
 import { useRef, useState } from "react";
-import { PhaserGame } from "./PhaserGame";
-import useTwitchOauth from "./hooks/useTwitchOauth";
-import { EventBus, setGlobalData, getGlobalData } from './game/EventBus';
-import Console from "./game/Console";
-import ColorPicker from './ColorPicker';
+import { PhaserGame } from "@/PhaserGame";
+import useTwitchOauth from "@/hooks/useTwitchOauth";
+import Console from "@/game/Console";
+import ColorPicker from '@/ColorPicker';
+import ConfigEditor from '@/ConfigEditor';
+import { setStoreState, store } from "@/game/store";
+import AutoSaveTrigger from "./AutoSaveTrigger";
+import CommandBoard from './CommandBoard';
 
-const isDev = import.meta.env['VITE_ENV'] === 'dev';
+type TRecord = {
+  user?: string;
+  content?: string;
+  createdAt?: Date;
+}
 
 function App() {
-  const [ isGameStart, setIsGameStart ] = useState(false);
+  const [ counter, setCounter ] = useState(0);
+  const [ isConfigOpen, setIsConfigOpen ] = useState(false);
+  const [ isLogOpen, setIsLogOpen ] = useState(false);
+  const [ isCmdOpen, setIsCmdOpen ] = useState(false);
+  const [ isConnected, setIsConnected ] = useState(false);
+  // const [ isGameStart, setIsGameStart ] = useState(false);
   const { twitchState, startOauthConnect, startWebsocket } = useTwitchOauth();
-  const [ record, setRecord ] = useState<{user?: string, content?: string}[]>([]);
+  const [ record, setRecord ] = useState<TRecord[]>([]);
   const [ bgColor, setBgColor ] = useState('#482e79');
-  const recordRef = useRef<{user?: string, content?: string}[]>([]);
+  const recordRef = useRef<TRecord[]>([]);
 
   const handleClickConnectButton = async () => {
     startWebsocket('chat', {
       onMessage: (data) => {
-        const { user, content } = data;
-        EventBus.emit('queue', { user, content });
-        recordRef.current.push({ user, content });
+        const { user, content, createdAt }: TRecord = data;
+        handlePushMessage(user || '', content || '');
+        recordRef.current.push({ user, content, createdAt });
         setRecord(recordRef.current);
       }
     });
-    setIsGameStart(true);
+    // setIsGameStart(true);
+    setIsConnected(true);
+    setCounter(counter + 1);
   }
 
-  const handleClickManualBattle = (user: string, content: string) => {
-    setGlobalData('message_queue', [
-      ...getGlobalData('message_queue'),
+  const handlePushMessage = (user: string, content: string) => {
+    const myStore = store('global.messageQueue');
+    setStoreState('global.messageQueue', [
+      ...(Array.isArray(myStore?.get()) ? myStore.get() as { user?: string, content?: string }[] : []),
       { user, content }
-    ]);
-    // EventBus.emit('global-event', '123');
+    ])
   }
 
-  
   return (
     <div id="app" style={{ background: bgColor }}>
-      
-      <div style={{ zIndex: 1, position: "relative" }}>
-        {
-          !twitchState &&
-          <button className="button" onClick={startOauthConnect}>Twitch login</button>
+      <div style={{ display: 'flex', width: '100%' }}>
+        <div style={{ position: 'absolute', right: '0', top: '0', padding: '4px 12px', display: 'flex', gap: '4px', zIndex: 2 }}>
+          
+          <button
+            className={`button ${isConfigOpen ? 'open' : ''}`}
+            disabled={!!twitchState}
+            onClick={startOauthConnect}
+          >
+            { twitchState ? 'LOGINED' : 'LOGIN TWITCH'}
+          </button>
+          <button
+            className={`button ${isConfigOpen ? 'open' : ''}`}
+            onClick={() => setIsConfigOpen(!isConfigOpen)}
+          >
+            CONFIG
+          </button>
+          <button
+            className={`button ${isLogOpen ? 'open' : ''}`}
+            onClick={() => setIsLogOpen(!isLogOpen)}
+          >
+            LOG
+          </button>
+          <button
+            className={`button ${isCmdOpen ? 'open' : ''}`}
+            onClick={() => setIsCmdOpen(!isCmdOpen)}
+          >
+            CMD
+          </button>
+        </div>
+
+        {/* Side */}
+        { isConfigOpen &&
+          <div style={{ height: '100vh'}}>
+            <ConfigEditor onChange={() => {
+                window.alert('設定已更新，將重新啟動');
+                setCounter(counter + 1);
+                // window.location.reload()
+              }}
+            />
+          </div>
         }
-        { twitchState &&
-          <div style={{ position: 'relative' }}>
-            { !isGameStart &&
+        
+        {/* Main */}
+        <div style={{
+          position: "relative",
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          width: '100%',
+          zIndex: 1
+        }}>
+          {/* <div key={counter}>
+            <Console>
+              <PhaserGame />
+            </Console>
+          </div> */}
+          {/* {
+            !twitchState &&
+            <button className="button" onClick={startOauthConnect}>Twitch login</button>
+          } */}
+          <div key={counter} style={{ position: 'relative' }}>
+            { (twitchState && !isConnected) &&
               <button
                 className="button"
                 onClick={handleClickConnectButton}
@@ -53,48 +119,39 @@ function App() {
                   Start Connect
               </button>
             }
-            <div style={{ opacity: !isGameStart ? 0.5 : 1, pointerEvents: isGameStart ? 'auto': 'none' }}>
+            <div style={{ opacity: (!twitchState || isConnected) ? 1 : 0.5, pointerEvents: (!twitchState || isConnected) ? 'auto': 'none' }}>
               <Console>
-                { isGameStart &&
-                  <PhaserGame />
-                }
+                { (!twitchState || isConnected) && <PhaserGame /> }
               </Console>
             </div>
           </div>
-        }
-        { isDev && isGameStart &&
-          <div style={{ position: 'fixed', bottom: 0, left: 0, width: '100%' }}>
-            <div style={{ display: 'flex', gap: '12px', alignItems: 'center', justifyContent: 'center', marginBottom: '12px' }}>
-              <button className="button" onClick={() => setGlobalData('tamagotchi_level', 1)}>
-                level=1
-              </button>
-              <button className="button" onClick={() => setGlobalData('tamagotchi_coin', 0)}>
-                coin=0
-              </button>
-              <button className="button" onClick={() => setGlobalData('tamagotchi_coin', getGlobalData('tamagotchi_coin') + 20)}>
-                coin+20
-              </button>
-            </div>
-            <div style={{ display: 'flex', gap: '12px', alignItems: 'center', justifyContent: 'center' }}>
-              <button className="button" onClick={() => handleClickManualBattle('test', '補充水分')}>補充水分</button>
-              <button className="button" onClick={() => handleClickManualBattle('test', '貝貝打招呼')}>battle 貝貝</button>
-              <button className="button" onClick={() => handleClickManualBattle('test', '上上打招呼')}>battle 上上</button>
+          
+        </div>
+      </div>
+      <div style={{ position: 'absolute', bottom: '0', right: '0', zIndex: 2, display: 'flex', flexDirection: 'column', gap: '4px', alignItems: 'flex-end', width: '100%' }}>
+        <div style={{ padding: '12px', display: 'flex', flexDirection: 'column', gap: '4px', alignItems: 'flex-end', width: '100%'}}>
+          <AutoSaveTrigger />
+          { isCmdOpen && <CommandBoard /> }
+          <ColorPicker
+            defaultColor={bgColor}
+            onChange={color => setBgColor(color)}
+          />
+        </div>
+        {/* { isLogOpen && isGameStart && */}
+        { isLogOpen &&
+          <div style={{ width: '100%', padding: '12px 36px', zIndex: 1, backgroundColor: 'hsla(0, 0%, 0%, .5)', overflowY: 'auto', maxHeight: '100px' }}>
+            <div style={{ marginBottom: '12px'}}>
             </div>
             <div>
-              { twitchState && JSON.stringify(twitchState) }
               { record.map((_record, i) => 
                 <div key={i}>
-                  {_record.user}: {_record.content}
+                  {_record.user}: {_record.content}: {_record.createdAt}
                 </div>
               ) }
             </div>
           </div>
         }
       </div>
-      <ColorPicker
-        defaultColor={bgColor}
-        onChange={color => setBgColor(color)}
-      />
     </div>
   );
 }
