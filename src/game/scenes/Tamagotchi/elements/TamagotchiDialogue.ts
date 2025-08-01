@@ -28,17 +28,18 @@ export class TamagotchiDialogue extends Phaser.GameObjects.Container {
   }
 
   public async runDialogue(action: string, params?: { [key: string]: string | number }) {
-    
     const result = this.config[action];
-    const { dialogs } = result;
-    
+    const { dialogs, hp, coin } = result;
+    const replacement = {...{ hp, coin }, ...params};
 
-    if (dialogs && params) {
+    console.log(replacement)
+
+    if (dialogs && replacement) {
       const selectedDialog = selectFromPiority<TDialogItem>(dialogs);
       const selectedSentences = selectedDialog.sentences.map((_sentence) => {
         let text = _sentence.text;
-        if (params) {
-          Object.entries(params).forEach(([key, value]) => {
+        if (replacement) {
+          Object.entries(replacement).forEach(([key, value]) => {
             let displayValue = value;
             if (typeof value === 'number') displayValue = Math.abs(value);
             text = text.replaceAll(`{{${key}}}`, String(displayValue));

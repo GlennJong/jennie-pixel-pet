@@ -73,12 +73,18 @@ const JsonEditor: React.FC<Props> = ({ value, onChange, prefixName, keyName, tem
             value={value === null ? "" : value}
             onChange={e => {
               if (typeof value === 'number') {
-                const v = e.target.value;
+                let v = e.target.value;
                 // 僅允許合法數字
                 if (v === '' || v === null) {
                   onChange(0);
-                } else if (!isNaN(Number(v))) {
-                  onChange(Number(v));
+                } else {
+                  // 若目前值為 0 且輸入新數字，去除前導 0
+                  if (String(value) === '0' && /^0\d+$/.test(v)) {
+                    v = v.replace(/^0+/, '');
+                  }
+                  if (!isNaN(Number(v))) {
+                    onChange(Number(v));
+                  }
                 }
                 // 非合法數字則不更新
               } else {

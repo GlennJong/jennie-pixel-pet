@@ -1437,19 +1437,19 @@
         {
           "key": "tamagotchi_room",
           "frame": "customized_3",
-          "cost": 100,
+          "cost": 200,
           "level": 3
         },
         {
           "key": "tamagotchi_room",
           "frame": "customized_4",
-          "cost": 100,
+          "cost": 400,
           "level": 4
         },
         {
           "key": "tamagotchi_room",
           "frame": "customized_5",
-          "cost": 100,
+          "cost": 800,
           "level": 5
         }
       ],
@@ -1614,7 +1614,7 @@
         "award": {
           "animation": "none",
           "hp": 0,
-          "coin": 30,
+          "coin": 10,
           "dialogs": [
             {
               "sentences": [
@@ -1623,7 +1623,7 @@
                     "key": "tamagotchi_afk",
                     "frame": "face_normal"
                   },
-                  "text": "我贏了！賺到 10 元零用錢！"
+                  "text": "我贏了！\n賺到 {{coin}} 元零用錢！"
                 }
               ],
               "piority": 2
@@ -1660,7 +1660,7 @@
                     "key": "tamagotchi_afk",
                     "frame": "face_normal"
                   },
-                  "text": "用賺來的錢錢買東西！花了 {{coin}} 元零用錢！"
+                  "text": "用賺來的錢錢買東西！\n花了 {{coin}} 元零用錢！"
                 }
               ],
               "piority": 2
@@ -1672,7 +1672,7 @@
                     "key": "tamagotchi_afk",
                     "frame": "face_normal"
                   },
-                  "text": "把錢錢變成喜歡的樣子！！花了 {{coin}} 元零用錢！"
+                  "text": "把錢錢變成喜歡的樣子！！\n花了 {{coin}} 元零用錢！"
                 }
               ],
               "piority": 4
@@ -1710,7 +1710,7 @@
                     "key": "tamagotchi_afk",
                     "frame": "face_sad"
                   },
-                  "text": "死了"
+                  "text": "死了...\n損失 {{coin}} 元零用錢！"
                 }
               ],
               "piority": 2

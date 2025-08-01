@@ -133,6 +133,7 @@ export default class TamagotchiScene extends Scene {
 
     const { nextScene } = this.config[task.action];
     const { action, user, params } = task;
+    console.log({params})
     try {
       // Run Character Animation
       await this.character?.runFuntionalActionAsync(action);
@@ -145,7 +146,7 @@ export default class TamagotchiScene extends Scene {
       // Change header elements
       if (this.header) {
         this.header.showHeader(HEADER_DISPLAY_DURATION);
-        this.header.runAction(action);
+        this.header.runAction(action, params);
       }
 
       if (this.property) {
