@@ -10,7 +10,11 @@ body {
   color: rgba(255, 255, 255, 0.87);
   /* background-color: hsla(240, 100%, 96%, 0.75); */
   background-color: #482e79;
-  font-family: "BoutiqueBitmap", Arial, Helvetica, sans-serif;
+  /* font-family: "BoutiqueBitmap", Arial, Helvetica, sans-serif; */
+}
+
+* {
+  box-sizing: border-box;
 }
 
 #app {
@@ -39,10 +43,10 @@ body {
   cursor: pointer;
   display: inline-block;
   font-family: -apple-system,system-ui,"Segoe UI",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji";
-  font-size: 14px;
+  font-size: 12px;
   font-weight: 600;
   line-height: 20px;
-  padding: 6px 16px;
+  padding: 4px 8px;
   position: relative;
   text-align: center;
   text-decoration: none;
@@ -58,7 +62,7 @@ body {
   outline: none;
 }
 
-.button:hover {
+.button:hover, .button.open {
   background-color: #472f74;
 }
 
@@ -68,10 +72,8 @@ body {
 }
 
 .button:disabled {
-  background-color: #94d3a2;
-  border-color: rgba(27, 31, 35, .1);
-  color: rgba(255, 255, 255, .8);
-  cursor: default;
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 .button:active {
