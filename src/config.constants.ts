@@ -7,8 +7,8 @@ export const mappingWording = {
   battle_beibei: '角色戰鬥：貝貝',
   battle_shangshang: '角色戰鬥：上上',
   action: '遊戲內指令',
-  matches: '配對條件',
-  content: '指令名稱',
+  matches: '觸發條件',
+  content: '忠誠點數名稱',
   user: '兌換人'
 }
 
@@ -60,7 +60,8 @@ export const tamagotchiSceneHideKey = [
   'animations',
   'animation',
   'has_direction',
-  'tamagotchi_room'
+  'tamagotchi_room',
+  'is_move'
 ]
 
 export const tamagotchiSceneWording = {

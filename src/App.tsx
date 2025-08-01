@@ -19,7 +19,8 @@ function App() {
   const [ isConfigOpen, setIsConfigOpen ] = useState(false);
   const [ isLogOpen, setIsLogOpen ] = useState(false);
   const [ isCmdOpen, setIsCmdOpen ] = useState(false);
-  const [ isGameStart, setIsGameStart ] = useState(true);
+  const [ isConnected, setIsConnected ] = useState(false);
+  // const [ isGameStart, setIsGameStart ] = useState(false);
   const { twitchState, startOauthConnect, startWebsocket } = useTwitchOauth();
   const [ record, setRecord ] = useState<TRecord[]>([]);
   const [ bgColor, setBgColor ] = useState('#482e79');
@@ -34,7 +35,9 @@ function App() {
         setRecord(recordRef.current);
       }
     });
-    setIsGameStart(true);
+    // setIsGameStart(true);
+    setIsConnected(true);
+    setCounter(counter + 1);
   }
 
   const handlePushMessage = (user: string, content: string) => {
@@ -49,6 +52,14 @@ function App() {
     <div id="app" style={{ background: bgColor }}>
       <div style={{ display: 'flex', width: '100%' }}>
         <div style={{ position: 'absolute', right: '0', top: '0', padding: '4px 12px', display: 'flex', gap: '4px', zIndex: 2 }}>
+          
+          <button
+            className={`button ${isConfigOpen ? 'open' : ''}`}
+            disabled={!!twitchState}
+            onClick={startOauthConnect}
+          >
+            { twitchState ? 'LOGINED' : 'LOGIN TWITCH'}
+          </button>
           <button
             className={`button ${isConfigOpen ? 'open' : ''}`}
             onClick={() => setIsConfigOpen(!isConfigOpen)}
@@ -90,27 +101,30 @@ function App() {
           width: '100%',
           zIndex: 1
         }}>
-          {
-            twitchState &&
+          {/* <div key={counter}>
+            <Console>
+              <PhaserGame />
+            </Console>
+          </div> */}
+          {/* {
+            !twitchState &&
             <button className="button" onClick={startOauthConnect}>Twitch login</button>
-          }
-          { !twitchState &&
-            <div key={counter} style={{ position: 'relative' }}>
-              { !isGameStart &&
-                <button
-                  className="button"
-                  onClick={handleClickConnectButton}
-                  style={{ position: 'absolute', left: '50%', top: '50%', transform: 'translate(-50%, -50%)', zIndex: 2, boxShadow: '2px 4px 12px hsla(0, 0%, 0%, .33)' }}>
-                    Start Connect
-                </button>
-              }
-              <div style={{ opacity: !isGameStart ? 0.5 : 1, pointerEvents: isGameStart ? 'auto': 'none' }}>
-                <Console>
-                  { isGameStart && <PhaserGame /> }
-                </Console>
-              </div>
+          } */}
+          <div key={counter} style={{ position: 'relative' }}>
+            { (twitchState && !isConnected) &&
+              <button
+                className="button"
+                onClick={handleClickConnectButton}
+                style={{ position: 'absolute', left: '50%', top: '50%', transform: 'translate(-50%, -50%)', zIndex: 2, boxShadow: '2px 4px 12px hsla(0, 0%, 0%, .33)' }}>
+                  Start Connect
+              </button>
+            }
+            <div style={{ opacity: (!twitchState || isConnected) ? 1 : 0.5, pointerEvents: (!twitchState || isConnected) ? 'auto': 'none' }}>
+              <Console>
+                { (!twitchState || isConnected) && <PhaserGame /> }
+              </Console>
             </div>
-          }
+          </div>
           
         </div>
       </div>

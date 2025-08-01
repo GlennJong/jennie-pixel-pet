@@ -1681,8 +1681,6 @@
         },
         "born": {
           "animation": "born",
-          "hp": 0,
-          "coin": 0,
           "dialogs": [
             {
               "sentences": [
@@ -1700,7 +1698,6 @@
         },
         "dead": {
           "animation": "dead",
-          "hp": 0,
           "coin": -10,
           "dialogs": [
             {
