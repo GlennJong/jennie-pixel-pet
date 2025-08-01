@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import JsonEditor from './JsonEditor';
 import { battleSceneHideKey, battleSceneWording, mappingHideKey, mappingWording, tamagotchiSceneHideKey, tamagotchiSceneWording, templates } from "./config.constants";
 
-const CONFIG_PATH = "/assets/config.json";
+const CONFIG_PATH = `${window.location.href}assets/config.json`; // TODO
 const LOCAL_KEY = "custom_config";
 
 
