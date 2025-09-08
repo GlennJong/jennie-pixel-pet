@@ -1,4 +1,5 @@
 import { Scene } from 'phaser';
+import { ConfigManager } from '../managers/ConfigManagers';
 
 export class Preloader extends Scene {
   constructor() {
@@ -21,16 +22,19 @@ export class Preloader extends Scene {
       try {
         const local = localStorage.getItem('custom_config');
         if (local) customConfig = JSON.parse(local);
-      } catch {}
+      } catch (e) {
+        console.error(e);
+      }
     }
 
+    customConfig = null; // TODO
     if (customConfig) {
       this.cache.json.add('config', customConfig);
       this._preloadAssetsFromConfig(customConfig);
     } else {
       // Main config json file
       this.load.json('config', 'config.json');
-      this.load.on('filecomplete-json-config', (_key: unknown, _type: unknown, data) => {
+      this.load.on('filecomplete-json-config', (_key: unknown, _type: unknown, data: any) => {
         this._preloadAssetsFromConfig(data);
       });
     }
@@ -62,6 +66,7 @@ export class Preloader extends Scene {
         );
       });
     }
+
     // Preload all battle characters
     if (battle) {
       Object.keys(battle).map((key) => {
@@ -77,6 +82,11 @@ export class Preloader extends Scene {
   }
 
   create() {
+    // Set Config Manager
+    const data = this.cache.json.get('config');
+    ConfigManager.getInstance().setConfig(data);
+    
+    // Start First Scene
     this.scene.start('MainScene');
   }
 }

@@ -6,7 +6,7 @@ import { filterFromMatchList } from "@/game/utils/filterFromMatchList";
 import { Message, TaskMappingItem, Task } from "./types";
 import { CONFIG_MAPPING_LIST_KEY, MESSAGE_QUEUE_STORE_KEY, TASK_QUEUE_STORE_KEY } from "./constants";
 
-export class TaskQueueHandler {
+export class TaskQueueService {
   private taskQueueState = store<Task[]>(TASK_QUEUE_STORE_KEY);
   private messageQueueState = store<Message[]>(MESSAGE_QUEUE_STORE_KEY);
   private timerEvent?: Phaser.Time.TimerEvent;
@@ -15,6 +15,8 @@ export class TaskQueueHandler {
 
   private onTask?: (task: Task) => boolean | Promise<boolean>;
   private scene: Phaser.Scene;
+
+  private retryCounts: Map<string, number> = new Map();
 
   constructor(scene: Phaser.Scene) {
     this.scene = scene;
@@ -80,8 +82,7 @@ export class TaskQueueHandler {
     if (queue.length === 0) return;
 
     const task = queue[0];
-
-    let retryCount = 0;
+    const taskId = JSON.stringify(task); // Use a unique identifier for the task
     const maxRetry = 3;
 
     const handleTask = async () => {
@@ -91,20 +92,21 @@ export class TaskQueueHandler {
           success = await this.onTask(task as Task);
         }
       } catch (err) {
-        console.error('TaskQueueHandler onTask error:', err);
+        console.error('TaskQueueService onTask error:', err);
         success = false;
       }
       if (success) {
         this.removeTask(0);
-        retryCount = 0;
+        this.retryCounts.delete(taskId);
       } else {
-        retryCount++;
+        const retryCount = (this.retryCounts.get(taskId) || 0) + 1;
+        this.retryCounts.set(taskId, retryCount);
         if (retryCount > maxRetry) {
-          console.warn('TaskQueueHandler: task failed too many times, removing from queue.', task);
+          console.warn('TaskQueueService: task failed too many times, removing from queue.', task);
           this.removeTask(0);
-          retryCount = 0;
+          this.retryCounts.delete(taskId);
         } else {
-          console.warn('TaskQueueHandler: task failed, will retry.', task);
+          console.warn('TaskQueueService: task failed, will retry.', task);
         }
       }
       this.timerEvent = undefined;

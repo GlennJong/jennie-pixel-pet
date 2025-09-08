@@ -22,8 +22,8 @@ export class TamagotchiDialogue extends Phaser.GameObjects.Container {
     // Window
     this.dialogue = new PrimaryDialogue(scene);
     this.dialogue.initDialogue({
-      onDialogueStart: () => setStoreState('global.isPaused', true),
-      onDialogueEnd: () => setStoreState('global.isPaused', false),
+      onDialogueStart: () => setStoreState('global.is_paused', true),
+      onDialogueEnd: () => setStoreState('global.is_paused', false),
     });
   }
 
@@ -32,7 +32,28 @@ export class TamagotchiDialogue extends Phaser.GameObjects.Container {
     const { dialogs, hp, coin } = result;
     const replacement = {...{ hp, coin }, ...params};
 
-    console.log(replacement)
+    if (dialogs && replacement) {
+      const selectedDialog = selectFromPiority<TDialogItem>(dialogs);
+      const selectedSentences = selectedDialog.sentences.map((_sentence) => {
+        let text = _sentence.text;
+        if (replacement) {
+          Object.entries(replacement).forEach(([key, value]) => {
+            let displayValue = value;
+            if (typeof value === 'number') displayValue = Math.abs(value);
+            text = text.replaceAll(`{{${key}}}`, String(displayValue));
+          });
+        }
+        return {
+          ..._sentence,
+          text,
+        };
+      });
+      await this.dialogue.runDialogue(selectedSentences);
+    }
+    
+  }
+
+  public async runDialogue2(dialogs: TDialogItem[], replacement?: { [key: string]: string | number }) {
 
     if (dialogs && replacement) {
       const selectedDialog = selectFromPiority<TDialogItem>(dialogs);

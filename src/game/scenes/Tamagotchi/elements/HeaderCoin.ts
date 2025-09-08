@@ -57,6 +57,7 @@ export class IconCoin extends Phaser.GameObjects.Container {
 
 
   public handleSetValue = (value: number) => {
+    console.log({value})
     const resultValue = value <= 0 ? 0 : value;
     this.targetValue = resultValue;
   }

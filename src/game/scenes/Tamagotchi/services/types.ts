@@ -1,3 +1,4 @@
+type UserParams = { user?: string }
 type BattleParams = { opponent?: string }
 type AwardParams = { coin?: number }
 
@@ -10,6 +11,14 @@ export type Message = {
 export type Task = {
   user: string;
   action: string;
+  params: UserParams & BattleParams & AwardParams & { [key: string]: string | number };
+  callback?: () => void
+};
+
+export type Task2 = {
+  action: string; // 必須要有的行動
+  
+  // user: string;
   params?: BattleParams & AwardParams & { [key: string]: string | number };
   callback?: () => void
 };

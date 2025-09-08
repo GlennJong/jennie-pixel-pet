@@ -1488,9 +1488,9 @@
         },
         { "prefix": "lay-down", "qty": 4, "freq": 8, "repeat": 0 },
         { "prefix": "wake-up", "qty": 5, "freq": 8, "repeat": 0 },
-        { "prefix": "sleep", "qty": 5, "freq": 2, "repeat": -1 },
-        { "prefix": "idle-left", "qty": 2, "freq": 1, "repeat": -1 },
-        { "prefix": "idle-right", "qty": 2, "freq": 1, "repeat": -1 },
+        { "prefix": "sleep", "qty": 5, "freq": 2, "repeat": 0 },
+        { "prefix": "idle-left", "qty": 2, "freq": 1, "repeat": 0 },
+        { "prefix": "idle-right", "qty": 2, "freq": 1, "repeat": 0 },
         { "prefix": "stare-left", "qty": 6, "freq": 4, "repeat": 0 },
         { "prefix": "stare-right", "qty": 6, "freq": 4, "repeat": 0 },
         { "prefix": "wink-left", "qty": 3, "freq": 4, "repeat": 0 },
@@ -1522,6 +1522,10 @@
       "activities": {
         "drink": {
           "animation": "drink",
+          "effect": {
+            "hp": 10,
+            "status": "normal"
+          },
           "hp": 10,
           "dialogs": [
             {
@@ -1714,6 +1718,262 @@
             }
           ]
         }
+      }
+    },
+    "afk2": {
+      "key": "afk2",
+      "preload": {
+        "png": "tamagotchi/afk.png",
+        "json": "tamagotchi/afk.json"
+      },
+      "attributes": ["hp", "mp", "coin", "status"],
+      "animations": [
+        { "prefix": "born", "qty": 7, "freq": 8, "repeat": 0 },
+        { "prefix": "egg", "qty": 2, "freq": 1, "repeat": 0 },
+        { "prefix": "walk-left", "qty": 6, "freq": 8, "repeat": 4 },
+        { "prefix": "walk-right", "qty": 6, "freq": 8, "repeat": 4 },
+        {
+          "prefix": "drink",
+          "qty": 7,
+          "freq": 4,
+          "repeat": 0,
+          "repeat_delay": 1000
+        },
+        {
+          "prefix": "write",
+          "qty": 13,
+          "freq": 8,
+          "repeat": 0,
+          "repeat_delay": 1000
+        },
+        { "prefix": "lay-down", "qty": 4, "freq": 8, "repeat": 0 },
+        { "prefix": "wake-up", "qty": 5, "freq": 8, "repeat": 0 },
+        { "prefix": "sleep", "qty": 5, "freq": 2, "repeat": 0 },
+        { "prefix": "idle-left", "qty": 2, "freq": 1, "repeat": 0 },
+        { "prefix": "idle-right", "qty": 2, "freq": 1, "repeat": 0 },
+        { "prefix": "stare-left", "qty": 6, "freq": 4, "repeat": 0 },
+        { "prefix": "stare-right", "qty": 6, "freq": 4, "repeat": 0 },
+        { "prefix": "wink-left", "qty": 3, "freq": 4, "repeat": 0 },
+        { "prefix": "wink-right", "qty": 3, "freq": 4, "repeat": 0 }
+      ],
+      "idleness": {
+        "idle": {
+          "animation": "idle",
+          "piority": 10,
+          "has_direction": true
+        },
+        "stare": {
+          "animation": "stare",
+          "piority": 6,
+          "has_direction": true
+        },
+        "walk": {
+          "animation": "walk",
+          "piority": 4,
+          "is_move": true,
+          "has_direction": true
+        },
+        "wink": {
+          "animation": "wink",
+          "piority": 8,
+          "has_direction": true
+        }
+      },
+      "statuses": {
+        "default": {
+          "conditions": {
+            "is_alive": true,
+            "is_sleep": false
+          },
+          "idle": true,
+          "rules": {
+            "hp": { "method": "sub", "value": 1, "interval": 600 }
+          }
+        },
+        "normal": {
+          "conditions": {
+            "is_alive": true,
+            "is_sleep": false
+          },
+          "idle": true,
+          "rules": {
+            "hp": { "method": "sub", "value": 1, "interval": 600 }
+          }
+        },
+        "sleep": {
+          "conditions": {
+            "is_sleep": true,
+            "is_alive": false
+          },
+          "idle": false,
+          "play": "sleep",
+          "action_transition": {
+            "front": "wake-up",
+            "end": "lay-down"
+          },
+          "rules": {
+            "hp": { "method": "add", "value": 1, "interval": 1200 }
+          }
+        },
+        "death": {
+          "conditions": {
+            "is_alive": false,
+            "is_sleep": false
+          },
+          "idle": false,
+          "play": "egg",
+          "rules": {
+            "hp": { "method": "add", "value": 1, "interval": 500 }
+          }
+        }
+      },
+      "actions": {
+        "drink": {
+          "action": "drink",
+          "plays": ["drink"],
+          "user": "system",
+          "effect": {
+            "hp": { "method": "add", "value": 10 },
+            "status": { "method": "inherit" }
+          },
+          "dialogs": [
+            {
+              "sentences": [
+                {
+                  "portrait:id": "tamagotchi_afk_face_normal",
+                  "face": {
+                    "key": "tamagotchi_afk",
+                    "frame": "face_normal"
+                  },
+                  "text": "感謝 {{user}} 兌換\n補充喝水，為AFK增加了 10 點生命！"
+                }
+              ],
+              "piority": 2
+            }
+          ]
+        },
+        "sleep": {
+          "action": "sleep",
+          "plays": ["lay-down", "sleep"],
+          "user": "system",
+          "effect": {
+            "status": { "method": "set", "value": "sleep" }
+          },
+          "dialogs": [
+            {
+              "sentences": [
+                {
+                  "face": {
+                    "key": "tamagotchi_afk",
+                    "frame": "face_normal"
+                  },
+                  "text": "休息一下"
+                }
+              ],
+              "piority": 2
+            }
+          ]
+        },
+        "awake": {
+          "action": "awake",
+          "plays": ["awake"],
+          "user": "system",
+          "effect": {
+            "status": { "method": "set", "value": "normal" }
+          },
+          "dialogs": [
+            {
+              "sentences": [
+                {
+                  "face": {
+                    "key": "tamagotchi_afk",
+                    "frame": "face_normal"
+                  },
+                  "text": "起床了"
+                }
+              ],
+              "piority": 2
+            }
+          ]
+        },
+        "award": {
+          "action": "award",
+          "user": "system",
+          "plays": ["none"],
+          "effect": {
+            "coin": { "method": "add", "value": 100 }
+          },
+          "dialogs": [
+            {
+              "sentences": [
+                {
+                  "face": {
+                    "key": "tamagotchi_afk",
+                    "frame": "face_normal"
+                  },
+                  "text": "我贏了！\n賺到 {{coin}} 元零用錢！"
+                }
+              ],
+              "piority": 2
+            }
+          ]
+        },
+        "dead": {
+          "action": "dead",
+          "plays": ["dead"],
+          "auto": true,
+          "condition": {
+            "hp": 95,
+            "status": "default"
+          },
+          "effect": {
+            "coin": { "method": "sub", "value": 10 },
+            "status": { "method": "set", "value": "death" }
+          },
+          "dialogs": [
+            {
+              "sentences": [
+                {
+                  "face": {
+                    "key": "tamagotchi_afk",
+                    "frame": "face_sad"
+                  },
+                  "text": "死了...\n損失 {{coin}} 元零用錢！"
+                }
+              ],
+              "piority": 2
+            }
+          ]
+        },
+        "born": {
+          "action": "born",
+          "plays": ["born"],
+          "auto": true,
+          "condition": {
+            "hp": 100,
+            "status": "death"
+          },
+          "effect": {
+            "status": { "method": "set", "value": "default" }
+          },
+          "dialogs": [
+            {
+              "sentences": [
+                {
+                  "face": {
+                    "key": "tamagotchi_afk",
+                    "frame": "face_normal"
+                  },
+                  "text": "復活"
+                }
+              ],
+              "piority": 2
+            }
+          ]
+        }
+      },
+      "decorations": {
+        "room": []
       }
     }
   },

@@ -1,11 +1,12 @@
 import Phaser from 'phaser';
-import { store, Store } from '@/game/store';
+import { setStoreState, store, Store } from '@/game/store';
 
 // components
 import { Character } from '@/game/components/Character';
 
 // utils
 import { selectFromPiority } from '@/game/utils/selectFromPiority';
+import { ConfigManager } from '@/game/managers/ConfigManagers';
 
 type TDirection = 'none' | 'left' | 'right';
 
@@ -19,7 +20,7 @@ type TIdleness = {
   piority: number;
 } & TAction;
 
-const DEFAULT_CHARACTER_KEY = 'tamagotchi_afk';
+const DEFAULT_CHARACTER_KEY = 'afk2';
 const DEFAULT_EDGE = { from: 50, to: 120 };
 
 const DEFAULT_TAMAGOTCHI_POSITION = {
@@ -27,13 +28,18 @@ const DEFAULT_TAMAGOTCHI_POSITION = {
   edge: DEFAULT_EDGE
 }
 
+// const CONFIG_KEY = 'tamagotchi_new';
+
 const DEFAULT_AUTO_ACTIOIN_DURATION = 3000;
 const DEFAULT_IDLE_PREFEX = 'idle';
 const DEFAULT_MOVE_DISTANCE = 32;
 
 export class TamagotchiCharacter extends Character {
-  private isAliveState?: Store<boolean> = store('tamagotchi.isAlive');
-  private isSleepState?: Store<boolean> = store('tamagotchi.isSleep');
+  private statusState?: Store<string> = store('tamagotchi.status');
+  private isPausedState?: Store<boolean> = store('global.is_paused');
+  
+  // private isAliveState?: Store<boolean> = store('tamagotchi.is_alive');
+  // private isSleepState?: Store<boolean> = store('tamagotchi.is_sleep');
   
   private isActing: boolean = false;
   private isReady: boolean = false;
@@ -41,24 +47,19 @@ export class TamagotchiCharacter extends Character {
   private idleness: { [key: string]: TIdleness };
   private spaceEdge: { from: number; to: number };
   private direction: TDirection = 'left';
-  private hpState?: Store<number>;
 
   public activities: { [key: string]: TAction };
 
   constructor(scene: Phaser.Scene) {
 
-    // get current character config
-    const config = scene.cache.json.get('config').tamagotchi[DEFAULT_CHARACTER_KEY]; 
-    
+    const config = ConfigManager.getInstance().get(`tamagotchi.${DEFAULT_CHARACTER_KEY}`);
+
     super(scene, DEFAULT_CHARACTER_KEY, {
       ...DEFAULT_TAMAGOTCHI_POSITION,
       animations: config.animations
     });
     
-    // global state handler
-    this.hpState = store('tamagotchi.hp');
-    if (!this.hpState) console.warn('Global hp state not found, please check MainScene.ts');
-    
+
     this.character.setDepth(2);
 
     // actions
@@ -69,20 +70,18 @@ export class TamagotchiCharacter extends Character {
     this.spaceEdge = DEFAULT_TAMAGOTCHI_POSITION.edge;
 
     // default animation
-    if (this.isAliveState?.get()) {
-      this.handleDefaultIdleAction();
-    }
-    else {
-      this.playAnimation('egg');
-    }
-
+    this.handleAutomaticAction();
   }
+
+  private getBehavior() {
+    const status = this.statusState?.get();
+    const { idle, play, action_transition } = ConfigManager.getInstance().get(`tamagotchi.${DEFAULT_CHARACTER_KEY}`).statuses[status];
+    return { idle, play, action_transition };
+  }
+  
   private getIsUnavaliableAll() {
-    return this.isActing || !this.isAliveState?.get() || this.isSleepState?.get();
-  }
-
-  private getIsUnavaliableIdle() {
-    return this.isActing || !this.isAliveState?.get();
+    const { idle } = this.getBehavior();
+    return this.isActing || !idle;
   }
 
   private handleDefaultIdleAction() {
@@ -91,8 +90,16 @@ export class TamagotchiCharacter extends Character {
   }
 
   private async handleAutomaticAction() {
-    if (this.getIsUnavaliableAll()) return;
 
+    if (this.isActing) return;
+
+    // Special move
+    const { idle, play } = this.getBehavior();
+    if (!idle && !!play) {
+      this.playAnimation(play);
+      return;
+    }
+    // Idle
     const currentAction = selectFromPiority<TIdleness>(this.idleness);
 
     if (currentAction) {
@@ -112,7 +119,8 @@ export class TamagotchiCharacter extends Character {
   }
 
   public handleMoveDirection(animation: string) {
-    if (this.getIsUnavaliableIdle()) return;
+    const { idle } = this.getBehavior();
+    if (!idle) return;
 
     // change direction if character close to edge
     this.direction =
@@ -138,13 +146,7 @@ export class TamagotchiCharacter extends Character {
       this.autoActionTimer = this.scene.time.addEvent({
         delay: DEFAULT_AUTO_ACTIOIN_DURATION,
         loop: true,
-        callback: () => {
-          const isAlive = this.isAliveState?.get();
-          const isSleep = this.isSleepState?.get();
-          if (isAlive && !isSleep) {
-            this.handleAutomaticAction();
-          }
-        }
+        callback: () => this.handleAutomaticAction()
       });
     }
   }
@@ -159,79 +161,34 @@ export class TamagotchiCharacter extends Character {
   public runFuntionalAction(action: string) {
     if (this.isActing) return;
 
-    const isAlive = this.isAliveState?.get();
-    const isSleep = this.isSleepState?.get();
-
-    if (!isAlive && action !== 'born') return;
-
-    if ((isSleep && action == 'sleep') || (!isSleep && action === 'awake')) return;
-
-    const needWakeUp = isSleep && action !== 'sleep' && action !== 'awake';
-
-    const actionList = {
-      drink: {
-        play: async () => {
-          await this.playAnimation('drink')
-        },
-        state: () => {},
-      },
-      write: {
-        play: async () => {
-          await this.playAnimation('write')
-        },
-        state: () => {},
-      },
-      sleep: {
-        play: async () => {
-          await this.playAnimation('lay-down');
-          this.playAnimation('sleep');
-        },
-        state: () => this.isSleepState?.set(true),
-      },
-      awake: {
-        play: async () => {
-          await this.playAnimation('wake-up');
-        },
-        state: () => this.isSleepState?.set(false)
-      },
-      dead: {
-        play: async () => {
-          this.playAnimation('egg');
-        },
-        state: () => this.isAliveState?.set(false),
-      },
-      born: {
-        play: async () => {
-          await this.playAnimation('born');
-          this.playAnimation('idle-left');
-        },
-        state: () => this.isAliveState?.set(true),
-      },
-    }
+    const { action_transition } = this.getBehavior();
+    
+    const actions = ConfigManager.getInstance().get('tamagotchi.afk2.actions');
 
     const runAnimation = async (func: () => Promise<void>) => {
       this.isActing = true;
+      // setStoreState('global.is_paused', true);
       await func();
       this.isActing = false;
+      // setStoreState('global.is_paused', false);
     };
-
-    if (action in actionList) {
-      if (needWakeUp) {
-        runAnimation(async () => {
-          await actionList.awake.play();
-          await actionList[action as keyof typeof actionList].play();
-          await actionList.sleep.play();
-          actionList[action as keyof typeof actionList].state();
-        });
-      } else {
-        runAnimation(async () => {
-          await actionList[action as keyof typeof actionList].play();
-          actionList[action as keyof typeof actionList].state();
-        });
+    
+    runAnimation(async () => {
+      if (action_transition?.front) {
+        await this.playAnimation(action_transition.front);
       }
-    }
+      
+      for (let i = 0; i < actions[action].plays.length; i++) {
+        await this.playAnimation(actions[action].plays[i]);
+      }
 
+      if (action_transition?.end) {
+        await this.playAnimation(action_transition.end);
+      }
+    });
+    
   }
+
   public async runFuntionalActionAsync(action: string) {
     await new Promise<void>(resolve => {
       const timer = this.scene.time.addEvent({
@@ -247,8 +204,6 @@ export class TamagotchiCharacter extends Character {
     });
     this.runFuntionalAction(action);
   }
-
-
 
   public update() {
     if (!this.isReady) return;

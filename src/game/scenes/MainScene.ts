@@ -18,12 +18,13 @@ export class MainScene extends Scene {
         if (isAutoSave && isSavedStoreExisted) {
             await loadAllStoresFromLocalStorage();
         } else {
-            initStore('global.isPaused', false);
+            initStore('global.is_paused', false);
             initStore('global.transmit', DEFAULT_GLOBAL_TRANSMIT);
             initStore('global.messageQueue', []);
             initStore('tamagotchi.hp', DEFAULT_HP);
-            initStore('tamagotchi.isAlive', true);
-            initStore('tamagotchi.isSleep', false);
+            initStore('tamagotchi.status', 'default');
+            initStore('tamagotchi.is_alive', true);
+            initStore('tamagotchi.is_sleep', false);
             initStore('tamagotchi.taskQueue', []);
             initStore('tamagotchi.coin', DEFAULT_COIN);
             initStore('tamagotchi.level', DEFAULT_LEVEL);

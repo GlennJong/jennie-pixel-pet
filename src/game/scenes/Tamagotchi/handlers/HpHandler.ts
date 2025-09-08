@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import { store, getStoreState, setStoreState } from '@/game/store';
+import { ConfigManager } from '@/game/managers/ConfigManagers';
 
 const STORE_KEY = 'tamagotchi.hp';
 
@@ -13,10 +14,8 @@ const RETRY_DELAY = 1000;
 export class HpHandler {
   private timer?: Phaser.Time.TimerEvent;
   private scene: Phaser.Scene;
+  private statusState = store<string>('tamagotchi.status');
   private hpState = store<number>(STORE_KEY);
-  private isAliveState = store<boolean>('tamagotchi.isAlive');
-  private recover: number = DEFAULT_RECOVER_HP;
-  private consume: number = DEFAULT_CONSUMED_HP;
   private interval: number = DEFAULT_HP_DECREASE_INTERVAL;
   private onFullHp?: () => void;
   private onZeroHp?: () => void;
@@ -28,26 +27,48 @@ export class HpHandler {
   init(params: { onFullHp?: () => void, onZeroHp?: () => void }) {
     const { onFullHp, onZeroHp } = params || {};
 
-    const { consume, recover, interval } = this.scene.cache.json.get('config').tamagotchi.tamagotchi_afk.base;
-    console.log({ consume, recover, interval })
-    this.recover = typeof recover === 'number' ? recover : DEFAULT_RECOVER_HP;
-    this.consume = typeof consume === 'number' ? consume : DEFAULT_CONSUMED_HP;
-    this.interval = typeof interval === 'number' ? interval : DEFAULT_HP_DECREASE_INTERVAL;
-    
-    
-    this.hpState?.watch(this.handleHpChange);
-    
+    this.statusState?.watch(this.handleSetRule);
+
     if (onFullHp) this.onFullHp = onFullHp;
     if (onZeroHp) this.onZeroHp = onZeroHp;
 
+    this.handleSetRule(this.statusState?.get());
+  }
+  
+
+  private handleSetRule = (value) => {
+    if (this.timer) {
+      this.timer.remove();
+      this.timer = undefined;
+    }
+    const statuses = ConfigManager.getInstance().get('tamagotchi.afk2.statuses');
+    // const { interval } = this.scene.cache.json.get('config').tamagotchi.tamagotchi_afk.base;
+
+    // this.interval = typeof interval === 'number' ? interval : DEFAULT_HP_DECREASE_INTERVAL;
+    this.hpState?.watch(this.handleHpChange);
+
+    const status = this.statusState?.get();
+    const { rules } = statuses[status] || {};
+
     this.timer = this.scene.time.addEvent({
-      delay: this.interval,
+      delay: rules.hp.interval,
       loop: true,
       callback: () => {
-        const isStopped = getStoreState('global.isPaused') || getStoreState('tamagotchi.isSleep');
+        const isStopped = getStoreState('global.is_paused') || getStoreState('tamagotchi.is_sleep');
         if (isStopped) return;
         const currentHp = getStoreState('tamagotchi.hp') as number;
-        const newHp = this.isAliveState?.get() ? this.consume*-1 : this.recover;
+
+        const { method, value } = rules.hp;
+
+        let newHp = 0;
+        
+        if (method === 'sub') {
+          newHp = value * -1
+        }
+        if (method === 'add') {
+          newHp = value;
+        }
+
         const resultHp = Math.max(0, Math.min(100, currentHp + newHp));
         
         setStoreState('tamagotchi.hp', resultHp);
@@ -68,19 +89,35 @@ export class HpHandler {
       return false;
     };
     if (currentHp === 100) {
-      if (this.onFullHp && !this.isAliveState?.get()) {
-        await retry(() => {
-          const result = this.onFullHp?.();
-          return typeof result === 'boolean' ? result : true;
-        });
+      if (this.onFullHp) {
+        this.onFullHp();
+        // await retry(() => {
+        //   const result = this.onFullHp?.();
+        //   return typeof result === 'boolean' ? result : true;
+        // });
       }
     } else if (currentHp === 0) {
       if (this.onZeroHp) {
-        await retry(() => {
-          const result = this.onZeroHp?.();
-          return typeof result === 'boolean' ? result : true;
-        });
+        this.onZeroHp();
+        // await retry(() => {
+        //   const result = this.onZeroHp?.();
+        //   return typeof result === 'boolean' ? result : true;
+        // });
       }
+    }
+  }
+
+  public runEffect = (effect) => {
+    const { hp } = effect;
+    if (!hp) return;
+    if (hp.method === 'add') {
+      setStoreState('tamagotchi.hp', Math.min(100, getStoreState('tamagotchi.hp') + hp.value));
+    }
+    else if (hp.method === 'sub') {
+      setStoreState('tamagotchi.hp', Math.max(0, getStoreState('tamagotchi.hp') - hp.value));
+    }
+    else if (hp.method === 'set') {
+      setStoreState('tamagotchi.hp', hp.value);
     }
   }
 

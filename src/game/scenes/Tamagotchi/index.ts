@@ -13,13 +13,17 @@ import { TamagotchiCharacter } from './elements/TamagotchiCharacter';
 import { TamagotchiDialogue } from './elements/TamagotchiDialogue';
 
 // services
-import { TaskQueueHandler } from './services/TaskQueueService';
+import { TaskQueueService } from './services/TaskQueueService';
 
 // handlers
 import { KeyboardHandler } from './handlers/KeyboardHander';
 import { PropertyHandler } from './handlers/PropertyHandler';
 import { HpHandler } from './handlers/HpHandler';
 import { Task } from './services/types';
+import { ConfigManager } from '@/game/managers/ConfigManagers';
+import { StatusHandler } from './handlers/StatusHandler';
+import { CoinHandler } from './handlers/CoinHandler';
+import { AutoActionHandler } from './handlers/AutoActionHandler';
 
 
 const DEFAULT_USER_NAME = 'user';
@@ -28,6 +32,8 @@ const HEADER_DISPLAY_DURATION = 5000;
 
 export default class TamagotchiScene extends Scene {
   private config: {[key: string]: any} = {};
+  private _autoWatchers: { key: string, handler: (v: any) => void }[] = [];
+  
   private background?: Phaser.GameObjects.Image;
   private header?: Header;
   private property?: Property;
@@ -35,9 +41,12 @@ export default class TamagotchiScene extends Scene {
   private dialogue?: TamagotchiDialogue;
   private keyboardHandler?: KeyboardHandler;
 
-  private taskQueueHandler?: TaskQueueHandler;
+  private taskQueueService?: TaskQueueService;
   private propertyHandler?: PropertyHandler;
+  private coinHandler?: CoinHandler;
   private hpHandler?: HpHandler;
+  private statusHandler?: StatusHandler;
+  private autoActionHandler?: AutoActionHandler;
 
   private isTamagotchiReady: boolean = false;
 
@@ -46,10 +55,18 @@ export default class TamagotchiScene extends Scene {
   }
   create() {
     // ============= Mechanism =============
-    setStoreState('global.isPaused', true);
+    setStoreState('global.is_paused', true);
 
     // charactor
     this.character = new TamagotchiCharacter(this);
+    // const temp = this.cache.json.get('config').tamagotchi['character:game'];
+    // console.log(temp);
+
+    // const drinkAction = ConfigManager.getInstance().get('tamagotchi_new');
+    // console.log({drinkAction})
+    
+    
+    
     this.config = this.cache.json.get('config').tamagotchi[DEFAULT_CHARACTER_KEY].activities || {};
 
     // background
@@ -65,7 +82,6 @@ export default class TamagotchiScene extends Scene {
 
     // property
     this.property = new Property(this);
-    // this.add.existing(this.property);
 
     // header
     this.header = new Header(this);
@@ -76,21 +92,32 @@ export default class TamagotchiScene extends Scene {
     // property
     this.propertyHandler = new PropertyHandler(this);
     this.propertyHandler.init({
-      onUpgrade: (params) => this.handleUpgrade(this.taskQueueHandler, params)
+      onUpgrade: (params) => this.handleUpgrade(this.taskQueueService, params)
     });
+
+    this.coinHandler = new CoinHandler(this);
+    this.coinHandler.init();
 
     // hp
     this.hpHandler = new HpHandler(this);
     this.hpHandler.init({
-      onFullHp: () => this.handleFullHp(this.taskQueueHandler),
-      onZeroHp: () => this.handleZeroHp(this.taskQueueHandler)
+      onFullHp: () => this.handleFullHp(this.taskQueueService),
+      onZeroHp: () => this.handleZeroHp(this.taskQueueService)
     });
 
+    this.statusHandler = new StatusHandler(this);
+    this.statusHandler.init();
+
     // queue init
-    this.taskQueueHandler = new TaskQueueHandler(this);
-    this.taskQueueHandler.init({
+    this.taskQueueService = new TaskQueueService(this);
+    this.taskQueueService.init({
       onTask: (task) => this.handleActionQueueTask(task),
       interval: 300
+    });
+
+    this.autoActionHandler = new AutoActionHandler();
+    this.autoActionHandler.init({
+      onTrigger: (action) => this.handleAddEmergencyTask(action)
     });
 
     // Build Keyboard 
@@ -104,13 +131,14 @@ export default class TamagotchiScene extends Scene {
     EventBus.on('game-right-keydown', () => this.handleControlButton('right')),
     EventBus.on('game-select-keydown', () => this.handleControlButton('space')),
 
+    
     // Run opening scene and start tamagotchi
     (async() => {
       await sceneStarter(this);
-      this.handleBattleAward(this.taskQueueHandler);
+      this.handleBattleAward(this.taskQueueService);
       this.character?.startTamagotchi();
       this.isTamagotchiReady = true;
-      setStoreState('global.isPaused', false);
+      setStoreState('global.is_paused', false);
     })();
 
     this.events.on('shutdown', this.shutdown, this);
@@ -123,39 +151,86 @@ export default class TamagotchiScene extends Scene {
       this.header!.moveNext()
     } else if (key === 'space') {
       const action = this.header!.select();
-      this.taskQueueHandler?.addTask({ user: DEFAULT_USER_NAME, action });
+
+      // action: drink | battle | write | sleep | awake
+      // const currentAction = this.config[action];
+      
+      if (action === 'drink') {
+        const task = ConfigManager.getInstance().get('tamagotchi.afk2.actions.drink');
+        // const actionConfig = ConfigManager.getInstance().get('config');
+        // console.log({drinkConfig})
+
+        
+        this.taskQueueService?.addTask(task);
+        // this.taskQueueService?.addTask(this.config.drink);
+      }
+      else if (action === 'battle') {
+        const task = ConfigManager.getInstance().get('tamagotchi.afk2.actions.sleep');
+
+        this.taskQueueService?.addTask(task);
+      }
+      else if (action === 'write') {
+        const task = ConfigManager.getInstance().get('tamagotchi.afk2.actions.dead');
+
+        this.taskQueueService?.addTask(task);
+      }
+      // ....
+      
+      // this.taskQueueService?.addTask({ user: DEFAULT_USER_NAME, action });
     }
   }
 
   async handleActionQueueTask(task: Task) {
+    
+    console.log({task})
+    
     if (!this.isTamagotchiReady) return false;
     let success = false;
 
-    const { nextScene } = this.config[task.action];
-    const { action, user, params } = task;
-    console.log({params})
+    
+    // const { nextScene } = this.config[task.action];
+    // const actionConfig = this.config[task.action];
+    const { action, animation, animation_infinity, user, params, effect, dialogs } = task;
+    // console.log({params})
     try {
+
+
+
+      // console.log({animation})
+      // 1.角色執行行為
+      // 2.執行對話
+      // 3.執行上放狀態列
+      // 4.執行裝飾管理
+      // 5.執行場景轉換
+      
       // Run Character Animation
+      // await this.character?.runAnimation();
+      
       await this.character?.runFuntionalActionAsync(action);
+      this.statusHandler?.runEffect(effect);
 
       // Run Dialogue
       if (this.dialogue) {
-        await this.dialogue.runDialogue(action, {...params, user});
+        // await this.dialogue.runDialogue(action, {...params, user});
+        const effectReplacement = Object.fromEntries(
+          Object.entries(effect).map(([key, obj]) => [key, (obj as { value: any }).value])
+        );
+        const replacement = {user, ...effectReplacement, ...params};
+        await this.dialogue.runDialogue2(dialogs, replacement);
       }
       
-      // Change header elements
-      if (this.header) {
-        this.header.showHeader(HEADER_DISPLAY_DURATION);
-        this.header.runAction(action, params);
-      }
+      this.hpHandler?.runEffect(effect);
+      this.coinHandler?.runEffect(effect);
+        
+      this.header?.showHeader(HEADER_DISPLAY_DURATION);
 
       if (this.property) {
-        this.property.runAction(action);
+        // this.property.runAction(action);
       }
       
       // Change scene if need
-      if (params) setStoreState('global.transmit', params);
-      if (nextScene) await sceneConverter(this, nextScene);
+      // if (params) setStoreState('global.transmit', params);
+      // if (actionConfig.nextScene) await sceneConverter(this, actionConfig.nextScene);
       
       success = true;
     } catch (err) {
@@ -165,35 +240,54 @@ export default class TamagotchiScene extends Scene {
     return success;
   }
 
-  handleBattleAward(taskQueueHandler: any) {
+  handleAddEmergencyTask(task: Task) {
+    this.taskQueueService?.addTask(task);
+  }
+
+  handleBattleAward(taskQueueService: any) {
     const globalParamsStore = store('global.transmit');
     if (!globalParamsStore) return;
     
     const params: { battleResult?: string } = globalParamsStore.get() || {};
     if (params.battleResult === 'win') {
-      taskQueueHandler?.addEmergentTask({ action: 'award', user: 'system' });
+      taskQueueService?.addEmergentTask({ action: 'award', user: 'system' });
     } else if (params.battleResult === 'lose') {
-      taskQueueHandler?.addEmergentTask({ action: 'lose', user: 'system' });
+      taskQueueService?.addEmergentTask({ action: 'lose', user: 'system' });
     }
     globalParamsStore.set('undefined');
   }
 
-  async handleUpgrade(taskQueueHandler: any, params: any) {
+  async handleUpgrade(taskQueueService: any, params: any) {
     if (!this.isTamagotchiReady) return false;
-    taskQueueHandler?.addTask({ action: 'buy', user: 'system', params });
+    taskQueueService?.addTask({ action: 'buy', user: 'system', params });
     return true;
   }
 
-  handleFullHp(taskQueueHandler: any) {
-    if (!this.isTamagotchiReady) return false;
-    taskQueueHandler?.addEmergentTask({ action: 'born', user: 'system' });
-    return true;
+  handleFullHp(taskQueueService: any) {
+    if (!this.isTamagotchiReady) return;
+
+    const actions = ConfigManager.getInstance().get('tamagotchi.afk2.actions');
+    const { condition } = actions.born;
+    console.log(condition);
+    
+    // const condition = { hp: 100, status: 'dead' };
+    // const task = Object.values(actions)
+    //   .filter((a: any) => a.auto && a.condition)
+    //   .find((a: any) => a.condition.hp === condition.hp && a.condition.status === condition.status);
+    //   console.log({task})
+    // if (task) {
+    //   taskQueueService?.addEmergentTask(task);
+    // }
+    // return true;
   }
 
-  handleZeroHp(taskQueueHandler: any) {
+  handleZeroHp(taskQueueService: any) {
     if (!this.isTamagotchiReady) return false;
-    taskQueueHandler?.addEmergentTask({ action: 'dead', user: 'system' });
-    return true;
+    const task = ConfigManager.getInstance().get('tamagotchi.afk2.actions.dead');
+    taskQueueService?.addEmergentTask(task);
+
+    // taskQueueService?.addEmergentTask({ action: 'dead', user: 'system' });
+    // return true;
   }
 
   update() {
@@ -212,7 +306,16 @@ export default class TamagotchiScene extends Scene {
     this.dialogue?.destroy();
     this.hpHandler?.destroy();
     this.propertyHandler?.destroy();
-    this.taskQueueHandler?.destroy();
+    this.autoActionHandler?.destroy();
+    this.taskQueueService?.destroy();
+
+    // 移除 handleAuto 註冊的監聽
+    if (this._autoWatchers && this._autoWatchers.length > 0) {
+      for (const { key, handler } of this._autoWatchers) {
+        store<string>(`tamagotchi.${key}`)?.unwatch(handler);
+      }
+      this._autoWatchers = [];
+    }
 
     EventBus.off('game-left-keydown');
     EventBus.off('game-right-keydown');

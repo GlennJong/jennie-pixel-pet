@@ -1,4 +1,4 @@
-import { store, getStoreState } from "@/game/store";
+import { store, getStoreState, setStoreState } from "@/game/store";
 import Phaser from "phaser";
 
 type PropertyItem = {
@@ -70,6 +70,20 @@ export class PropertyHandler {
         }
         return; // stop loop
       }
+    }
+  }
+
+  public runEffect = (effect) => {
+    const { coin } = effect;
+    if (!coin) return;
+    if (coin.method === 'add') {
+      setStoreState(STORE_KEY, getStoreState(STORE_KEY) + coin.value);
+    }
+    else if (coin.method === 'sub') {
+      setStoreState(STORE_KEY, Math.max(0, getStoreState(STORE_KEY) - coin.value));
+    }
+    else if (coin.method === 'set') {
+      setStoreState(STORE_KEY, coin.value);
     }
   }
 

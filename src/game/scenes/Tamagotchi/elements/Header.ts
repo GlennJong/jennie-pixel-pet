@@ -168,7 +168,7 @@ export class Header extends Phaser.GameObjects.Container {
   }
 
   public select() {
-    const isSleep = getStoreState('tamagotchi.isSleep');
+    const isSleep = getStoreState('tamagotchi.is_sleep');
 
     // special condition
     if (isSleep && this.currentSelector === 'sleep') return 'awake';
@@ -180,8 +180,8 @@ export class Header extends Phaser.GameObjects.Container {
     const hp = this.config[action].hp;
     const coin = params?.coin || this.config[action].coin;
     this.showHeader(HEADER_DISPLAY_DURATION);
-    if (hp) setStoreState('tamagotchi.hp', Math.min(100, getStoreState('tamagotchi.hp') + hp));
-    if (coin) setStoreState('tamagotchi.coin', getStoreState('tamagotchi.coin') + coin);
+    // if (hp) setStoreState('tamagotchi.hp', Math.min(100, getStoreState('tamagotchi.hp') + hp));
+    // if (coin) setStoreState('tamagotchi.coin', getStoreState('tamagotchi.coin') + coin);
   }
 
   public update() {
