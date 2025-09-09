@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-import { setStoreState, store, Store } from '@/game/store';
+import { store, Store } from '@/game/store';
 
 // components
 import { Character } from '@/game/components/Character';
@@ -36,7 +36,7 @@ const DEFAULT_MOVE_DISTANCE = 32;
 
 export class TamagotchiCharacter extends Character {
   private statusState?: Store<string> = store('tamagotchi.status');
-  private isPausedState?: Store<boolean> = store('global.is_paused');
+  // private isPausedState?: Store<boolean> = store('global.is_paused');
   
   // private isAliveState?: Store<boolean> = store('tamagotchi.is_alive');
   // private isSleepState?: Store<boolean> = store('tamagotchi.is_sleep');
@@ -167,10 +167,8 @@ export class TamagotchiCharacter extends Character {
 
     const runAnimation = async (func: () => Promise<void>) => {
       this.isActing = true;
-      // setStoreState('global.is_paused', true);
       await func();
       this.isActing = false;
-      // setStoreState('global.is_paused', false);
     };
     
     runAnimation(async () => {

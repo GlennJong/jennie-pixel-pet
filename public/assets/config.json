@@ -1726,7 +1726,30 @@
         "png": "tamagotchi/afk.png",
         "json": "tamagotchi/afk.json"
       },
-      "attributes": ["hp", "mp", "coin", "status"],
+      "resources": [
+        {
+          "key": "hp",
+          "value": 100,
+          "max": 100,
+          "min": 0
+        },
+        {
+          "key": "coin",
+          "value": 100,
+          "min": 0
+        },
+        {
+          "key": "level",
+          "value": 0,
+          "min": 0
+        },
+        {
+          "key": "win",
+          "value": 0,
+          "min": 0,
+          "max": 1
+        }
+      ],
       "animations": [
         { "prefix": "born", "qty": 7, "freq": 8, "repeat": 0 },
         { "prefix": "egg", "qty": 2, "freq": 1, "repeat": 0 },
@@ -1781,30 +1804,18 @@
       },
       "statuses": {
         "default": {
-          "conditions": {
-            "is_alive": true,
-            "is_sleep": false
-          },
           "idle": true,
           "rules": {
             "hp": { "method": "sub", "value": 1, "interval": 600 }
           }
         },
         "normal": {
-          "conditions": {
-            "is_alive": true,
-            "is_sleep": false
-          },
           "idle": true,
           "rules": {
             "hp": { "method": "sub", "value": 1, "interval": 600 }
           }
         },
         "sleep": {
-          "conditions": {
-            "is_sleep": true,
-            "is_alive": false
-          },
           "idle": false,
           "play": "sleep",
           "action_transition": {
@@ -1816,10 +1827,6 @@
           }
         },
         "death": {
-          "conditions": {
-            "is_alive": false,
-            "is_sleep": false
-          },
           "idle": false,
           "play": "egg",
           "rules": {
@@ -1834,6 +1841,7 @@
           "user": "system",
           "effect": {
             "hp": { "method": "add", "value": 10 },
+            "coin": { "method": "add", "value": 1 },
             "status": { "method": "inherit" }
           },
           "dialogs": [
@@ -1900,8 +1908,13 @@
           "action": "award",
           "user": "system",
           "plays": ["none"],
+          "auto": true,
+          "condition": {
+            "win": 1
+          },
           "effect": {
-            "coin": { "method": "add", "value": 100 }
+            "coin": { "method": "add", "value": 100 },
+            "win": { "method": "set", "value": 0 }
           },
           "dialogs": [
             {
@@ -1923,7 +1936,7 @@
           "plays": ["dead"],
           "auto": true,
           "condition": {
-            "hp": 95,
+            "hp": 0,
             "status": "default"
           },
           "effect": {
@@ -1970,11 +1983,109 @@
               "piority": 2
             }
           ]
+        },
+        "buy": {
+          "action": "buy",
+          "plays": ["buy"],
+          "effect": {
+            "level": { "method": "add", "value": 1 }
+          },
+          "dialogs": [
+            {
+              "sentences": [
+                {
+                  "face": {
+                    "key": "tamagotchi_afk",
+                    "frame": "face_normal"
+                  },
+                  "text": "買買買"
+                }
+              ],
+              "piority": 2
+            }
+          ]
+        },
+        "buy:1": {
+          "inherit": "buy",
+          "auto": true,
+          "condition": {
+            "coin": 100,
+            "level": 0,
+            "status": "default"
+          },
+          "effect": {
+            "coin": { "method": "sub", "value": 100 },
+            "level": { "method": "set", "value": 1 }
+          }
         }
-      },
-      "decorations": {
-        "room": []
       }
+    },
+    "properties": {
+      "watch": "level",
+      "key": "tamagotchi_room",
+      "preload": {
+        "png": "tamagotchi/room.png",
+        "json": "tamagotchi/room.json"
+      },
+      "animations": [
+        { "prefix": "background", "qty": 1, "freq": 1, "repeat": 0 },
+        { "prefix": "back-0", "qty": 1, "freq": 1, "repeat": 0 },
+        { "prefix": "back-1", "qty": 1, "freq": 1, "repeat": 0 },
+        { "prefix": "back-2", "qty": 1, "freq": 1, "repeat": 0 },
+        { "prefix": "back-3", "qty": 1, "freq": 1, "repeat": 0 },
+        { "prefix": "back-4", "qty": 1, "freq": 1, "repeat": 0 },
+        { "prefix": "back-5", "qty": 1, "freq": 1, "repeat": 0 },
+        { "prefix": "p-front", "qty": 1, "freq": 1, "repeat": 0 },
+        { "prefix": "recorder", "qty": 12, "freq": 12, "repeat": -1 },
+        { "prefix": "window", "qty": 9, "freq": 12, "repeat": -1 }
+      ],
+      "list": [
+        {
+          "value": 0,
+          "background": "background",
+          "back": "back-0",
+          "front": "p_front"
+        },
+        {
+          "value": 1,
+          "background": "p_background",
+          "back": "back-1",
+          "front": "p_front",
+          "customs": [
+            { "animation": "window", "x": 44, "y": -4 }
+          ]
+        },
+        {
+          "value": 2,
+          "background": "p_background",
+          "back": "back-2",
+          "front": "p_front",
+          "customs": [
+            { "animation": "recorder", "x": 0, "y": 31 },
+            { "animation": "window", "x": 44, "y": -4 }
+          ]
+        },
+        {
+          "value": 3,
+          "background": "p_background",
+          "back": "back-3",
+          "front": "p_front",
+          "customs": [
+            { "animation": "recorder", "x": 0, "y": 31 },
+            { "animation": "window", "x": 44, "y": -4 }
+          ]
+        },
+        {
+          "value": 4,
+          "background": "p_background",
+          "back": "back-4",
+          "front": "p_front",
+          "customs": [
+            { "animation": "recorder", "x": 0, "y": 31 },
+            { "animation": "window", "x": 44, "y": -4 }
+          ]
+        }
+      ]
     }
   },
   "mapping": {

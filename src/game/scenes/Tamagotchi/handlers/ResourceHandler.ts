@@ -1,103 +1,90 @@
 
 import Phaser from 'phaser';
 import { store, getStoreState, setStoreState } from '@/game/store';
+import { ConfigManager } from '@/game/managers/ConfigManagers';
 
-type ResourceRule = {
-  change: number;
-  interval: number;
-  min?: number;
-  max?: number;
-};
-
-type StatusConfig = {
-  resources: Record<string, ResourceRule>;
-};
 
 export class ResourceHandler {
+  private timer?: Phaser.Time.TimerEvent;
   private scene: Phaser.Scene;
-  private timers: Record<string, Phaser.Time.TimerEvent> = {};
-  private resourceStates: Record<string, ReturnType<typeof store<number>>> = {};
   private statusState = store<string>('tamagotchi.status');
-  private statusConfig: Record<string, StatusConfig> = {};
-  private onFull: Record<string, () => void> = {};
-  private onZero: Record<string, () => void> = {};
+  private resourceState: ReturnType<typeof store<number>>;
+  private storeKey: string;
+  private min: number;
+  private max: number;
 
-  constructor(scene: Phaser.Scene) {
+  constructor(scene: Phaser.Scene, storeKey: string, min = -Infinity, max = Infinity) {
     this.scene = scene;
+    this.storeKey = storeKey;
+    this.resourceState = store<number>(storeKey);
+    this.min = min;
+    this.max = max;
   }
 
-  init(statusConfig: Record<string, StatusConfig>, resourceKeys: string[], hooks?: { onFull?: Record<string, () => void>, onZero?: Record<string, () => void> }) {
-    this.statusConfig = statusConfig;
-    this.onFull = hooks?.onFull || {};
-    this.onZero = hooks?.onZero || {};
-
-    // 初始化所有資源的 store 監聽
-    resourceKeys.forEach((key) => {
-      const s = store<number>(`tamagotchi.${key}`);
-      this.resourceStates[key] = s;
-      s?.watch((newValue, _oldValue) => this.handleResourceChange(key, newValue));
-    });
-
-    // 監聽 status 變化
-    this.statusState?.watch(this.handleStatusChange);
-    // 初始化當前 status 的自動化規則
-    this.handleStatusChange(this.statusState?.get() || 'normal');
+  init() {
+    this.statusState?.watch(this.handleSetRule);
+    this.handleSetRule(this.statusState?.get());
   }
 
-  private handleStatusChange = (status: string) => {
-    // 移除所有舊的 timer
-    Object.values(this.timers).forEach(timer => timer.remove());
-    this.timers = {};
-    const config = this.statusConfig[status];
-    if (!config) return;
-    Object.entries(config.resources).forEach(([key, rule]) => {
-      if (rule.interval > 0) {
-        this.timers[key] = this.scene.time.addEvent({
-          delay: rule.interval,
-          loop: true,
-          callback: () => {
-            const isPaused = getStoreState('global.is_paused');
-            if (isPaused) return;
-            const current = getStoreState(`tamagotchi.${key}`) as number;
-            const min = rule.min ?? 0;
-            const max = rule.max ?? 100;
-            const next = Math.max(min, Math.min(max, current + rule.change));
-            setStoreState(`tamagotchi.${key}`, next);
-          }
-        });
+  private handleSetRule = (_value: unknown): void => {
+    if (this.timer) {
+      this.timer.remove();
+      this.timer = undefined;
+    }
+    const statuses = ConfigManager.getInstance().get('tamagotchi.afk2.statuses') as Record<string, any>;
+    const status = this.statusState?.get();
+    if (!status || !statuses || typeof statuses !== 'object') return;
+    const statusObj = statuses[status];
+    if (!statusObj || typeof statusObj !== 'object') return;
+    const rules = statusObj.rules as Record<string, any>;
+    if (!rules || !rules[this.getResourceKey()]) return;
+    const rule = rules[this.getResourceKey()];
+
+    this.timer = this.scene.time.addEvent({
+      delay: rule.interval,
+      loop: true,
+      callback: () => {
+        const isStopped = getStoreState('global.is_paused') || getStoreState('tamagotchi.is_sleep');
+        if (isStopped) return;
+        const currentValue = getStoreState(this.storeKey) as number;
+        const { method, value } = rule;
+        let newValue = 0;
+        if (method === 'sub') {
+          newValue = value * -1;
+        } else if (method === 'add') {
+          newValue = value;
+        }
+        const result = Math.max(this.min, Math.min(this.max, currentValue + newValue));
+        setStoreState(this.storeKey, result);
       }
     });
-  };
+  }
 
-  private handleResourceChange = (key: string, value: number) => {
-    const rule = Object.values(this.statusConfig).flatMap(cfg => Object.entries(cfg.resources)).find(([k]) => k === key)?.[1] as ResourceRule | undefined;
-    if (!rule) return;
-    const min = rule.min ?? 0;
-    const max = rule.max ?? 100;
-    if (value === max && this.onFull[key]) this.onFull[key]!();
-    if (value === min && this.onZero[key]) this.onZero[key]!();
-  };
+  // 取得資源 key (如 'hp', 'mp')
+  private getResourceKey(): string {
+    const parts = this.storeKey.split('.');
+    return parts[parts.length - 1];
+  }
 
-  public runEffect = (effect: Record<string, { method: string, value: number }>) => {
-    Object.entries(effect).forEach(([key, op]) => {
-      const storeKey = `tamagotchi.${key}`;
-      const current = getStoreState(storeKey) as number;
-      if (op.method === 'add') {
-        setStoreState(storeKey, current + op.value);
-      } else if (op.method === 'sub') {
-        setStoreState(storeKey, current - op.value);
-      } else if (op.method === 'set') {
-        setStoreState(storeKey, op.value);
-      }
-    });
-  };
+  public runEffect = (effect: Record<string, any>): void => {
+    const key = this.getResourceKey();
+    const resourceEffect = effect[key];
+    if (!resourceEffect) return;
+    const current = getStoreState(this.storeKey) as number;
+    if (resourceEffect.method === 'add') {
+      setStoreState(this.storeKey, Math.min(this.max, current + resourceEffect.value));
+    } else if (resourceEffect.method === 'sub') {
+      setStoreState(this.storeKey, Math.max(this.min, current - resourceEffect.value));
+    } else if (resourceEffect.method === 'set') {
+      setStoreState(this.storeKey, Math.max(this.min, Math.min(this.max, resourceEffect.value)));
+    }
+  }
 
   destroy() {
-    Object.values(this.resourceStates).forEach(state => state?.unwatchAll());
-    Object.values(this.timers).forEach(timer => timer.remove());
-    this.timers = {};
-    this.onFull = {};
-    this.onZero = {};
-    this.statusState?.unwatchAll();
+    this.resourceState?.unwatchAll();
+    if (this.timer) {
+      this.timer.remove();
+      this.timer = undefined;
+    }
   }
 }

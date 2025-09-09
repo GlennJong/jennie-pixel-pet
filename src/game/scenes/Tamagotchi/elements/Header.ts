@@ -37,16 +37,16 @@ export class Header extends Phaser.GameObjects.Container {
       .nineslice({
         key: 'tamagotchi_header_frame',
         frame: 'frame',
+        x: 0,
+        y: 0,
         width: DEFAULT_WIDTH,
-        x: DEFAULT_WIDTH / 2,
-        y: DEFAULT_HEIGHT / 2,
         height: DEFAULT_HEIGHT,
         leftWidth: 8,
         rightWidth: 8,
         topHeight: 8,
         bottomHeight: 8,
       })
-      .setOrigin(0.5);
+      .setOrigin(0);
     this.add(this.background);
 
     const drink = new HeaderSelector(scene, {
@@ -109,6 +109,7 @@ export class Header extends Phaser.GameObjects.Container {
     this.currentSelector = 'drink';
     this.handleUpdateSelector();
 
+    this.setDepth(9999);
     this.scene.add.existing(this);
   }
 

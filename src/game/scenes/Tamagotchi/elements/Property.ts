@@ -1,49 +1,133 @@
-import { RoomWindow } from './RoomWindow';
-import { RoomRecorder } from './RoomRecorder';
-import { CustomDecroation } from './CustomDecroation';
+import { ConfigManager } from '@/game/managers/ConfigManagers';
+import { store } from '@/game/store';
 
-const WINDOW_POSITION = { x: 44, y: -4 };
-const RECORDER_POSITION = { x: 0, y: 31 }
+const STORE_KEY = 'tamagotchi.status';
 
-export class Property extends Phaser.GameObjects.Container {
-  private window: RoomWindow;
-  private recorder: RoomRecorder;
-  private decoration: CustomDecroation;
-  
+const CONFIG_KEY = 'tamagotchi.properties';
+
+type TAnimation = {
+  prefix: string;
+  qty: number;
+  freq: number;
+  repeat: number;
+  duration: number;
+  repeat_delay: number;
+};
+
+const DEFAULT_SPRITE = { key: '', frame: '' }
+
+export class Property {
+  private config;
+  private scene: Phaser.Scene;
+  private background?: Phaser.GameObjects.Sprite;
+  private back?: Phaser.GameObjects.Sprite;
+  private front?: Phaser.GameObjects.Sprite;
+  private customs: Phaser.GameObjects.Sprite[] = [];
+  private watchState = store<number>(STORE_KEY);
+
   constructor(scene: Phaser.Scene) {
-    super(scene);
-    
-    // Window
-    this.window = new RoomWindow(scene, WINDOW_POSITION);
-
-    // Recorder
-    this.recorder = new RoomRecorder(scene, RECORDER_POSITION);
-
-    // Custom Decroation
-    this.decoration = new CustomDecroation(scene);
-
-    // Add this container to scene
-    this.scene.add.existing(this);
+    this.scene = scene;
+    this.config = ConfigManager.getInstance().get(CONFIG_KEY);
   }
 
+  init() {
+    const { watch } = this.config;
 
+    // set watch state
+    this.watchState = store<number>(`tamagotchi.${watch}`);
+    this.watchState?.watch(this.handleRenderPropertyByWatchedState);
 
-  create() {
+    // init animations
+    this.initAnimations();
+
+    // init basic sprites
+    this.initBasicSprites();
+
+    // render first
+    const value = this.watchState?.get() || 0;
+    this.handleRenderPropertyByWatchedState(value);
   }
 
+  private initAnimations = () => {
+    const { key, animations } = this.config;
+    if (animations) {
+      animations.forEach((_ani: TAnimation) => {
+        const animationName = `${key}_${_ani.prefix}`;
+        if (this.scene.anims.exists(animationName)) return; // prevent recreate after change scene.
 
-  public runAction(action: string) {
-    if (action === 'buy') {
-      this.decoration.levelUp();
+        const data: Phaser.Types.Animations.Animation = {
+          key: animationName,
+          frames: this.scene.anims.generateFrameNames(key, {
+            prefix: `${_ani.prefix}_`,
+            start: 1,
+            end: _ani.qty,
+          }),
+          repeat: _ani.repeat,
+        };
+
+        if (typeof _ani.freq !== "undefined") data.frameRate = _ani.freq;
+        if (typeof _ani.duration !== "undefined") data.duration = _ani.duration;
+        if (typeof _ani.repeat_delay !== "undefined") data.repeatDelay = _ani.repeat_delay;
+
+        this.scene.anims.create(data);
+      });
     }
   }
-  
-  public update() {
+
+  private initBasicSprites = () => {
+    this.background = this.scene.make.sprite(DEFAULT_SPRITE).setOrigin(0);
+    this.background.setPosition(0, 0);
+    this.background.setDepth(0);
+    
+    this.back = this.scene.make.sprite(DEFAULT_SPRITE).setOrigin(0);
+    this.back.setPosition(0, 0);
+    this.back.setDepth(1);
+
+    this.front = this.scene.make.sprite(DEFAULT_SPRITE).setOrigin(0);
+    this.front.setPosition(0, 80);
+    this.front.setDepth(100);
+
   }
 
-  public destroy() {
-    this.window.destroy();
-    this.recorder.destroy();
-    // this.decoration.destroy();
-  } 
+
+  private handleRenderPropertyByWatchedState = (value: number) => {
+    const { list } = this.config;
+    const current = list[value];
+    if (!current) return;
+
+    const { background, back, front, customs } = current;
+    this.back?.play(`${this.config.key}_${back}`);
+    this.front?.play(`${this.config.key}_${front}`);
+    this.background?.play(`${this.config.key}_${background}`);
+
+    this.handleRenderCustoms(customs);
+  }
+
+  private handleRenderCustoms = (newCustoms?: any[]) => {
+    if (!newCustoms) return;
+
+    if (this.customs.length !== 0) {
+      this.customs.forEach((custom) => {
+        custom.destroy();
+      });
+      this.customs = [];
+    }
+
+    newCustoms.forEach(({ x, y, animation, depth=1 }) => {
+      const current = this.scene.make.sprite(DEFAULT_SPRITE)
+      .setOrigin(0)
+      .setPosition(x, y)
+      .setDepth(depth)
+      .play(`${this.config.key}_${animation}`);
+
+      this.customs.push(current);
+    });
+  }
+
+  destroy() {
+    this.watchState?.unwatchAll();
+    this.background?.destroy();
+    this.back?.destroy();
+    this.front?.destroy();
+  }
 }
