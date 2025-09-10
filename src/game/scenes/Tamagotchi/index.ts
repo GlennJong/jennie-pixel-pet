@@ -118,7 +118,7 @@ export default class TamagotchiScene extends Scene {
       // this.handleBattleAward(this.taskQueueService);
       this.character?.startTamagotchi();
       this.isTamagotchiReady = true;
-      // setStoreState('global.is_paused', false);
+      setStoreState('global.is_paused', false);
     })();
 
     this.events.on('shutdown', this.shutdown, this);
@@ -135,28 +135,8 @@ export default class TamagotchiScene extends Scene {
       // action: drink | battle | write | sleep | awake
       // const currentAction = this.config[action];
       
-      if (action === 'drink') {
-        const task = ConfigManager.getInstance().get('tamagotchi.afk2.actions.buy');
-        // const actionConfig = ConfigManager.getInstance().get('config');
-        // console.log({drinkConfig})
-
-        
-        this.taskQueueService?.addTask(task);
-        // this.taskQueueService?.addTask(this.config.drink);
-      }
-      else if (action === 'battle') {
-        const task = ConfigManager.getInstance().get('tamagotchi.afk2.actions.sleep');
-
-        this.taskQueueService?.addTask(task);
-      }
-      else if (action === 'write') {
-        const task = ConfigManager.getInstance().get('tamagotchi.afk2.actions.dead');
-
-        this.taskQueueService?.addTask(task);
-      }
-      // ....
-      
-      // this.taskQueueService?.addTask({ user: DEFAULT_USER_NAME, action });
+      const task = ConfigManager.getInstance().get(`tamagotchi.afk2.actions.${action}`);
+      this.taskQueueService?.addTask(task);
     }
   }
 
@@ -196,7 +176,7 @@ export default class TamagotchiScene extends Scene {
 
       this.resourceHandlerGroup.forEach((handler) => handler.runEffect(effect));
       
-      this.header?.showHeader(HEADER_DISPLAY_DURATION);
+      // this.header?.showHeader(HEADER_DISPLAY_DURATION);
 
       // if (move) {
       //   sceneConverter(this, move.scene, move.data);

@@ -1,39 +1,83 @@
 import Phaser from 'phaser';
 
-import { getStoreState, setStoreState } from '@/game/store';
+import { getStoreState } from '@/game/store';
 
 // elements
-import { HeaderSelector } from './HeaderSelector';
-import { IconHp } from './HeaderHp';
-import { IconCoin } from './HeaderCoin';
+import { ConfigManager } from '@/game/managers/ConfigManagers';
+import { ResourceIcon } from './ResourceIcon';
 
 const DEFAULT_WIDTH = 160;
 const DEFAULT_HEIGHT = 25;
-const AUTO_HIDE_TIME = 10000;
-const HEADER_DISPLAY_DURATION = 10000;
-
-const SELECTORS = ['drink', 'battle', 'write', 'sleep'];
-const DEFAULT_CHARACTER_KEY = 'tamagotchi_afk';
 
 // TODO Constant Naming
 export class Header extends Phaser.GameObjects.Container {
-  private selectors = SELECTORS;
-  public currentSelector: string = SELECTORS[0];
+  private selectorGroup: any[] = [];
+  private resourceGroup: any[] = [];
+  private current = 0;
 
   private config;
-  private background: Phaser.GameObjects.NineSlice;
-  private iconSelector: { [key: string]: HeaderSelector } = {};
-  private iconHp: IconHp;
-  private iconCoin: IconCoin;
-  private timer: number | undefined;
 
+  private matchActionByStore(actionConfig: any, matchKey: string): string | null {
+    if (!actionConfig || typeof actionConfig !== 'object') return null;
+    const storeValue = getStoreState(`tamagotchi.${matchKey}`);
+    for (const actionName in actionConfig) {
+      const matchList = actionConfig[actionName][matchKey];
+      if (Array.isArray(matchList) && matchList.includes(storeValue)) {
+        return actionName;
+      }
+    }
+    return null;
+  }
+  private background?: Phaser.GameObjects.NineSlice;
+  private timer: number | undefined;
   
   constructor(scene: Phaser.Scene) {
     super(scene);
 
-    this.config = scene.cache.json.get('config').tamagotchi[DEFAULT_CHARACTER_KEY].activities || {};
+    // this.config = scene.cache.json.get('config').tamagotchi[DEFAULT_CHARACTER_KEY].activities || {};
+    this.config = ConfigManager.getInstance().get(`tamagotchi.header`);
 
-    this.background = scene.make
+    this.initAnimations();
+    
+    this.initBackground();
+    this.initSelectors();
+    this.initResources();
+
+    this.handleUpdateSelector();
+
+
+    this.setDepth(9999);
+    this.scene.add.existing(this);
+  }
+  
+  private initAnimations = () => {
+    const { key, animations } = this.config;
+    if (animations) {
+      animations.forEach((_ani: TAnimation) => {
+        const animationName = `${key}_${_ani.prefix}`;
+        if (this.scene.anims.exists(animationName)) return; // prevent recreate after change scene.
+
+        const data: Phaser.Types.Animations.Animation = {
+          key: animationName,
+          frames: this.scene.anims.generateFrameNames(key, {
+            prefix: `${_ani.prefix}_`,
+            start: 1,
+            end: _ani.qty,
+          }),
+          repeat: _ani.repeat,
+        };
+
+        if (typeof _ani.freq !== "undefined") data.frameRate = _ani.freq;
+        if (typeof _ani.duration !== "undefined") data.duration = _ani.duration;
+        if (typeof _ani.repeat_delay !== "undefined") data.repeatDelay = _ani.repeat_delay;
+
+        this.scene.anims.create(data);
+      });
+    }
+  }
+
+  private initBackground() {
+    this.background = this.scene.make
       .nineslice({
         key: 'tamagotchi_header_frame',
         frame: 'frame',
@@ -48,156 +92,128 @@ export class Header extends Phaser.GameObjects.Container {
       })
       .setOrigin(0);
     this.add(this.background);
-
-    const drink = new HeaderSelector(scene, {
-      key: 'tamagotchi_header_icons',
-      frame: 'drink',
-      x: 16,
-      y: 7,
-      start: 1,
-      end: 5,
-      freq: 4,
-    });
-    this.add(drink);
-    this.iconSelector['drink'] = drink;
-
-    const battle = new HeaderSelector(scene, {
-      key: 'tamagotchi_header_icons',
-      frame: 'battle',
-      x: 36,
-      y: 7,
-      start: 1,
-      end: 4,
-      freq: 4,
-    });
-
-    this.add(battle);
-    this.iconSelector['battle'] = battle;
-
-    const write = new HeaderSelector(scene, {
-      key: 'tamagotchi_header_icons',
-      frame: 'write',
-      x: 56,
-      y: 7,
-      start: 1,
-      end: 5,
-      freq: 4,
-    });
-
-    this.add(write);
-    this.iconSelector['write'] = write;
-
-    const sleep = new HeaderSelector(scene, {
-      key: 'tamagotchi_header_icons',
-      frame: 'sleep',
-      x: 76,
-      y: 7,
-      start: 1,
-      end: 2,
-      freq: 1,
-    });
-
-    this.add(sleep);
-    this.iconSelector['sleep'] = sleep;
-
-    this.iconHp = new IconHp(scene, { x: 100, y: 7 });
-    this.add(this.iconHp);
-
-    this.iconCoin = new IconCoin(scene, { x: 126, y: 7 });
-    this.add(this.iconCoin);
-
-    this.currentSelector = 'drink';
-    this.handleUpdateSelector();
-
-    this.setDepth(9999);
-    this.scene.add.existing(this);
   }
 
-  private hideHeader() {
-    if (this.timer) {
-      clearTimeout(this.timer);
-    }
-    this.timer = setTimeout(() => {
-      this.setAlpha(0);
-    }, AUTO_HIDE_TIME);
+  private initSelectors() {
+    const startFrom = 4;
+    const arrowSpace = 12;
+    const gap = 8;
+    const y = 7;
+    this.config.selectors.forEach(({animation}, i) => {
+      const arrow = this.scene.make.sprite({
+        x: startFrom + (gap*i) + ((i) * arrowSpace),
+        y,
+        key: '',
+        frame: '',
+      })
+      .setOrigin(0);
+      arrow.play(`${this.config.key}_${this.config.arrow.animation}`)
+      this.add(arrow);
+
+      const icon = this.scene.make.sprite({
+        x: startFrom + (gap*i) + ((i+1) * arrowSpace),
+        y,
+        key: '',
+        frame: '',
+      })
+      .setOrigin(0);
+      icon.play(`${this.config.key}_${animation.unselected}`)
+      this.add(icon);
+
+      this.selectorGroup.push({
+        arrow, icon,
+        onBlur: () => {
+          arrow.setAlpha(0);
+          icon.play(`${this.config.key}_${animation.unselected}`)
+        },
+        onSelect: () => {
+          arrow.setAlpha(1);
+          icon.play(`${this.config.key}_${animation.selected}`);
+        }
+      });
+    })
   }
+
+  private initResources() {
+    const startFrom = 100;
+    const gap = 30;
+    const y = 7;
+    this.config.resources.forEach(({resource, animation}, i) => {
+      const icon = new ResourceIcon(this.scene, {
+        x: startFrom + (gap*i),
+        y,
+        key: `tamagotchi.${resource}`,
+        animation: `${this.config.key}_${animation}`,
+      });
+      this.add(icon);
+      this.resourceGroup.push(icon);
+    })
+  }
+
+
+  // private hideHeader() {
+  //   if (this.timer) {
+  //     clearTimeout(this.timer);
+  //   }
+  //   this.timer = setTimeout(() => {
+  //     this.setAlpha(0);
+  //   }, AUTO_HIDE_TIME);
+  // }
 
   private handleUpdateSelector() {
-    this.setAlpha(1);
-
-    Object.keys(this.iconSelector).map((_key) => {
-      this.iconSelector[_key].unselect();
-    });
-    this.iconSelector[this.currentSelector].select();
-
-    this.hideHeader();
-  }
-
-  public showHeader(time?: number) {
-    this.setAlpha(1);
-    if (time) {
-      if (this.timer) {
-        clearTimeout(this.timer);
+    this.selectorGroup.forEach(({ onBlur, onSelect }, i) => {
+      if (i === this.current) {
+        onSelect();
+      } else {
+        onBlur();
       }
-      this.timer = setTimeout(() => {
-        this.setAlpha(0);
-      }, time);
-    }
+    });
   }
+
+  // public showHeader(time?: number) {
+  //   this.setAlpha(1);
+  //   if (time) {
+  //     if (this.timer) {
+  //       clearTimeout(this.timer);
+  //     }
+  //     this.timer = setTimeout(() => {
+  //       this.setAlpha(0);
+  //     }, time);
+  //   }
+  // }
 
   public moveNext() {
-    const currentIndex = this.selectors.indexOf(this.currentSelector);
-    this.currentSelector =
-      currentIndex !== this.selectors.length - 1
-        ? this.selectors[currentIndex + 1]
-        : this.selectors[0];
+    this.current = this.current === this.selectorGroup.length - 1 ? 0 : this.current + 1;
     this.handleUpdateSelector();
   }
 
   public movePrev() {
-    const currentIndex = this.selectors.indexOf(this.currentSelector);
-    this.currentSelector =
-      currentIndex === 0
-        ? this.selectors[this.selectors.length - 1]
-        : this.selectors[currentIndex - 1];
-    this.handleUpdateSelector();
-  }
-
-  public moveToSelector(selector: string) {
-    this.currentSelector = selector;
+    this.current = this.current === 0 ? this.selectorGroup.length - 1 : this.current - 1;
     this.handleUpdateSelector();
   }
 
   public select() {
-    const isSleep = getStoreState('tamagotchi.is_sleep');
-
-    // special condition
-    if (isSleep && this.currentSelector === 'sleep') return 'awake';
-    
-    return this.currentSelector;
+    const { action } = this.config.selectors[this.current];
+    // 預設比對 status，可傳入其他 key
+    return this.matchActionByStore(action, 'status');
   }
 
-  public runAction(action: string, params: { coin: number }) {
-    const hp = this.config[action].hp;
-    const coin = params?.coin || this.config[action].coin;
-    this.showHeader(HEADER_DISPLAY_DURATION);
-    // if (hp) setStoreState('tamagotchi.hp', Math.min(100, getStoreState('tamagotchi.hp') + hp));
-    // if (coin) setStoreState('tamagotchi.coin', getStoreState('tamagotchi.coin') + coin);
-  }
-
-  public update() {
-    this.iconHp.update();
-    this.iconCoin.update();
+  update() {
+    this.resourceGroup.forEach(icon => icon.update());
   }
 
   public destroy() {
-    this.background.destroy();
-    this.iconHp.destroy();
-    this.iconCoin.destroy();
-    this.iconSelector['drink'].destroy();
-    this.iconSelector['battle'].destroy();
-    this.iconSelector['write'].destroy();
-    this.iconSelector['sleep'].destroy();
+    this.background?.destroy();
+    this.selectorGroup.forEach(({ arrow, icon }) => {
+      arrow.destroy();
+      icon.destroy();
+    })
+    // this.iconHp.destroy();
+    // this.iconCoin.destroy();
+    // this.iconSelector['drink'].destroy();
+    // this.iconSelector['battle'].destroy();
+    // this.iconSelector['write'].destroy();
+    // this.iconSelector['sleep'].destroy();
     clearTimeout(this.timer);
   }
 

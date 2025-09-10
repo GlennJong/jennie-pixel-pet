@@ -1,3 +1,4 @@
+import { ConfigManager } from '@/game/managers/ConfigManagers';
 import Phaser from 'phaser';
 
 type TOption = {
@@ -11,6 +12,7 @@ type TOption = {
 };
 
 export class HeaderSelector extends Phaser.GameObjects.Container {
+  private config: any;
   private arrow: Phaser.GameObjects.Sprite;
   private icon: Phaser.GameObjects.Sprite;
   private frameName: string;
@@ -19,55 +21,85 @@ export class HeaderSelector extends Phaser.GameObjects.Container {
     // Inherite from scene
     super(scene);
 
+    this.config = ConfigManager.getInstance().get(`tamagotchi.header`);
+
+    this.initAnimations();
+    
     const { x, y, key, frame, start, end, freq } = option;
 
     // Icon
-    this.icon = scene.make.sprite({
-      key: key,
-      frame: `${frame}-default`,
-      x: x,
-      y: y,
-    }).setOrigin(0);
+    // this.icon = scene.make.sprite({
+    //   key: key,
+    //   frame: `${frame}-default`,
+    //   x: x,
+    //   y: y,
+    // }).setOrigin(0);
 
     this.frameName = frame;
 
     // Defind Icon Animation
-    if (!scene.anims.exists(`${frame}_anim`)) {
-      scene.anims.create({
-        key: `${frame}_anim`,
-        frames: scene.anims.generateFrameNames(key, {
-          prefix: `${frame}-`,
-          start: start,
-          end: end,
-        }),
-        repeat: -1,
-        frameRate: freq,
-      });
-    }
+    // if (!scene.anims.exists(`${frame}_anim`)) {
+    //   scene.anims.create({
+    //     key: `${frame}_anim`,
+    //     frames: scene.anims.generateFrameNames(key, {
+    //       prefix: `${frame}-`,
+    //       start: start,
+    //       end: end,
+    //     }),
+    //     repeat: -1,
+    //     frameRate: freq,
+    //   });
+    // }
 
-    this.add(this.icon);
+    // this.add(this.icon);
 
     // Arrow
-    this.arrow = scene.make.sprite({
-      key: 'tamagotchi_header_icons',
-      frame: 'arrow',
-      x: x - 12,
-      y: y,
-    }).setOrigin(0);
+    // this.arrow = scene.make.sprite({
+    //   key: 'tamagotchi_header_icons',
+    //   frame: 'arrow',
+    //   x: x - 12,
+    //   y: y,
+    // }).setOrigin(0);
 
     // Defind Arrow Animation
-    scene.tweens.add({
-      targets: this.arrow,
-      repeat: -1,
-      yoyo: true,
-      ease: 'linear',
-      duration: 500,
-      alpha: 0,
-      pause: true,
-    });
+    // scene.tweens.add({
+    //   targets: this.arrow,
+    //   repeat: -1,
+    //   yoyo: true,
+    //   ease: 'linear',
+    //   duration: 500,
+    //   alpha: 0,
+    //   pause: true,
+    // });
 
-    this.arrow.visible = false;
-    this.add(this.arrow);
+    // this.arrow.visible = false;
+    // this.add(this.arrow);
+  }
+  
+  private initAnimations = () => {
+    const { key, animations } = this.config;
+    if (animations) {
+      animations.forEach((_ani: TAnimation) => {
+        const animationName = `${key}_${_ani.prefix}`;
+        if (this.scene.anims.exists(animationName)) return; // prevent recreate after change scene.
+
+        const data: Phaser.Types.Animations.Animation = {
+          key: animationName,
+          frames: this.scene.anims.generateFrameNames(key, {
+            prefix: `${_ani.prefix}_`,
+            start: 1,
+            end: _ani.qty,
+          }),
+          repeat: _ani.repeat,
+        };
+
+        if (typeof _ani.freq !== "undefined") data.frameRate = _ani.freq;
+        if (typeof _ani.duration !== "undefined") data.duration = _ani.duration;
+        if (typeof _ani.repeat_delay !== "undefined") data.repeatDelay = _ani.repeat_delay;
+
+        this.scene.anims.create(data);
+      });
+    }
   }
 
   public select() {
