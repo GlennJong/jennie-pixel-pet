@@ -5,6 +5,7 @@ import { filterFromMatchList } from "@/game/utils/filterFromMatchList";
 
 import { Message, TaskMappingItem, Task } from "./types";
 import { CONFIG_MAPPING_LIST_KEY, MESSAGE_QUEUE_STORE_KEY, TASK_QUEUE_STORE_KEY } from "./constants";
+import { ConfigManager } from "@/game/managers/ConfigManagers";
 
 export class TaskQueueService {
   private taskQueueState = store<Task[]>(TASK_QUEUE_STORE_KEY);
@@ -38,8 +39,11 @@ export class TaskQueueService {
     let updated = false;
     messages.forEach(msg => {
       const result = filterFromMatchList(msg, this.mappingList);
+      const config = ConfigManager.getInstance().get('tamagotchi.afk2.actions');
       if (result) {
-        tasks.push({ ...msg, ...result });
+        console.log({result})
+
+        tasks.push({ ...config[result.action],...msg, ...result });
         updated = true;
       }
     });

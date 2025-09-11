@@ -137,6 +137,7 @@ export default class TamagotchiScene extends Scene {
     if (!this.isTamagotchiReady) return false;
     let success = false;
 
+    console.log({task});
     const { action, user, params, effect, dialogs, move } = task;
     // console.log({params})
     try {
@@ -173,9 +174,10 @@ export default class TamagotchiScene extends Scene {
       
       // this.header?.showHeader(HEADER_DISPLAY_DURATION);
 
-      // if (move) {
-      //   sceneConverter(this, move.scene, move.data);
-      // }
+      if (move) {
+        setStoreState('global.transmit', params);
+        sceneConverter(this, move);
+      }
 
       success = true;
     } catch (err) {

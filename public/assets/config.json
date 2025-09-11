@@ -1947,7 +1947,7 @@
             "hp": { "method": "add", "value": 10 },
             "coin": { "method": "add", "value": 1 }
           },
-          "move": "battle",
+          "move": "Battle",
           "dialogs": [
             {
               "sentences": [
