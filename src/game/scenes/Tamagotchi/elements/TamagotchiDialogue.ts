@@ -54,7 +54,6 @@ export class TamagotchiDialogue extends Phaser.GameObjects.Container {
   }
 
   public async runDialogue2(dialogs: TDialogItem[], replacement?: { [key: string]: string | number }) {
-
     if (dialogs && replacement) {
       const selectedDialog = selectFromPiority<TDialogItem>(dialogs);
       const selectedSentences = selectedDialog.sentences.map((_sentence) => {

@@ -1,15 +1,26 @@
-import { store } from '@/game/store';
+import { ConfigManager } from '@/game/managers/ConfigManagers';
+import { getStoreState, store } from '@/game/store';
 
 const STORE_KEY = 'tamagotchi.status';
+const CONFIG_KEY = 'tamagotchi.afk2.statuses'
 
 export class StatusHandler {
+  private config = ConfigManager.getInstance().get(CONFIG_KEY) || undefined;
   private statusState = store<number>(STORE_KEY);
 
   constructor() {}
 
-  init() {}
+  public getStatus(): string {
+    return getStoreState('tamagotchi.status');
+  }
+
+  public getConfig(): string {
+    const current = this.getStatus();
+    return this.config[current] || ErrorEvent;
+  }
 
   public runEffect = (effect) => {
+    if (!effect) return;
     const { status } = effect;
     if (status?.method === 'set') {
       this.statusState?.set(status.value);

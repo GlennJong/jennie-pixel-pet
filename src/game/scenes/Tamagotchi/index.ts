@@ -54,14 +54,6 @@ export default class TamagotchiScene extends Scene {
 
     // charactor
     this.character = new TamagotchiCharacter(this);
-    // const temp = this.cache.json.get('config').tamagotchi['character:game'];
-    // console.log(temp);
-
-    // const drinkAction = ConfigManager.getInstance().get('tamagotchi_new');
-    // console.log({drinkAction})
-    
-    
-    
     this.config = this.cache.json.get('config').tamagotchi[DEFAULT_CHARACTER_KEY].activities || {};
 
     // property
@@ -86,7 +78,7 @@ export default class TamagotchiScene extends Scene {
 
     // Status handler
     this.statusHandler = new StatusHandler();
-    this.statusHandler.init();
+    // this.statusHandler.init();
 
     // queue init
     this.taskQueueService = new TaskQueueService(this);
@@ -166,10 +158,13 @@ export default class TamagotchiScene extends Scene {
 
       // Run Dialogue
       if (this.dialogue) {
-        // await this.dialogue.runDialogue(action, {...params, user});
-        const effectReplacement = Object.fromEntries(
-          Object.entries(effect).map(([key, obj]) => [key, (obj as { value: any }).value])
-        );
+        let effectReplacement = {};
+        
+        if (effect) {
+          effectReplacement = Object.fromEntries(
+            Object.entries(effect).map(([key, obj]) => [key, (obj as { value: any }).value])
+          );
+        }
         const replacement = {user, ...effectReplacement, ...params};
         await this.dialogue.runDialogue2(dialogs, replacement);
       }

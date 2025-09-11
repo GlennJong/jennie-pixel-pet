@@ -1,7 +1,7 @@
 import Phaser from "phaser";
 
 export type TDialogData = {
-  face: { key: string; frame: string };
+  portrait: string;
   text: string;
 };
 
@@ -98,7 +98,7 @@ export class PrimaryDialogue extends Phaser.GameObjects.Container {
 
   // Elements
   private portraitBackground?: Phaser.GameObjects.NineSlice;
-  private portrait?: Phaser.GameObjects.Image;
+  private portrait?: Phaser.GameObjects.Sprite;
   private textboxBackground?: Phaser.GameObjects.NineSlice;
   private textbox?: Phaser.GameObjects.Text;
 
@@ -117,9 +117,10 @@ export class PrimaryDialogue extends Phaser.GameObjects.Container {
   private dialogueFinishedTypingCurrentPage = false;
   private resolvePromise: ((value?: unknown) => void) | null = null;
 
-  private setAvatar = (avatarKey: string, avatarFrame: string) => {
-    if (this.portrait && avatarKey) {
-      this.portrait.setTexture(avatarKey, avatarFrame);
+  private setPortrait = (portrait: string) => {
+    console.log(portrait)
+    if (this.portrait && portrait) {
+      this.portrait.play(portrait);
     }
   }
 
@@ -152,7 +153,7 @@ export class PrimaryDialogue extends Phaser.GameObjects.Container {
     }
 
     const currentEntry = this.dialogueData[this.currentDialogueEntryIndex];
-    this.setAvatar(currentEntry.face.key, currentEntry.face.frame);
+    this.setPortrait(currentEntry.portrait);
     this.handleShowDialogue(currentEntry.text);
   }
 
@@ -331,7 +332,7 @@ export class PrimaryDialogue extends Phaser.GameObjects.Container {
       .setVisible(false)
       .setDepth(998);
 
-    this.portrait = this.scene.make.image({
+    this.portrait = this.scene.make.sprite({
       ...PORTRAIT_CONFIG,
       // key: 'tamagotchi_room',
       // frame: 'room',
@@ -339,7 +340,8 @@ export class PrimaryDialogue extends Phaser.GameObjects.Container {
       .setDisplaySize(PORTRAIT_SIZE, PORTRAIT_SIZE)
       .setOrigin(0)
       .setDepth(999)
-      .setVisible(false);
+      .setVisible(false)
+      .play('idle');
 
     this.textbox = this.scene.add.text(TEXTBOX_X, TEXTBOX_Y, '', {
       ...TEXTBOX_CONFIT,

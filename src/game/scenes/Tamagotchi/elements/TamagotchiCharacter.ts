@@ -1,5 +1,4 @@
 import Phaser from 'phaser';
-import { store, Store } from '@/game/store';
 
 // components
 import { Character } from '@/game/components/Character';
@@ -7,6 +6,8 @@ import { Character } from '@/game/components/Character';
 // utils
 import { selectFromPiority } from '@/game/utils/selectFromPiority';
 import { ConfigManager } from '@/game/managers/ConfigManagers';
+import { StatusHandler } from '../handlers/StatusHandler';
+import { getValueFromColonStoreState } from '@/game/store/helper';
 
 type TDirection = 'none' | 'left' | 'right';
 
@@ -28,19 +29,11 @@ const DEFAULT_TAMAGOTCHI_POSITION = {
   edge: DEFAULT_EDGE
 }
 
-// const CONFIG_KEY = 'tamagotchi_new';
-
 const DEFAULT_AUTO_ACTIOIN_DURATION = 3000;
 const DEFAULT_IDLE_PREFEX = 'idle';
 const DEFAULT_MOVE_DISTANCE = 32;
 
 export class TamagotchiCharacter extends Character {
-  private statusState?: Store<string> = store('tamagotchi.status');
-  // private isPausedState?: Store<boolean> = store('global.is_paused');
-  
-  // private isAliveState?: Store<boolean> = store('tamagotchi.is_alive');
-  // private isSleepState?: Store<boolean> = store('tamagotchi.is_sleep');
-  
   private isActing: boolean = false;
   private isReady: boolean = false;
 
@@ -74,9 +67,8 @@ export class TamagotchiCharacter extends Character {
   }
 
   private getBehavior() {
-    const status = this.statusState?.get();
-    const { idle, play, action_transition } = ConfigManager.getInstance().get(`tamagotchi.${DEFAULT_CHARACTER_KEY}`).statuses[status];
-    return { idle, play, action_transition };
+    const { idle, play } = new StatusHandler().getConfig();
+    return { idle, play };
   }
   
   private getIsUnavaliableAll() {
@@ -90,7 +82,6 @@ export class TamagotchiCharacter extends Character {
   }
 
   private async handleAutomaticAction() {
-
     if (this.isActing) return;
 
     // Special move
@@ -141,7 +132,6 @@ export class TamagotchiCharacter extends Character {
 
   public startTamagotchi() {
     this.isReady = true;
-    // 啟動自動行為 timer
     if (!this.autoActionTimer) {
       this.autoActionTimer = this.scene.time.addEvent({
         delay: DEFAULT_AUTO_ACTIOIN_DURATION,
@@ -161,10 +151,12 @@ export class TamagotchiCharacter extends Character {
   public runFuntionalAction(action: string) {
     if (this.isActing) return;
 
-    const { action_transition } = this.getBehavior();
-    
     const actions = ConfigManager.getInstance().get('tamagotchi.afk2.actions');
 
+    const { plays } = actions[action];
+
+    const currentPlays = getValueFromColonStoreState(plays);
+    
     const runAnimation = async (func: () => Promise<void>) => {
       this.isActing = true;
       await func();
@@ -172,16 +164,8 @@ export class TamagotchiCharacter extends Character {
     };
     
     runAnimation(async () => {
-      if (action_transition?.front) {
-        await this.playAnimation(action_transition.front);
-      }
-      
-      for (let i = 0; i < actions[action].plays.length; i++) {
-        await this.playAnimation(actions[action].plays[i]);
-      }
-
-      if (action_transition?.end) {
-        await this.playAnimation(action_transition.end);
+      for (let i = 0; i < currentPlays.length; i++) {
+        await this.playAnimation(currentPlays[i]);
       }
     });
     

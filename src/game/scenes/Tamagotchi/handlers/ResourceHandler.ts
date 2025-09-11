@@ -33,7 +33,7 @@ export class ResourceHandler {
     }
     const statuses = ConfigManager.getInstance().get('tamagotchi.afk2.statuses') as Record<string, any>;
     const status = this.statusState?.get();
-    console.log({status})
+    
     if (!status || !statuses || typeof statuses !== 'object') return;
     const statusObj = statuses[status];
     if (!statusObj || typeof statusObj !== 'object') return;
@@ -68,6 +68,8 @@ export class ResourceHandler {
   }
 
   public runEffect = (effect: Record<string, any>): void => {
+    if (!effect) return;
+    
     const key = this.getResourceKey();
     const resourceEffect = effect[key];
     if (!resourceEffect) return;

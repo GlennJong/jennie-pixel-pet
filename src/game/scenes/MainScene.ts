@@ -33,7 +33,7 @@ export class MainScene extends Scene {
             initStore('tamagotchi.level', DEFAULT_LEVEL);
             initStore('tamagotchi.win', 0);
             
-            initStore('tamagotchi.status', 'default');
+            initStore('tamagotchi.status', 'normal');
             initStore('tamagotchi.taskQueue', []);
             // initStore('tamagotchi.battleResult', 'win');
         }

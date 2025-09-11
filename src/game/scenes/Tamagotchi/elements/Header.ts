@@ -1,10 +1,9 @@
 import Phaser from 'phaser';
 
-import { getStoreState } from '@/game/store';
-
 // elements
 import { ConfigManager } from '@/game/managers/ConfigManagers';
 import { ResourceIcon } from './ResourceIcon';
+import { getValueFromColonStoreState } from '@/game/store/helper';
 
 const DEFAULT_WIDTH = 160;
 const DEFAULT_HEIGHT = 25;
@@ -17,17 +16,6 @@ export class Header extends Phaser.GameObjects.Container {
 
   private config;
 
-  private matchActionByStore(actionConfig: any, matchKey: string): string | null {
-    if (!actionConfig || typeof actionConfig !== 'object') return null;
-    const storeValue = getStoreState(`tamagotchi.${matchKey}`);
-    for (const actionName in actionConfig) {
-      const matchList = actionConfig[actionName][matchKey];
-      if (Array.isArray(matchList) && matchList.includes(storeValue)) {
-        return actionName;
-      }
-    }
-    return null;
-  }
   private background?: Phaser.GameObjects.NineSlice;
   private timer: number | undefined;
   
@@ -184,6 +172,7 @@ export class Header extends Phaser.GameObjects.Container {
 
   public moveNext() {
     this.current = this.current === this.selectorGroup.length - 1 ? 0 : this.current + 1;
+    console.log(this.config.selectors[this.current]);
     this.handleUpdateSelector();
   }
 
@@ -194,8 +183,8 @@ export class Header extends Phaser.GameObjects.Container {
 
   public select() {
     const { action } = this.config.selectors[this.current];
-    // 預設比對 status，可傳入其他 key
-    return this.matchActionByStore(action, 'status');
+    const currentAction = getValueFromColonStoreState(action);
+    return currentAction;
   }
 
   update() {

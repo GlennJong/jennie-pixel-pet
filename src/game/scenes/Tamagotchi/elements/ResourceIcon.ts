@@ -12,10 +12,8 @@ export class ResourceIcon extends Phaser.GameObjects.Container {
 
   constructor(scene: Phaser.Scene, option: { x: number, y: number, key: string, animation: string }) {
     super(scene);
-
     
     const { x, y, key, animation} = option;
-    console.log({key})
     this.storeState = store<number>(key);
     this.value = typeof this.storeState?.get() === 'number' ? this.storeState.get() : DEFAULT_VALUE;
     this.storeState?.watch(this.handleSetValue);

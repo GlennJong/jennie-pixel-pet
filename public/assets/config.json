@@ -1749,7 +1749,10 @@
             "unselected": "water-unselected"
           },
           "action": {
-             "drink": { "status": ["default", "sleep"] }
+            "default": "drink",
+            "status:normal": "drink",
+            "status:sleep": "drink",
+            "status:death": "disable"
           }
         },
         {
@@ -1758,7 +1761,10 @@
             "unselected": "battle-unselected"
           },
           "action": {
-             "battle": { "status": ["default"] }
+            "default": "battle",
+            "status:normal": "battle",
+            "status:sleep": "battle",
+            "status:death": "disable"
           }
         },
         {
@@ -1767,7 +1773,10 @@
             "unselected": "write-unselected"
           },
           "action": {
-             "buy": { "status": ["default", "sleep"] }
+            "default": "write",
+            "status:normal": "write",
+            "status:sleep": "write",
+            "status:death": "disable"
           }
         },
         {
@@ -1776,8 +1785,10 @@
             "unselected": "sleep-unselected"
           },
           "action": {
-            "sleep": { "status": ["default"] },
-            "awake": { "status": ["sleep"] }
+            "default": "sleep",
+            "status:normal": "sleep",
+            "status:sleep": "awake",
+            "status:death": "disable"
           }
         }
       ],
@@ -1823,6 +1834,9 @@
         }
       ],
       "animations": [
+        { "prefix": "face-normal", "qty": 1, "freq": 1, "repeat": 0 },
+        { "prefix": "face-angry", "qty": 1, "freq": 1, "repeat": 0 },
+        { "prefix": "face-sad", "qty": 1, "freq": 1, "repeat": 0 },
         { "prefix": "born", "qty": 7, "freq": 8, "repeat": 0 },
         { "prefix": "egg", "qty": 2, "freq": 1, "repeat": 0 },
         { "prefix": "walk-left", "qty": 6, "freq": 8, "repeat": 4 },
@@ -1875,12 +1889,6 @@
         }
       },
       "statuses": {
-        "default": {
-          "idle": true,
-          "rules": {
-            "hp": { "method": "sub", "value": 1, "interval": 600 }
-          }
-        },
         "normal": {
           "idle": true,
           "rules": {
@@ -1890,10 +1898,6 @@
         "sleep": {
           "idle": false,
           "play": "sleep",
-          "action_transition": {
-            "front": "wake-up",
-            "end": "lay-down"
-          },
           "rules": {
             "hp": { "method": "add", "value": 1, "interval": 1200 }
           }
@@ -1909,23 +1913,70 @@
       "actions": {
         "drink": {
           "action": "drink",
-          "plays": ["drink"],
+          "plays": {
+            "default": ["drink"],
+            "status:normal": ["drink"],
+            "status:sleep": ["wake-up", "drink", "lay-down"],
+            "status:death": ["egg"]
+          },
           "user": "system",
           "effect": {
             "hp": { "method": "add", "value": 10 },
-            "coin": { "method": "add", "value": 1 },
-            "status": { "method": "inherit" }
+            "coin": { "method": "add", "value": 1 }
           },
           "dialogs": [
             {
               "sentences": [
                 {
-                  "portrait:id": "tamagotchi_afk_face_normal",
-                  "face": {
-                    "key": "tamagotchi_afk",
-                    "frame": "face_normal"
-                  },
+                  "portrait": "afk2_face-normal",
                   "text": "感謝 {{user}} 兌換\n補充喝水，為AFK增加了 10 點生命！"
+                }
+              ],
+              "piority": 2
+            }
+          ]
+        },
+        "battle": {
+          "action": "battle",
+          "plays": {
+            "default": ["wink-left", "wink-right"],
+            "status:death": ["egg"]
+          },
+          "user": "system",
+          "effect": {
+            "hp": { "method": "add", "value": 10 },
+            "coin": { "method": "add", "value": 1 }
+          },
+          "move": "battle",
+          "dialogs": [
+            {
+              "sentences": [
+                {
+                  "portrait": "afk2_face-angry",
+                  "text": "感謝 {{user}} 兌換戰鬥！挑戰者來了！"
+                }
+              ],
+              "piority": 2
+            }
+          ]
+        },
+        "write": {
+          "action": "write",
+          "plays": {
+            "default": ["write"],
+            "status:sleep": ["wake-up", "write", "lay-down"]
+          },
+          "user": "system",
+          "effect": {
+            "hp": { "method": "add", "value": 10 },
+            "coin": { "method": "add", "value": 1 }
+          },
+          "dialogs": [
+            {
+              "sentences": [
+                {
+                  "portrait": "afk2_face-sad",
+                  "text": "感謝 {{user}} 兌換\n提醒存檔，為AFK增加了 10 點生命！"
                 }
               ],
               "piority": 2
@@ -1934,7 +1985,12 @@
         },
         "sleep": {
           "action": "sleep",
-          "plays": ["lay-down", "sleep"],
+          "plays": {
+            "default": ["lay-down"],
+            "status:normal": ["lay-down"],
+            "status:sleep": ["wake-up"],
+            "status:death": ["egg"]
+          },
           "user": "system",
           "effect": {
             "status": { "method": "set", "value": "sleep" }
@@ -1943,10 +1999,7 @@
             {
               "sentences": [
                 {
-                  "face": {
-                    "key": "tamagotchi_afk",
-                    "frame": "face_normal"
-                  },
+                  "portrait": "face-normal",
                   "text": "休息一下"
                 }
               ],
@@ -1956,7 +2009,12 @@
         },
         "awake": {
           "action": "awake",
-          "plays": ["wake-up"],
+          "plays": {
+            "default": ["wake-up"],
+            "status:normal": ["wake-up"],
+            "status:sleep": ["wake-up"],
+            "status:death": ["egg"]
+          },
           "user": "system",
           "effect": {
             "status": { "method": "set", "value": "normal" }
@@ -1965,10 +2023,7 @@
             {
               "sentences": [
                 {
-                  "face": {
-                    "key": "tamagotchi_afk",
-                    "frame": "face_normal"
-                  },
+                  "portrait": "face-normal",
                   "text": "起床了"
                 }
               ],
@@ -1979,7 +2034,9 @@
         "award": {
           "action": "award",
           "user": "system",
-          "plays": ["none"],
+          "plays": {
+            "default": ["none"]
+          },
           "auto": true,
           "condition": {
             "win": 1
@@ -1992,10 +2049,7 @@
             {
               "sentences": [
                 {
-                  "face": {
-                    "key": "tamagotchi_afk",
-                    "frame": "face_normal"
-                  },
+                  "portrait": "face-normal",
                   "text": "我贏了！\n賺到 {{coin}} 元零用錢！"
                 }
               ],
@@ -2005,11 +2059,13 @@
         },
         "dead": {
           "action": "dead",
-          "plays": ["dead"],
+          "plays": {
+            "default": ["dead"]
+          },
           "auto": true,
           "condition": {
             "hp": 0,
-            "status": "default"
+            "status": "normal"
           },
           "effect": {
             "coin": { "method": "sub", "value": 10 },
@@ -2019,10 +2075,7 @@
             {
               "sentences": [
                 {
-                  "face": {
-                    "key": "tamagotchi_afk",
-                    "frame": "face_sad"
-                  },
+                  "portrait": "face-normal",
                   "text": "死了...\n損失 {{coin}} 元零用錢！"
                 }
               ],
@@ -2032,24 +2085,40 @@
         },
         "born": {
           "action": "born",
-          "plays": ["born"],
+          "plays": {
+            "default": ["born"]
+          },
           "auto": true,
           "condition": {
             "hp": 100,
             "status": "death"
           },
           "effect": {
-            "status": { "method": "set", "value": "default" }
+            "status": { "method": "set", "value": "normal" }
           },
           "dialogs": [
             {
               "sentences": [
                 {
-                  "face": {
-                    "key": "tamagotchi_afk",
-                    "frame": "face_normal"
-                  },
+                  "portrait": "face-normal",
                   "text": "復活"
+                }
+              ],
+              "piority": 2
+            }
+          ]
+        },
+        "disable": {
+          "action": "disable",
+          "plays": {
+            "default": ["egg"]
+          },
+          "dialogs": [
+            {
+              "sentences": [
+                {
+                  "portrait": "face-normal",
+                  "text": "我已經死了什麼都不能做！"
                 }
               ],
               "piority": 2
@@ -2058,7 +2127,15 @@
         },
         "buy": {
           "action": "buy",
-          "plays": ["buy"],
+          "plays": {
+            "default": ["none"]
+          },
+          "auto": true,
+          "condition": {
+            "coin": 100,
+            "level": 0,
+            "status": "normal"
+          },
           "effect": {
             "level": { "method": "add", "value": 1 }
           },
@@ -2076,19 +2153,6 @@
               "piority": 2
             }
           ]
-        },
-        "buy:1": {
-          "inherit": "buy",
-          "auto": true,
-          "condition": {
-            "coin": 100,
-            "level": 0,
-            "status": "default"
-          },
-          "effect": {
-            "coin": { "method": "sub", "value": 100 },
-            "level": { "method": "set", "value": 1 }
-          }
         }
       }
     },
