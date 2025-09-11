@@ -1,0 +1,50 @@
+{
+  "mapping": {
+    "drink": {
+      "action": "drink",
+      "matches": {
+        "content": ["補充水分"]
+      }
+    },
+    "write": {
+      "action": "write",
+      "matches": {
+        "content": ["提醒大家存檔"]
+      }
+    },
+    "sleep": {
+      "action": "sleep",
+      "matches": []
+    },
+    "battle_currycat": {
+      "action": "battle",
+      "matches": {
+        "user": ["curry_cat"],
+        "content": ["貝貝打招呼", "貝貝刷存在感", "上上打招呼", "上上刷存在感"]
+      },
+      "params": { "opponent": "currycat" }
+    },
+    "battle_jennie": {
+      "action": "battle",
+      "matches": {
+        "user": ["jennie_congee"],
+        "content": ["貝貝打招呼", "貝貝刷存在感", "上上打招呼", "上上刷存在感"]
+      },
+      "params": { "opponent": "jennie" }
+    },
+    "battle_shangshang": {
+      "action": "battle",
+      "matches": {
+        "content": ["上上打招呼", "上上刷存在感"]
+      },
+      "params": { "opponent": "shangshang" }
+    },
+    "battle_beibei": {
+      "action": "battle",
+      "matches": {
+        "content": ["貝貝打招呼", "貝貝刷存在感"]
+      },
+      "params": { "opponent": "beibei" }
+    }
+  }
+}

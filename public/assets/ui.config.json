@@ -1,0 +1,32 @@
+{
+  "ui": {
+    "dialogue_frame": {
+      "key": "dialogue_frame",
+      "preload": {
+        "png": "dialogue/frame.png",
+        "json": "dialogue/frame.json"
+      }
+    },
+    "tamagotchi_header_icons": {
+      "key": "tamagotchi_header_icons",
+      "preload": {
+        "png": "tamagotchi/header/icons.png",
+        "json": "tamagotchi/header/icons.json"
+      }
+    },
+    "tamagotchi_header_frame": {
+      "key": "tamagotchi_header_frame",
+      "preload": {
+        "png": "tamagotchi/header/frame.png",
+        "json": "tamagotchi/header/frame.json"
+      }
+    },
+    "battle_board": {
+      "key": "battle_board",
+      "preload": {
+        "png": "battle/board.png",
+        "json": "battle/board.json"
+      }
+    }
+  }
+}

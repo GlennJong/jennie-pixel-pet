@@ -1,9 +1,8 @@
-import Phaser, { Scene } from 'phaser';
+import { Scene } from 'phaser';
 
 // common components
-import { originalHeight, originalWidth } from '@/game/constants';
 import { sceneConverter, sceneStarter } from '@/game/components/CircleSceneTransition';
-import { setStoreState, store } from '@/game/store';
+import { setStoreState } from '@/game/store';
 import { EventBus } from '@/game/EventBus';
 
 // partial elements
@@ -23,14 +22,9 @@ import { AutoActionHandler } from './handlers/AutoActionHandler';
 import { ResourceHandler } from './handlers/ResourceHandler';
 import { Property } from './elements/Property';
 
-
-const DEFAULT_CHARACTER_KEY = 'tamagotchi_afk';
 const HEADER_DISPLAY_DURATION = 5000;
 
 export default class TamagotchiScene extends Scene {
-  private config: {[key: string]: any} = {};
-  
-  // private background?: Phaser.GameObjects.Image;
   private header?: Header;
   private property?: Property;
   private character?: TamagotchiCharacter;
@@ -54,7 +48,6 @@ export default class TamagotchiScene extends Scene {
 
     // charactor
     this.character = new TamagotchiCharacter(this);
-    this.config = this.cache.json.get('config').tamagotchi[DEFAULT_CHARACTER_KEY].activities || {};
 
     // property
     this.property = new Property(this);
@@ -123,9 +116,6 @@ export default class TamagotchiScene extends Scene {
       this.header!.moveNext()
     } else if (key === 'space') {
       const action = this.header!.select();
-
-      // action: drink | battle | write | sleep | awake
-      // const currentAction = this.config[action];
       
       const task = ConfigManager.getInstance().get(`tamagotchi.afk2.actions.${action}`);
       this.taskQueueService?.addTask(task);
@@ -136,24 +126,8 @@ export default class TamagotchiScene extends Scene {
     
     if (!this.isTamagotchiReady) return false;
     let success = false;
-
-    console.log({task});
     const { action, user, params, effect, dialogs, move } = task;
-    // console.log({params})
     try {
-
-
-
-      // console.log({animation})
-      // 1.角色執行行為
-      // 2.執行對話
-      // 3.執行上放狀態列
-      // 4.執行裝飾管理
-      // 5.執行場景轉換
-      
-      // Run Character Animation
-      // await this.character?.runAnimation();
-      
       await this.character?.runFuntionalActionAsync(action);
       this.statusHandler?.runEffect(effect);
 

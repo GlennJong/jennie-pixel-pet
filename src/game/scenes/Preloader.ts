@@ -5,6 +5,14 @@ export class Preloader extends Scene {
   constructor() {
     super('Preloader');
   }
+  
+  private configsFiles = [
+    // {key: 'config', filename: 'config.json'},
+    {key: 'battle', filename: 'battle.config.json'},
+    {key: 'tamagotchi', filename: 'tamagotchi.config.json'},
+    {key: 'ui', filename: 'ui.config.json'},
+    {key: 'mapping', filename: 'mapping.config.json'},
+  ]
 
   init() {
     this.add.image(512, 384, 'background');
@@ -33,10 +41,21 @@ export class Preloader extends Scene {
       this._preloadAssetsFromConfig(customConfig);
     } else {
       // Main config json file
-      this.load.json('config', 'config.json');
-      this.load.on('filecomplete-json-config', (_key: unknown, _type: unknown, data: any) => {
-        this._preloadAssetsFromConfig(data);
-      });
+      let num = 0;
+      let result = {};
+
+      for (const {key, filename} of this.configsFiles) {
+        this.load.json(key, filename);
+        this.load.on(`filecomplete-json-${key}`, (_key: unknown, _type: unknown, data: any) => {
+          num += 1;
+          result = {...result, ...data};
+          if (num === this.configsFiles.length) {
+            this.cache.json.add('config', result);
+            this._preloadAssetsFromConfig(result);
+          }
+        });
+      }
+      
     }
 
     // Preload Fonts
@@ -85,7 +104,7 @@ export class Preloader extends Scene {
     // Set Config Manager
     const data = this.cache.json.get('config');
     ConfigManager.getInstance().setConfig(data);
-    
+
     // Start First Scene
     this.scene.start('MainScene');
   }
