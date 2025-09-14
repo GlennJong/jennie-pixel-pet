@@ -21,8 +21,8 @@ type TIdleness = {
   piority: number;
 } & TAction;
 
-const DEFAULT_CHARACTER_KEY = 'afk2';
-const DEFAULT_EDGE = { from: 50, to: 120 };
+const DEFAULT_CHARACTER_KEY = 'mycharacter';
+const DEFAULT_EDGE = { from: 0, to: 160 };
 
 const DEFAULT_TAMAGOTCHI_POSITION = {
   x: 60, y: 68,
@@ -31,7 +31,7 @@ const DEFAULT_TAMAGOTCHI_POSITION = {
 
 const DEFAULT_AUTO_ACTIOIN_DURATION = 3000;
 const DEFAULT_IDLE_PREFEX = 'idle';
-const DEFAULT_MOVE_DISTANCE = 32;
+const DEFAULT_MOVE_DISTANCE = 24;
 
 export class TamagotchiCharacter extends Character {
   private isActing: boolean = false;
@@ -51,7 +51,6 @@ export class TamagotchiCharacter extends Character {
       ...DEFAULT_TAMAGOTCHI_POSITION,
       animations: config.animations
     });
-    
 
     this.character.setDepth(2);
 
@@ -92,20 +91,17 @@ export class TamagotchiCharacter extends Character {
     }
     // Idle
     const currentAction = selectFromPiority<TIdleness>(this.idleness);
+    const currentplay = getValueFromColonStoreState(currentAction.plays);
 
-    if (currentAction) {
-      const currentAnimation = currentAction.has_direction
-        ? `${currentAction.animation}-${this.direction}`
-        : currentAction.animation;
-
-      if (typeof currentAction.is_move !== 'undefined') {
-        this.playAnimation(currentAnimation);
-        this.direction = Math.random() > 0.5 ? 'left' : 'right'; // give a random direction
-        this.handleMoveDirection(currentAction.animation);
-      } else {
-        await this.playAnimation(currentAnimation);
-        this.handleDefaultIdleAction();
+    if (typeof currentAction.is_move !== 'undefined') {
+      if (currentAction.direction) {
+        this.direction = currentAction.direction;
       }
+      
+      this.handleMoveDirection(currentplay);
+    } else {
+      this.playAllAnimations(currentplay)
+      this.handleDefaultIdleAction();
     }
   }
 
@@ -113,19 +109,28 @@ export class TamagotchiCharacter extends Character {
     const { idle } = this.getBehavior();
     if (!idle) return;
 
-    // change direction if character close to edge
-    this.direction =
-      this.character.x < this.spaceEdge.from
-        ? 'right'
-        : this.character.x > this.spaceEdge.to
-          ? 'left'
-          : this.direction;
     this.isActing = true;
-    this.playAnimation(`${animation}-${this.direction}`);
-    this.moveDirection(this.direction, DEFAULT_MOVE_DISTANCE, () => {
+    this.playAllAnimations(animation)
+
+    let isMoveDistanceOverEdge = false;
+    if (this.direction === 'right') {
+      isMoveDistanceOverEdge = this.character.x + DEFAULT_MOVE_DISTANCE > this.spaceEdge.to;
+    }
+    else if (this.direction === 'left') {
+      isMoveDistanceOverEdge = this.character.x - DEFAULT_MOVE_DISTANCE < this.spaceEdge.from;
+    }
+
+    if (isMoveDistanceOverEdge) {
       this.isActing = false;
       this.handleDefaultIdleAction();
-    });
+    }
+    else {
+      this.moveDirection(this.direction, DEFAULT_MOVE_DISTANCE, () => {
+        this.isActing = false;
+        this.handleDefaultIdleAction();
+      });
+    }
+
   }
 
   private autoActionTimer?: Phaser.Time.TimerEvent;
@@ -151,11 +156,28 @@ export class TamagotchiCharacter extends Character {
   public runFuntionalAction(action: string) {
     if (this.isActing) return;
 
-    const actions = ConfigManager.getInstance().get('tamagotchi.afk2.actions');
+    const actions = ConfigManager.getInstance().get('tamagotchi.mycharacter.actions');
 
     const { plays } = actions[action];
 
     const currentPlays = getValueFromColonStoreState(plays);
+    
+    this.playAllAnimations(currentPlays);
+    // const runAnimation = async (func: () => Promise<void>) => {
+    //   this.isActing = true;
+    //   await func();
+    //   this.isActing = false;
+    // };
+    
+    // runAnimation(async () => {
+    //   for (let i = 0; i < currentPlays.length; i++) {
+    //     await this.playAnimation(currentPlays[i]);
+    //   }
+    // });
+    
+  }
+
+  private playAllAnimations(plays) {
     
     const runAnimation = async (func: () => Promise<void>) => {
       this.isActing = true;
@@ -164,11 +186,10 @@ export class TamagotchiCharacter extends Character {
     };
     
     runAnimation(async () => {
-      for (let i = 0; i < currentPlays.length; i++) {
-        await this.playAnimation(currentPlays[i]);
+      for (let i = 0; i < plays.length; i++) {
+        await this.playAnimation(plays[i]);
       }
     });
-    
   }
 
   public async runFuntionalActionAsync(action: string) {

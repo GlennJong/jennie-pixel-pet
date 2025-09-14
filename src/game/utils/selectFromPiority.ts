@@ -13,7 +13,10 @@ export function selectFromPiority<T extends TPiorityObject>(
   );
   const closestPoint = Math.min(...allActionPoints);
 
-  return currentData[
-    allActionPoints.findIndex((_point) => _point === closestPoint)
-  ];
+  const candidateIndexes = allActionPoints
+    .map((point, index) => point === closestPoint ? index : -1)
+    .filter(index => index !== -1);
+
+  const randomIdx = candidateIndexes[Math.floor(Math.random() * candidateIndexes.length)];
+  return currentData[randomIdx];
 }

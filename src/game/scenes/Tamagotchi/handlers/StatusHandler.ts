@@ -2,7 +2,7 @@ import { ConfigManager } from '@/game/managers/ConfigManagers';
 import { getStoreState, store } from '@/game/store';
 
 const STORE_KEY = 'tamagotchi.status';
-const CONFIG_KEY = 'tamagotchi.afk2.statuses'
+const CONFIG_KEY = 'tamagotchi.mycharacter.statuses'
 
 export class StatusHandler {
   private config = ConfigManager.getInstance().get(CONFIG_KEY) || undefined;

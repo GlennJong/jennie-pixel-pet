@@ -78,7 +78,7 @@ const ConfigEditor = ({ onChange } : { onChange: () => void }): JSX.Element => {
           setConfig({...config});
         }}
       />
-      <JsonEditor
+      {/* <JsonEditor
         title="放置遊戲角色：基本設定"
         wording={tamagotchiSceneWording}
         template={templates}
@@ -88,8 +88,8 @@ const ConfigEditor = ({ onChange } : { onChange: () => void }): JSX.Element => {
           config.tamagotchi.tamagotchi_afk.base = data;
           setConfig({...config});
         }}
-      />
-      <JsonEditor
+      /> */}
+      {/* <JsonEditor
         title="放置遊戲角色：角色靜止設定"
         wording={tamagotchiSceneWording}
         template={templates}
@@ -99,8 +99,8 @@ const ConfigEditor = ({ onChange } : { onChange: () => void }): JSX.Element => {
           config.tamagotchi.tamagotchi_afk.idleness = data;
           setConfig({...config});
         }}
-      />
-      <JsonEditor
+      /> */}
+      {/* <JsonEditor
         title="放置遊戲角色：角色活動設定"
         wording={tamagotchiSceneWording}
         template={templates}
@@ -115,8 +115,8 @@ const ConfigEditor = ({ onChange } : { onChange: () => void }): JSX.Element => {
           config.tamagotchi.tamagotchi_afk.activities = data;
           setConfig({...config});
         }}
-      />
-      <JsonEditor
+      /> */}
+      {/* <JsonEditor
         title="放置遊戲房間"
         wording={{
           decoration: '房間裝飾',
@@ -130,7 +130,7 @@ const ConfigEditor = ({ onChange } : { onChange: () => void }): JSX.Element => {
           config.tamagotchi.tamagotchi_room = data;
           setConfig({...config});
         }}
-      />
+      /> */}
       <JsonEditor
         title="戰鬥角色設定"
         wording={battleSceneWording}

@@ -8,7 +8,7 @@ type TDialogItem = {
   piority: number;
 };
 
-const DEFAULT_CHARACTER_KEY = 'tamagotchi_afk';
+const DEFAULT_CHARACTER_KEY = 'mycharacter';
 
 export class TamagotchiDialogue extends Phaser.GameObjects.Container {
   private dialogue: PrimaryDialogue;

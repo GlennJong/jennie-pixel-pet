@@ -31,7 +31,7 @@ export class ResourceHandler {
       this.timer.remove();
       this.timer = undefined;
     }
-    const statuses = ConfigManager.getInstance().get('tamagotchi.afk2.statuses') as Record<string, any>;
+    const statuses = ConfigManager.getInstance().get('tamagotchi.mycharacter.statuses') as Record<string, any>;
     const status = this.statusState?.get();
     
     if (!status || !statuses || typeof statuses !== 'object') return;

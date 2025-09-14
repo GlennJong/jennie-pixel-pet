@@ -60,7 +60,7 @@ export default class TamagotchiScene extends Scene {
     this.dialogue = new TamagotchiDialogue(this);
 
     // Resources Handler
-    const resources = ConfigManager.getInstance().get('tamagotchi.afk2.resources');
+    const resources = ConfigManager.getInstance().get('tamagotchi.resources');
     
     resources.forEach(({ key, min, max, value }) => {
       // initStore(`tamagotchi.${key}`, value || 0);
@@ -117,7 +117,7 @@ export default class TamagotchiScene extends Scene {
     } else if (key === 'space') {
       const action = this.header!.select();
       
-      const task = ConfigManager.getInstance().get(`tamagotchi.afk2.actions.${action}`);
+      const task = ConfigManager.getInstance().get(`tamagotchi.mycharacter.actions.${action}`);
       this.taskQueueService?.addTask(task);
     }
   }

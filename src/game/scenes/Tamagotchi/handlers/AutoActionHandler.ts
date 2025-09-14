@@ -15,7 +15,7 @@ export class AutoActionHandler {
   private onTrigger?: (action: any) => void;
 
   constructor() {
-    const actions = ConfigManager.getInstance().get('tamagotchi.afk2.actions');
+    const actions = ConfigManager.getInstance().get('tamagotchi.mycharacter.actions');
     this.autoActions = Object.values(actions).filter(a => a.auto && a.condition);
   }
 

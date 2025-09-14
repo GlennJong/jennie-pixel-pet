@@ -77,13 +77,9 @@ export class Preloader extends Scene {
     }
     // Preload tamagotchi assets
     if (tamagotchi) {
-      Object.keys(tamagotchi).map((key) => {
-        this.load.atlas(
-          tamagotchi[key].key,
-          tamagotchi[key].preload.png,
-          tamagotchi[key].preload.json,
-        );
-      });
+      for (const [ key, {png, json} ] of Object.entries(tamagotchi.preload)) {
+        this.load.atlas( key, png, json);
+      }
     }
 
     // Preload all battle characters

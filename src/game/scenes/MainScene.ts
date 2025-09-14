@@ -24,10 +24,11 @@ export class MainScene extends Scene {
             initStore('global.messageQueue', []);
 
 
-            // const resources = ConfigManager.getInstance().get('tamagotchi_new');
-            // resources.forEach(({key, value}) => {
-            //     initStore(`tamagotchi.${key}`, value || 0);
-            // })
+            const resources = ConfigManager.getInstance().get('tamagotchi.resources');
+            // console.log({ resources })
+            resources.forEach(({key, value}) => {
+                initStore(`tamagotchi.${key}`, value || 0);
+            })
             initStore('tamagotchi.hp', DEFAULT_HP);
             initStore('tamagotchi.coin', DEFAULT_COIN);
             initStore('tamagotchi.level', DEFAULT_LEVEL);

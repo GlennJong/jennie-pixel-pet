@@ -1,310 +1,43 @@
 {
   "tamagotchi": {
-    "tamagotchi_room": {
-      "key": "tamagotchi_room",
-      "preload": {
+    "preload": {
+      "tamagotchi_room": {
         "png": "tamagotchi/room.png",
         "json": "tamagotchi/room.json"
       },
-      "decoration": [
-        {
-          "key": "tamagotchi_room",
-          "frame": "customized_1",
-          "cost": 0,
-          "level": 1
-        },
-        {
-          "key": "tamagotchi_room",
-          "frame": "customized_2",
-          "cost": 100,
-          "level": 2
-        },
-        {
-          "key": "tamagotchi_room",
-          "frame": "customized_3",
-          "cost": 200,
-          "level": 3
-        },
-        {
-          "key": "tamagotchi_room",
-          "frame": "customized_4",
-          "cost": 400,
-          "level": 4
-        },
-        {
-          "key": "tamagotchi_room",
-          "frame": "customized_5",
-          "cost": 800,
-          "level": 5
-        }
-      ],
-      "recorder": { "prefix": "recorder", "qty": 1, "freq": 1, "repeat": -1 },
-      "window": { "prefix": "window", "qty": 1, "freq": 1, "repeat": -1 }
-    },
-    "tamagotchi_afk": {
-      "key": "tamagotchi_afk",
-      "preload": {
+      "tamagotchi_header": {
+        "png": "tamagotchi/header/icons.png",
+        "json": "tamagotchi/header/icons.json"
+      },
+      "mycharacter": {
         "png": "tamagotchi/afk.png",
         "json": "tamagotchi/afk.json"
-      },
-      "base": {
-        "consume": 1,
-        "recover": 3,
-        "interval": 5000
-      },
-      "animations": [
-        { "prefix": "born", "qty": 7, "freq": 8, "repeat": 0 },
-        { "prefix": "egg", "qty": 2, "freq": 1, "repeat": -1 },
-        { "prefix": "walk-left", "qty": 6, "freq": 8, "repeat": 4 },
-        { "prefix": "walk-right", "qty": 6, "freq": 8, "repeat": 4 },
-        {
-          "prefix": "drink",
-          "qty": 7,
-          "freq": 4,
-          "repeat": 0,
-          "repeat_delay": 1000
-        },
-        {
-          "prefix": "write",
-          "qty": 13,
-          "freq": 8,
-          "repeat": 0,
-          "repeat_delay": 1000
-        },
-        { "prefix": "lay-down", "qty": 4, "freq": 8, "repeat": 0 },
-        { "prefix": "wake-up", "qty": 5, "freq": 8, "repeat": 0 },
-        { "prefix": "sleep", "qty": 5, "freq": 2, "repeat": 0 },
-        { "prefix": "idle-left", "qty": 2, "freq": 1, "repeat": 0 },
-        { "prefix": "idle-right", "qty": 2, "freq": 1, "repeat": 0 },
-        { "prefix": "stare-left", "qty": 6, "freq": 4, "repeat": 0 },
-        { "prefix": "stare-right", "qty": 6, "freq": 4, "repeat": 0 },
-        { "prefix": "wink-left", "qty": 3, "freq": 4, "repeat": 0 },
-        { "prefix": "wink-right", "qty": 3, "freq": 4, "repeat": 0 }
-      ],
-      "idleness": {
-        "idle": {
-          "animation": "idle",
-          "piority": 10,
-          "has_direction": true
-        },
-        "stare": {
-          "animation": "stare",
-          "piority": 6,
-          "has_direction": true
-        },
-        "walk": {
-          "animation": "walk",
-          "piority": 4,
-          "is_move": true,
-          "has_direction": true
-        },
-        "wink": {
-          "animation": "wink",
-          "piority": 8,
-          "has_direction": true
-        }
-      },
-      "activities": {
-        "drink": {
-          "animation": "drink",
-          "effect": {
-            "hp": 10,
-            "status": "normal"
-          },
-          "hp": 10,
-          "dialogs": [
-            {
-              "sentences": [
-                {
-                  "face": {
-                    "key": "tamagotchi_afk",
-                    "frame": "face_normal"
-                  },
-                  "text": "感謝 {{user}} 兌換\n補充喝水，為AFK增加了 10 點生命！"
-                }
-              ],
-              "piority": 2
-            }
-          ]
-        },
-        "battle": {
-          "animation": "none",
-          "hp": 0,
-          "nextScene": "Battle",
-          "dialogs": [
-            {
-              "sentences": [
-                {
-                  "face": {
-                    "key": "tamagotchi_afk",
-                    "frame": "face_normal"
-                  },
-                  "text": "{{user}} 兌換打招呼！\n有人來挑戰了！"
-                }
-              ],
-              "piority": 2
-            }
-          ]
-        },
-        "write": {
-          "animation": "write",
-          "hp": 10,
-          "dialogs": [
-            {
-              "sentences": [
-                {
-                  "face": {
-                    "key": "tamagotchi_afk",
-                    "frame": "face_normal"
-                  },
-                  "text": "感謝 {{user}} 兌換存檔紀錄，為AFK增加了 10 點生命！"
-                }
-              ],
-              "piority": 2
-            }
-          ]
-        },
-        "sleep": {
-          "animation": "sleep",
-          "hp": 0,
-          "dialogs": [
-            {
-              "sentences": [
-                {
-                  "face": {
-                    "key": "tamagotchi_afk",
-                    "frame": "face_normal"
-                  },
-                  "text": "休息一下"
-                }
-              ],
-              "piority": 2
-            }
-          ]
-        },
-        "awake": {
-          "animation": "awake",
-          "hp": 0,
-          "dialogs": [
-            {
-              "sentences": [
-                {
-                  "face": {
-                    "key": "tamagotchi_afk",
-                    "frame": "face_normal"
-                  },
-                  "text": "起床了"
-                }
-              ],
-              "piority": 2
-            }
-          ]
-        },
-        "award": {
-          "animation": "none",
-          "hp": 0,
-          "coin": 10,
-          "dialogs": [
-            {
-              "sentences": [
-                {
-                  "face": {
-                    "key": "tamagotchi_afk",
-                    "frame": "face_normal"
-                  },
-                  "text": "我贏了！\n賺到 {{coin}} 元零用錢！"
-                }
-              ],
-              "piority": 2
-            }
-          ]
-        },
-        "lose": {
-          "animation": "none",
-          "hp": 0,
-          "coin": -10,
-          "dialogs": [
-            {
-              "sentences": [
-                {
-                  "face": {
-                    "key": "tamagotchi_afk",
-                    "frame": "face_sad"
-                  },
-                  "text": "輸了，損失 10 元零用錢！"
-                }
-              ],
-              "piority": 2
-            }
-          ]
-        },
-        "buy": {
-          "animation": "none",
-          "coin": -100,
-          "dialogs": [
-            {
-              "sentences": [
-                {
-                  "face": {
-                    "key": "tamagotchi_afk",
-                    "frame": "face_normal"
-                  },
-                  "text": "用賺來的錢錢買東西！\n花了 {{coin}} 元零用錢！"
-                }
-              ],
-              "piority": 2
-            },
-            {
-              "sentences": [
-                {
-                  "face": {
-                    "key": "tamagotchi_afk",
-                    "frame": "face_normal"
-                  },
-                  "text": "把錢錢變成喜歡的樣子！！\n花了 {{coin}} 元零用錢！"
-                }
-              ],
-              "piority": 4
-            }
-          ]
-        },
-        "born": {
-          "animation": "born",
-          "dialogs": [
-            {
-              "sentences": [
-                {
-                  "face": {
-                    "key": "tamagotchi_afk",
-                    "frame": "face_normal"
-                  },
-                  "text": "復活"
-                }
-              ],
-              "piority": 2
-            }
-          ]
-        },
-        "dead": {
-          "animation": "dead",
-          "coin": -10,
-          "dialogs": [
-            {
-              "sentences": [
-                {
-                  "face": {
-                    "key": "tamagotchi_afk",
-                    "frame": "face_sad"
-                  },
-                  "text": "死了...\n損失 {{coin}} 元零用錢！"
-                }
-              ],
-              "piority": 2
-            }
-          ]
-        }
       }
     },
+    "resources": [
+      {
+        "key": "hp",
+        "value": 100,
+        "max": 100,
+        "min": 0
+      },
+      {
+        "key": "coin",
+        "value": 100,
+        "min": 0
+      },
+      {
+        "key": "level",
+        "value": 0,
+        "min": 0
+      },
+      {
+        "key": "win",
+        "value": 0,
+        "min": 0,
+        "max": 1
+      }
+    ],
     "header": {
       "key": "tamagotchi_header",
       "preload": {
@@ -388,36 +121,7 @@
         }
       ]
     },
-    "afk2": {
-      "key": "afk2",
-      "preload": {
-        "png": "tamagotchi/afk.png",
-        "json": "tamagotchi/afk.json"
-      },
-      "resources": [
-        {
-          "key": "hp",
-          "value": 100,
-          "max": 100,
-          "min": 0
-        },
-        {
-          "key": "coin",
-          "value": 100,
-          "min": 0
-        },
-        {
-          "key": "level",
-          "value": 0,
-          "min": 0
-        },
-        {
-          "key": "win",
-          "value": 0,
-          "min": 0,
-          "max": 1
-        }
-      ],
+    "mycharacter": {
       "animations": [
         { "prefix": "face-normal", "qty": 1, "freq": 1, "repeat": 0 },
         { "prefix": "face-angry", "qty": 1, "freq": 1, "repeat": 0 },
@@ -426,20 +130,8 @@
         { "prefix": "egg", "qty": 2, "freq": 1, "repeat": 0 },
         { "prefix": "walk-left", "qty": 6, "freq": 8, "repeat": 4 },
         { "prefix": "walk-right", "qty": 6, "freq": 8, "repeat": 4 },
-        {
-          "prefix": "drink",
-          "qty": 7,
-          "freq": 4,
-          "repeat": 0,
-          "repeat_delay": 1000
-        },
-        {
-          "prefix": "write",
-          "qty": 13,
-          "freq": 8,
-          "repeat": 0,
-          "repeat_delay": 1000
-        },
+        { "prefix": "drink", "qty": 7, "freq": 4, "repeat": 0, "repeat_delay": 1000 },
+        { "prefix": "write", "qty": 13, "freq": 8, "repeat": 0, "repeat_delay": 1000 },
         { "prefix": "lay-down", "qty": 4, "freq": 8, "repeat": 0 },
         { "prefix": "wake-up", "qty": 5, "freq": 8, "repeat": 0 },
         { "prefix": "sleep", "qty": 5, "freq": 2, "repeat": 0 },
@@ -450,29 +142,6 @@
         { "prefix": "wink-left", "qty": 3, "freq": 4, "repeat": 0 },
         { "prefix": "wink-right", "qty": 3, "freq": 4, "repeat": 0 }
       ],
-      "idleness": {
-        "idle": {
-          "animation": "idle",
-          "piority": 10,
-          "has_direction": true
-        },
-        "stare": {
-          "animation": "stare",
-          "piority": 6,
-          "has_direction": true
-        },
-        "walk": {
-          "animation": "walk",
-          "piority": 4,
-          "is_move": true,
-          "has_direction": true
-        },
-        "wink": {
-          "animation": "wink",
-          "piority": 8,
-          "has_direction": true
-        }
-      },
       "statuses": {
         "normal": {
           "idle": true,
@@ -495,6 +164,92 @@
           }
         }
       },
+      "idleness": {
+        "idle-left": {
+          "plays": {
+            "default": ["idle-left"],
+            "status:normal": ["idle-left"],
+            "status:sleep": ["sleep"],
+            "status:death": ["egg"]
+          },
+          "piority": 2,
+          "direction": "left"
+        },
+        "idle-right": {
+          "plays": {
+            "default": ["idle-right"],
+            "status:normal": ["idle-right"],
+            "status:sleep": ["sleep"],
+            "status:death": ["egg"]
+          },
+          "animation": "idle",
+          "piority": 2,
+          "direction": "right"
+        },
+        "stare-left": {
+          "plays": {
+            "default": ["stare-left"],
+            "status:normal": ["stare-left"],
+            "status:sleep": ["sleep"],
+            "status:death": ["egg"]
+          },
+          "piority": 6,
+          "direction": "left"
+        },
+        "stare-right": {
+          "plays": {
+            "default": ["stare-right"],
+            "status:normal": ["stare-right"],
+            "status:sleep": ["sleep"],
+            "status:death": ["egg"]
+          },
+          "piority": 6,
+          "direction": "left"
+        },
+        "walk-left": {
+          "plays": {
+            "default": ["walk-left"],
+            "status:normal": ["walk-left"],
+            "status:sleep": ["sleep"],
+            "status:death": ["egg"]
+          },
+          "piority": 10,
+          "is_move": true,
+          "direction": "left"
+        },
+        "walk-right": {
+          "plays": {
+            "default": ["walk-right"],
+            "status:normal": ["walk-right"],
+            "status:sleep": ["sleep"],
+            "status:death": ["egg"]
+          },
+          "piority": 10,
+          "is_move": true,
+          "direction": "right"
+        },
+        "wink-left": {
+          "plays": {
+            "default": ["wink-left"],
+            "status:normal": ["wink-left"],
+            "status:sleep": ["sleep"],
+            "status:death": ["egg"]
+          },
+          "piority": 10,
+          "direction": "left"
+        },
+        "wink-right": {
+          "animation": "wink-right",
+          "plays": {
+            "default": ["wink-right"],
+            "status:normal": ["wink-right"],
+            "status:sleep": ["sleep"],
+            "status:death": ["egg"]
+          },
+          "piority": 8,
+          "direction": "right"
+        }
+      },
       "actions": {
         "drink": {
           "action": "drink",
@@ -513,7 +268,7 @@
             {
               "sentences": [
                 {
-                  "portrait": "afk2_face-normal",
+                  "portrait": "mycharacter_face-normal",
                   "text": "感謝 {{user}} 兌換\n補充喝水，為AFK增加了 10 點生命！"
                 }
               ],
@@ -537,7 +292,7 @@
             {
               "sentences": [
                 {
-                  "portrait": "afk2_face-angry",
+                  "portrait": "mycharacter_face-angry",
                   "text": "感謝 {{user}} 兌換戰鬥！挑戰者來了！"
                 }
               ],
@@ -560,7 +315,7 @@
             {
               "sentences": [
                 {
-                  "portrait": "afk2_face-sad",
+                  "portrait": "mycharacter_face-sad",
                   "text": "感謝 {{user}} 兌換\n提醒存檔，為AFK增加了 10 點生命！"
                 }
               ],
