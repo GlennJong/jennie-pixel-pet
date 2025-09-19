@@ -1,5 +1,25 @@
 {
 	"frames": {
+		"empty_1": {
+			"frame": {
+				"x": 1,
+				"y": 1,
+				"w": 1,
+				"h": 1
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 1,
+				"h": 1
+			},
+			"sourceSize": {
+				"w": 1,
+				"h": 1
+			}
+		},
 		"back-0_1": {
 			"frame": {
 				"x": 1,

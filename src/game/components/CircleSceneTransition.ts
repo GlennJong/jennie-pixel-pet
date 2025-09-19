@@ -43,7 +43,7 @@ class CircleScreenTransition extends Phaser.GameObjects.Container {
     const coverRect = scene.add
       .rectangle(0, 0, width * zoom, height * zoom, maskCoverColor)
       .setOrigin(0)
-      .setDepth(100)
+      .setDepth(9999)
       .setVisible(true);
       
     const visibleArea = scene.add
@@ -54,10 +54,9 @@ class CircleScreenTransition extends Phaser.GameObjects.Container {
 
     const mask = visibleArea.createGeometryMask();
 
-    this.setDepth(99);
-
     mask.invertAlpha = true;
     coverRect.setMask(mask);
+    this.setDepth(9999);
   }
 
   public init() {

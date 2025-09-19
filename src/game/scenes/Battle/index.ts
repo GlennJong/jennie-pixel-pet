@@ -140,7 +140,7 @@ export default class Battle extends Scene {
   private async handleFinishGame() {
     const selfFinishDialog = this.self!.runFinish();
     await this.dialogue!.runDialogue(selfFinishDialog);
-    setStoreState('global.transmit', { battleResult: this.self!.hp.current > 0 ? 'win' : 'lose' });
+    setStoreState('tamagotchi.win', this.self!.hp.current > 0 ? 1 : -1);
     sceneConverter(this, 'Tamagotchi');
   }
 

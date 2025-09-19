@@ -1,11 +1,11 @@
 import { setStoreState } from '@/game/store';
 import { PrimaryDialogue, TDialogData } from '@/game/components/PrimaryDialogue';
-import { selectFromPiority } from '@/game/utils/selectFromPiority';
+import { selectFromPriority } from '@/game/utils/selectFromPriority';
 
 
 type TDialogItem = {
   sentences: TDialogData[];
-  piority: number;
+  priority: number;
 };
 
 const DEFAULT_CHARACTER_KEY = 'mycharacter';
@@ -33,7 +33,7 @@ export class TamagotchiDialogue extends Phaser.GameObjects.Container {
     const replacement = {...{ hp, coin }, ...params};
 
     if (dialogs && replacement) {
-      const selectedDialog = selectFromPiority<TDialogItem>(dialogs);
+      const selectedDialog = selectFromPriority<TDialogItem>(dialogs);
       const selectedSentences = selectedDialog.sentences.map((_sentence) => {
         let text = _sentence.text;
         if (replacement) {
@@ -55,7 +55,7 @@ export class TamagotchiDialogue extends Phaser.GameObjects.Container {
 
   public async runDialogue2(dialogs: TDialogItem[], replacement?: { [key: string]: string | number }) {
     if (dialogs && replacement) {
-      const selectedDialog = selectFromPiority<TDialogItem>(dialogs);
+      const selectedDialog = selectFromPriority<TDialogItem>(dialogs);
       const selectedSentences = selectedDialog.sentences.map((_sentence) => {
         let text = _sentence.text;
         if (replacement) {

@@ -2,8 +2,7 @@ import { ConfigManager } from '@/game/managers/ConfigManagers';
 import { store } from '@/game/store';
 
 const STORE_KEY = 'tamagotchi.status';
-
-const CONFIG_KEY = 'tamagotchi.properties';
+const CONFIG_KEY = 'tamagotchi.room';
 
 type TAnimation = {
   prefix: string;
@@ -22,7 +21,7 @@ export class Property {
   private background?: Phaser.GameObjects.Sprite;
   private back?: Phaser.GameObjects.Sprite;
   private front?: Phaser.GameObjects.Sprite;
-  private customs: Phaser.GameObjects.Sprite[] = [];
+  private extras: Phaser.GameObjects.Sprite[] = [];
   private watchState = store<number>(STORE_KEY);
 
   constructor(scene: Phaser.Scene) {
@@ -95,32 +94,32 @@ export class Property {
     const current = list[value];
     if (!current) return;
 
-    const { background, back, front, customs } = current;
+    const { background, back, front, extras } = current;
     this.back?.play(`${this.config.key}_${back}`);
     this.front?.play(`${this.config.key}_${front}`);
     this.background?.play(`${this.config.key}_${background}`);
 
-    this.handleRenderCustoms(customs);
+    this.handleRenderExtras(extras);
   }
 
-  private handleRenderCustoms = (newCustoms?: any[]) => {
-    if (!newCustoms) return;
+  private handleRenderExtras = (newextras?: any[]) => {
+    if (!newextras) return;
 
-    if (this.customs.length !== 0) {
-      this.customs.forEach((custom) => {
+    if (this.extras.length !== 0) {
+      this.extras.forEach((custom) => {
         custom.destroy();
       });
-      this.customs = [];
+      this.extras = [];
     }
 
-    newCustoms.forEach(({ x, y, animation, depth=1 }) => {
+    newextras.forEach(({ x, y, animation, depth=1 }) => {
       const current = this.scene.make.sprite(DEFAULT_SPRITE)
       .setOrigin(0)
       .setPosition(x, y)
       .setDepth(depth)
       .play(`${this.config.key}_${animation}`);
 
-      this.customs.push(current);
+      this.extras.push(current);
     });
   }
 

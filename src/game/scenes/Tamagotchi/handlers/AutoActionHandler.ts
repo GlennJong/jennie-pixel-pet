@@ -13,6 +13,8 @@ export class AutoActionHandler {
   private triggerValueMap: Record<string, Set<any>> = {};
   private autoActions: AutoActionConfig[] = [];
   private onTrigger?: (action: any) => void;
+  // 移除 pendingActions 機制
+  private lastTriggeredAction: string | null = null;
 
   constructor() {
     const actions = ConfigManager.getInstance().get('tamagotchi.mycharacter.actions');
@@ -45,14 +47,36 @@ export class AutoActionHandler {
 
   private makeHandler = (key: string) => {
     return (v: any) => {
-      if (!this.triggerValueMap[key] || !this.triggerValueMap[key].has(v)) return;
       this.cache[key] = v;
-      const matchAction = this.autoActions.find(a => Object.keys(a.condition).every(k => this.cache[k] === a.condition[k]));
+      const matchAction = this.autoActions.find(a => {
+        return Object.keys(a.condition).every(k => {
+          const cond = a.condition[k];
+          const val = this.cache[k];
+          if (Array.isArray(cond)) {
+            return cond.includes(val);
+          }
+          if (typeof cond === 'object' && cond !== null && 'op' in cond && 'value' in cond) {
+            switch (cond.op) {
+              case '==': return val === cond.value;
+              case '>=': return val >= cond.value;
+              case '<=': return val <= cond.value;
+              case '>': return val > cond.value;
+              case '<': return val < cond.value;
+              default: return false;
+            }
+          }
+          return val === cond;
+        });
+      });
       if (matchAction) {
-        this.onTrigger?.(matchAction);
+        if (this.lastTriggeredAction !== matchAction.action) {
+          this.onTrigger?.(matchAction);
+          this.lastTriggeredAction = matchAction.action;
+        }
       }
     };
-  };
+  }
+
 
   clearWatchers() {
     for (const { key, handler } of this._autoWatchers) {

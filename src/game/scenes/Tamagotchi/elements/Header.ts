@@ -28,13 +28,13 @@ export class Header extends Phaser.GameObjects.Container {
     this.initAnimations();
     
     this.initBackground();
-    this.initSelectors();
+    this.initMenu();
     this.initResources();
 
     this.handleUpdateSelector();
 
 
-    this.setDepth(9999);
+    this.setDepth(1000);
     this.scene.add.existing(this);
   }
   
@@ -82,12 +82,12 @@ export class Header extends Phaser.GameObjects.Container {
     this.add(this.background);
   }
 
-  private initSelectors() {
+  private initMenu() {
     const startFrom = 4;
     const arrowSpace = 12;
     const gap = 8;
     const y = 7;
-    this.config.selectors.forEach(({animation}, i) => {
+    this.config.menu.forEach(({animation}, i) => {
       const arrow = this.scene.make.sprite({
         x: startFrom + (gap*i) + ((i) * arrowSpace),
         y,
@@ -138,16 +138,6 @@ export class Header extends Phaser.GameObjects.Container {
     })
   }
 
-
-  // private hideHeader() {
-  //   if (this.timer) {
-  //     clearTimeout(this.timer);
-  //   }
-  //   this.timer = setTimeout(() => {
-  //     this.setAlpha(0);
-  //   }, AUTO_HIDE_TIME);
-  // }
-
   private handleUpdateSelector() {
     this.selectorGroup.forEach(({ onBlur, onSelect }, i) => {
       if (i === this.current) {
@@ -158,21 +148,8 @@ export class Header extends Phaser.GameObjects.Container {
     });
   }
 
-  // public showHeader(time?: number) {
-  //   this.setAlpha(1);
-  //   if (time) {
-  //     if (this.timer) {
-  //       clearTimeout(this.timer);
-  //     }
-  //     this.timer = setTimeout(() => {
-  //       this.setAlpha(0);
-  //     }, time);
-  //   }
-  // }
-
   public moveNext() {
     this.current = this.current === this.selectorGroup.length - 1 ? 0 : this.current + 1;
-    console.log(this.config.selectors[this.current]);
     this.handleUpdateSelector();
   }
 
@@ -182,7 +159,7 @@ export class Header extends Phaser.GameObjects.Container {
   }
 
   public select() {
-    const { action } = this.config.selectors[this.current];
+    const { action } = this.config.menu[this.current];
     const currentAction = getValueFromColonStoreState(action);
     return currentAction;
   }
@@ -196,13 +173,7 @@ export class Header extends Phaser.GameObjects.Container {
     this.selectorGroup.forEach(({ arrow, icon }) => {
       arrow.destroy();
       icon.destroy();
-    })
-    // this.iconHp.destroy();
-    // this.iconCoin.destroy();
-    // this.iconSelector['drink'].destroy();
-    // this.iconSelector['battle'].destroy();
-    // this.iconSelector['write'].destroy();
-    // this.iconSelector['sleep'].destroy();
+    });
     clearTimeout(this.timer);
   }
 

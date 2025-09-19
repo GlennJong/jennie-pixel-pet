@@ -46,7 +46,7 @@
       "actions": {
         "attack": {
           "animation": "attack",
-          "piority": 1,
+          "priority": 1,
           "dialogs": [
             {
               "dialog": [
@@ -58,7 +58,7 @@
                   "text": "！！！！！！！！"
                 }
               ],
-              "piority": 20
+              "priority": 20
             },
             {
               "dialog": [
@@ -70,7 +70,7 @@
                   "text": "！！！"
                 }
               ],
-              "piority": 80
+              "priority": 80
             }
           ],
           "effect": {
@@ -94,7 +94,7 @@
                   "text": "！？！？！？！？！？！？"
                 }
               ],
-              "piority": 2
+              "priority": 2
             }
           ]
         },
@@ -111,7 +111,7 @@
                   "text": "＾＿＾！"
                 }
               ],
-              "piority": 2
+              "priority": 2
             }
           ]
         }
@@ -128,7 +128,7 @@
                 "text": "：）））））"
               }
             ],
-            "piority": 2
+            "priority": 2
           }
         ],
         "finish": [
@@ -142,7 +142,7 @@
                 "text": "ZzZzZzZzZz"
               }
             ],
-            "piority": 2
+            "priority": 2
           }
         ]
       },
@@ -159,7 +159,7 @@
                   "text": "：ＤＤＤＤＤ"
                 }
               ],
-              "piority": 2
+              "priority": 2
             }
           ]
         },
@@ -175,7 +175,7 @@
                   "text": "：（（（（"
                 }
               ],
-              "piority": 2
+              "priority": 2
             }
           ]
         }
@@ -198,7 +198,7 @@
       "actions": {
         "attack": {
           "animation": "attack",
-          "piority": 10,
+          "priority": 10,
           "dialogs": [
             {
               "dialog": [
@@ -210,7 +210,7 @@
                   "text": "咖哩攻擊!"
                 }
               ],
-              "piority": 2
+              "priority": 2
             }
           ],
           "effect": {
@@ -221,7 +221,7 @@
         },
         "sp1": {
           "animation": "sp",
-          "piority": 2,
+          "priority": 2,
           "dialogs": [
             {
               "dialog": [
@@ -240,7 +240,7 @@
                   "text": "拌起來！"
                 }
               ],
-              "piority": 2
+              "priority": 2
             }
           ],
           "effect": {
@@ -251,7 +251,7 @@
         },
         "sp2": {
           "animation": "sp",
-          "piority": 20,
+          "priority": 20,
           "dialogs": [
             {
               "dialog": [
@@ -263,7 +263,7 @@
                   "text": "咖哩吃起來！"
                 }
               ],
-              "piority": 2
+              "priority": 2
             }
           ],
           "effect": {
@@ -287,7 +287,7 @@
                   "text": "喵喵喵喵喵!"
                 }
               ],
-              "piority": 2
+              "priority": 2
             }
           ]
         },
@@ -304,7 +304,7 @@
                   "text": "喵～"
                 }
               ],
-              "piority": 2
+              "priority": 2
             }
           ]
         }
@@ -321,7 +321,7 @@
                 "text": "喵！！"
               }
             ],
-            "piority": 2
+            "priority": 2
           }
         ],
         "finish": [
@@ -335,7 +335,7 @@
                 "text": "喵"
               }
             ],
-            "piority": 2
+            "priority": 2
           }
         ]
       },
@@ -352,7 +352,7 @@
                   "text": "從今以後咖哩都要拌起來！"
                 }
               ],
-              "piority": 2
+              "priority": 2
             }
           ]
         },
@@ -368,7 +368,7 @@
                   "text": "今天的咖哩有點臭酸！"
                 }
               ],
-              "piority": 2
+              "priority": 2
             }
           ]
         }
@@ -397,7 +397,7 @@
       "actions": {
         "attack": {
           "animation": "attack",
-          "piority": 40,
+          "priority": 40,
           "dialogs": [
             {
               "dialog": [
@@ -409,7 +409,7 @@
                   "text": "打！"
                 }
               ],
-              "piority": 2
+              "priority": 2
             }
           ],
           "effect": {
@@ -420,7 +420,7 @@
         },
         "sp1": {
           "animation": "sp",
-          "piority": 60,
+          "priority": 60,
           "dialogs": [
             {
               "dialog": [
@@ -432,7 +432,7 @@
                   "text": "成熟大姐姐飛吻！！！"
                 }
               ],
-              "piority": 2
+              "priority": 2
             }
           ],
           "effect": {
@@ -456,7 +456,7 @@
                   "text": "痛！！"
                 }
               ],
-              "piority": 2
+              "priority": 2
             }
           ]
         },
@@ -473,7 +473,7 @@
                   "text": "蟹蟹尼！"
                 }
               ],
-              "piority": 2
+              "priority": 2
             }
           ]
         }
@@ -490,7 +490,7 @@
                 "text": "貝貝登場！"
               }
             ],
-            "piority": 2
+            "priority": 2
           }
         ],
         "finish": [
@@ -504,7 +504,7 @@
                 "text": "８８８８８８８"
               }
             ],
-            "piority": 2
+            "priority": 2
           }
         ]
       },
@@ -521,7 +521,7 @@
                   "text": "我贏了"
                 }
               ],
-              "piority": 2
+              "priority": 2
             }
           ]
         },
@@ -537,7 +537,7 @@
                   "text": "我輸了"
                 }
               ],
-              "piority": 2
+              "priority": 2
             }
           ]
         }
@@ -566,7 +566,7 @@
       "actions": {
         "attack": {
           "animation": "attack",
-          "piority": 60,
+          "priority": 60,
           "dialogs": [
             {
               "dialog": [
@@ -578,7 +578,7 @@
                   "text": "喝啊！"
                 }
               ],
-              "piority": 2
+              "priority": 2
             }
           ],
           "effect": {
@@ -589,7 +589,7 @@
         },
         "sp1": {
           "animation": "sp",
-          "piority": 40,
+          "priority": 40,
           "dialogs": [
             {
               "dialog": [
@@ -601,7 +601,7 @@
                   "text": "吃我鐵拳！"
                 }
               ],
-              "piority": 2
+              "priority": 2
             }
           ],
           "effect": {
@@ -625,7 +625,7 @@
                   "text": "好痛！"
                 }
               ],
-              "piority": 2
+              "priority": 2
             }
           ]
         },
@@ -642,7 +642,7 @@
                   "text": "金乾蝦！"
                 }
               ],
-              "piority": 2
+              "priority": 2
             }
           ]
         }
@@ -659,7 +659,7 @@
                 "text": "上上登場！"
               }
             ],
-            "piority": 2
+            "priority": 2
           }
         ],
         "finish": [
@@ -673,7 +673,7 @@
                 "text": "掰掰"
               }
             ],
-            "piority": 2
+            "priority": 2
           }
         ]
       },
@@ -690,7 +690,7 @@
                   "text": "我贏了"
                 }
               ],
-              "piority": 2
+              "priority": 2
             }
           ]
         },
@@ -706,7 +706,7 @@
                   "text": "我輸了"
                 }
               ],
-              "piority": 2
+              "priority": 2
             }
           ]
         }
@@ -735,7 +735,7 @@
       "actions": {
         "attack": {
           "animation": "attack",
-          "piority": 60,
+          "priority": 60,
           "dialogs": [
             {
               "dialog": [
@@ -747,7 +747,7 @@
                   "text": "輕攻擊"
                 }
               ],
-              "piority": 2
+              "priority": 2
             },
             {
               "dialog": [
@@ -759,7 +759,7 @@
                   "text": "重攻擊"
                 }
               ],
-              "piority": 2
+              "priority": 2
             }
           ],
           "effect": {
@@ -770,7 +770,7 @@
         },
         "sp1": {
           "animation": "sp",
-          "piority": 40,
+          "priority": 40,
           "dialogs": [
             {
               "dialog": [
@@ -782,7 +782,7 @@
                   "text": "我愛拉麵！"
                 }
               ],
-              "piority": 2
+              "priority": 2
             }
           ],
           "effect": {
@@ -806,7 +806,7 @@
                   "text": "好痛"
                 }
               ],
-              "piority": 2
+              "priority": 2
             }
           ]
         },
@@ -823,7 +823,7 @@
                   "text": "金乾蝦"
                 }
               ],
-              "piority": 2
+              "priority": 2
             }
           ]
         }
@@ -840,7 +840,7 @@
                 "text": "貞尼鹹粥開台了"
               }
             ],
-            "piority": 2
+            "priority": 2
           }
         ],
         "finish": [
@@ -854,7 +854,7 @@
                 "text": "貞尼鹹粥關台了"
               }
             ],
-            "piority": 2
+            "priority": 2
           }
         ]
       },
@@ -871,7 +871,7 @@
                   "text": "我贏了"
                 }
               ],
-              "piority": 2
+              "priority": 2
             }
           ]
         },
@@ -887,7 +887,7 @@
                   "text": "我輸了"
                 }
               ],
-              "piority": 2
+              "priority": 2
             }
           ]
         }
@@ -916,7 +916,7 @@
       "actions": {
         "attack": {
           "animation": "attack",
-          "piority": 70,
+          "priority": 70,
           "dialogs": [
             {
               "dialog": [
@@ -928,7 +928,7 @@
                   "text": "攻擊"
                 }
               ],
-              "piority": 2
+              "priority": 2
             }
           ],
           "effect": {
@@ -939,7 +939,7 @@
         },
         "sp1": {
           "animation": "sp",
-          "piority": 30,
+          "priority": 30,
           "dialogs": [
             {
               "dialog": [
@@ -958,7 +958,7 @@
                   "text": "究極進化！"
                 }
               ],
-              "piority": 2
+              "priority": 2
             }
           ],
           "effect": {
@@ -982,7 +982,7 @@
                   "text": "好痛"
                 }
               ],
-              "piority": 2
+              "priority": 2
             }
           ]
         },
@@ -999,7 +999,7 @@
                   "text": "謝謝"
                 }
               ],
-              "piority": 2
+              "priority": 2
             }
           ]
         }
@@ -1016,7 +1016,7 @@
                 "text": "嗶嗶嗶來挑戰！"
               }
             ],
-            "piority": 2
+            "priority": 2
           }
         ],
         "finish": [
@@ -1030,7 +1030,7 @@
                 "text": "掰掰"
               }
             ],
-            "piority": 2
+            "priority": 2
           }
         ]
       },
@@ -1047,7 +1047,7 @@
                   "text": "我贏了"
                 }
               ],
-              "piority": 2
+              "priority": 2
             }
           ]
         },
@@ -1063,7 +1063,7 @@
                   "text": "我輸了"
                 }
               ],
-              "piority": 2
+              "priority": 2
             }
           ]
         }
@@ -1092,7 +1092,7 @@
       "actions": {
         "attack": {
           "animation": "attack",
-          "piority": 55,
+          "priority": 55,
           "dialogs": [
             {
               "dialog": [
@@ -1104,7 +1104,7 @@
                   "text": "攻擊"
                 }
               ],
-              "piority": 2
+              "priority": 2
             }
           ],
           "effect": {
@@ -1115,7 +1115,7 @@
         },
         "sp1": {
           "animation": "sp",
-          "piority": 45,
+          "priority": 45,
           "dialogs": [
             {
               "dialog": [
@@ -1134,7 +1134,7 @@
                   "text": "掐恰！"
                 }
               ],
-              "piority": 2
+              "priority": 2
             }
           ],
           "effect": {
@@ -1158,7 +1158,7 @@
                   "text": "好痛"
                 }
               ],
-              "piority": 2
+              "priority": 2
             }
           ]
         },
@@ -1175,7 +1175,7 @@
                   "text": "謝謝"
                 }
               ],
-              "piority": 2
+              "priority": 2
             }
           ]
         }
@@ -1192,7 +1192,7 @@
                 "text": "橙踏青來挑戰！"
               }
             ],
-            "piority": 2
+            "priority": 2
           }
         ],
         "finish": [
@@ -1206,7 +1206,7 @@
                 "text": "掰掰"
               }
             ],
-            "piority": 2
+            "priority": 2
           }
         ]
       },
@@ -1223,7 +1223,7 @@
                   "text": "我贏了"
                 }
               ],
-              "piority": 2
+              "priority": 2
             }
           ]
         },
@@ -1239,7 +1239,7 @@
                   "text": "我輸了"
                 }
               ],
-              "piority": 2
+              "priority": 2
             }
           ]
         }
@@ -1267,7 +1267,7 @@
       "actions": {
         "attack": {
           "animation": "attack",
-          "piority": 60,
+          "priority": 60,
           "dialogs": [
             {
               "dialog": [
@@ -1279,7 +1279,7 @@
                   "text": "攻擊！"
                 }
               ],
-              "piority": 2
+              "priority": 2
             }
           ],
           "effect": {
@@ -1290,7 +1290,7 @@
         },
         "attack2": {
           "animation": "attack",
-          "piority": 40,
+          "priority": 40,
           "dialogs": [
             {
               "dialog": [
@@ -1302,7 +1302,7 @@
                   "text": "重攻擊！"
                 }
               ],
-              "piority": 2
+              "priority": 2
             }
           ],
           "effect": {
@@ -1326,7 +1326,7 @@
                   "text": "嗚哇嗚哇"
                 }
               ],
-              "piority": 2
+              "priority": 2
             }
           ]
         },
@@ -1343,7 +1343,7 @@
                   "text": "謝謝尼"
                 }
               ],
-              "piority": 2
+              "priority": 2
             }
           ]
         }
@@ -1360,7 +1360,7 @@
                 "text": "戰鬥開始！"
               }
             ],
-            "piority": 2
+            "priority": 2
           }
         ],
         "finish": [
@@ -1374,7 +1374,7 @@
                 "text": "回到我的小房間"
               }
             ],
-            "piority": 2
+            "priority": 2
           }
         ]
       },
@@ -1391,7 +1391,7 @@
                   "text": "我贏了"
                 }
               ],
-              "piority": 2
+              "priority": 2
             }
           ]
         },
@@ -1407,7 +1407,7 @@
                   "text": "我輸了"
                 }
               ],
-              "piority": 2
+              "priority": 2
             }
           ]
         }
@@ -1496,26 +1496,26 @@
         { "prefix": "wink-left", "qty": 3, "freq": 4, "repeat": 0 },
         { "prefix": "wink-right", "qty": 3, "freq": 4, "repeat": 0 }
       ],
-      "idleness": {
+      "idleActions": {
         "idle": {
           "animation": "idle",
-          "piority": 10,
+          "priority": 10,
           "has_direction": true
         },
         "stare": {
           "animation": "stare",
-          "piority": 6,
+          "priority": 6,
           "has_direction": true
         },
         "walk": {
           "animation": "walk",
-          "piority": 4,
+          "priority": 4,
           "is_move": true,
           "has_direction": true
         },
         "wink": {
           "animation": "wink",
-          "piority": 8,
+          "priority": 8,
           "has_direction": true
         }
       },
@@ -1538,7 +1538,7 @@
                   "text": "感謝 {{user}} 兌換\n補充喝水，為AFK增加了 10 點生命！"
                 }
               ],
-              "piority": 2
+              "priority": 2
             }
           ]
         },
@@ -1557,7 +1557,7 @@
                   "text": "{{user}} 兌換打招呼！\n有人來挑戰了！"
                 }
               ],
-              "piority": 2
+              "priority": 2
             }
           ]
         },
@@ -1575,7 +1575,7 @@
                   "text": "感謝 {{user}} 兌換存檔紀錄，為AFK增加了 10 點生命！"
                 }
               ],
-              "piority": 2
+              "priority": 2
             }
           ]
         },
@@ -1593,7 +1593,7 @@
                   "text": "休息一下"
                 }
               ],
-              "piority": 2
+              "priority": 2
             }
           ]
         },
@@ -1611,7 +1611,7 @@
                   "text": "起床了"
                 }
               ],
-              "piority": 2
+              "priority": 2
             }
           ]
         },
@@ -1630,7 +1630,7 @@
                   "text": "我贏了！\n賺到 {{coin}} 元零用錢！"
                 }
               ],
-              "piority": 2
+              "priority": 2
             }
           ]
         },
@@ -1649,7 +1649,7 @@
                   "text": "輸了，損失 10 元零用錢！"
                 }
               ],
-              "piority": 2
+              "priority": 2
             }
           ]
         },
@@ -1667,7 +1667,7 @@
                   "text": "用賺來的錢錢買東西！\n花了 {{coin}} 元零用錢！"
                 }
               ],
-              "piority": 2
+              "priority": 2
             },
             {
               "sentences": [
@@ -1679,7 +1679,7 @@
                   "text": "把錢錢變成喜歡的樣子！！\n花了 {{coin}} 元零用錢！"
                 }
               ],
-              "piority": 4
+              "priority": 4
             }
           ]
         },
@@ -1696,7 +1696,7 @@
                   "text": "復活"
                 }
               ],
-              "piority": 2
+              "priority": 2
             }
           ]
         },
@@ -1714,7 +1714,7 @@
                   "text": "死了...\n損失 {{coin}} 元零用錢！"
                 }
               ],
-              "piority": 2
+              "priority": 2
             }
           ]
         }
@@ -1742,7 +1742,7 @@
       "arrow": {
         "animation": "arrow"
       },
-      "selectors": [
+      "menu": [
         {
           "animation": {
             "selected": "water-selected",
@@ -1865,26 +1865,26 @@
         { "prefix": "wink-left", "qty": 3, "freq": 4, "repeat": 0 },
         { "prefix": "wink-right", "qty": 3, "freq": 4, "repeat": 0 }
       ],
-      "idleness": {
+      "idleActions": {
         "idle": {
           "animation": "idle",
-          "piority": 10,
+          "priority": 10,
           "has_direction": true
         },
         "stare": {
           "animation": "stare",
-          "piority": 6,
+          "priority": 6,
           "has_direction": true
         },
         "walk": {
           "animation": "walk",
-          "piority": 4,
+          "priority": 4,
           "is_move": true,
           "has_direction": true
         },
         "wink": {
           "animation": "wink",
-          "piority": 8,
+          "priority": 8,
           "has_direction": true
         }
       },
@@ -1932,7 +1932,7 @@
                   "text": "感謝 {{user}} 兌換\n補充喝水，為AFK增加了 10 點生命！"
                 }
               ],
-              "piority": 2
+              "priority": 2
             }
           ]
         },
@@ -1956,7 +1956,7 @@
                   "text": "感謝 {{user}} 兌換戰鬥！挑戰者來了！"
                 }
               ],
-              "piority": 2
+              "priority": 2
             }
           ]
         },
@@ -1979,7 +1979,7 @@
                   "text": "感謝 {{user}} 兌換\n提醒存檔，為AFK增加了 10 點生命！"
                 }
               ],
-              "piority": 2
+              "priority": 2
             }
           ]
         },
@@ -2003,7 +2003,7 @@
                   "text": "休息一下"
                 }
               ],
-              "piority": 2
+              "priority": 2
             }
           ]
         },
@@ -2027,7 +2027,7 @@
                   "text": "起床了"
                 }
               ],
-              "piority": 2
+              "priority": 2
             }
           ]
         },
@@ -2053,7 +2053,7 @@
                   "text": "我贏了！\n賺到 {{coin}} 元零用錢！"
                 }
               ],
-              "piority": 2
+              "priority": 2
             }
           ]
         },
@@ -2079,7 +2079,7 @@
                   "text": "死了...\n損失 {{coin}} 元零用錢！"
                 }
               ],
-              "piority": 2
+              "priority": 2
             }
           ]
         },
@@ -2104,7 +2104,7 @@
                   "text": "復活"
                 }
               ],
-              "piority": 2
+              "priority": 2
             }
           ]
         },
@@ -2121,7 +2121,7 @@
                   "text": "我已經死了什麼都不能做！"
                 }
               ],
-              "piority": 2
+              "priority": 2
             }
           ]
         },
@@ -2150,13 +2150,13 @@
                   "text": "買買買"
                 }
               ],
-              "piority": 2
+              "priority": 2
             }
           ]
         }
       }
     },
-    "properties": {
+    "room": {
       "watch": "level",
       "key": "tamagotchi_room",
       "preload": {

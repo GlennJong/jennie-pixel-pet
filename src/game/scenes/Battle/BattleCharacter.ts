@@ -3,10 +3,10 @@ import { runTween } from '../../utils/runTween';
 import { StatusBoard } from './StatusBoard';
 import { Character } from '../../components/Character';
 import { TDialogData } from '../../components/PrimaryDialogue';
-import { selectFromPiority } from '../../utils/selectFromPiority';
+import { selectFromPriority } from '../../utils/selectFromPriority';
 
 type TDialogItem = {
-  piority: number;
+  priority: number;
   dialog: TDialogData[];
 };
 
@@ -25,7 +25,7 @@ type TReaction = {
 type TAction = {
   animation: 'attack' | string;
   dialogs: TDialogItem[];
-  piority: number;
+  priority: number;
   effect: TEffect;
 };
 
@@ -172,7 +172,7 @@ export default class BattleCharacter extends Character {
 
     return {
       ...currentAction,
-      dialog: selectFromPiority(dialogs).dialog,
+      dialog: selectFromPriority(dialogs).dialog,
     };
   }
 
@@ -228,7 +228,7 @@ export default class BattleCharacter extends Character {
 
     return {
       ...currentReaction,
-      dialog: selectFromPiority(dialogs).dialog,
+      dialog: selectFromPriority(dialogs).dialog,
       isDead: this.hp.current <= 0,
     };
   }
@@ -246,7 +246,7 @@ export default class BattleCharacter extends Character {
 
     return {
       ...currentResult,
-      dialog: selectFromPiority(dialogs).dialog,
+      dialog: selectFromPriority(dialogs).dialog,
     };
   }
 
@@ -254,28 +254,28 @@ export default class BattleCharacter extends Character {
     const startDialog = this.common!['start'];
     if (!startDialog) return;
 
-    return selectFromPiority(startDialog).dialog;
+    return selectFromPriority(startDialog).dialog;
   }
 
   public runFinish() {
     const finishDialog = this.common!['finish'];
     if (!finishDialog) return;
 
-    return selectFromPiority(finishDialog).dialog;
+    return selectFromPriority(finishDialog).dialog;
   }
 
   public getRandomAction() {
     if (!this.actions) return;
     const allAction = Object.keys(this.actions);
-    let sumPiority = 0;
+    let sumPriority = 0;
 
     const allActionPoint: { [key: string]: number } = {};
 
     allAction.forEach((key) => {
-      allActionPoint[key] = sumPiority += this.actions![key].piority;
+      allActionPoint[key] = sumPriority += this.actions![key].priority;
     });
 
-    const randomPoint = sumPiority * Math.random();
+    const randomPoint = sumPriority * Math.random();
 
     allAction.forEach((key) => {
       allActionPoint[key] = Math.abs(allActionPoint[key] - randomPoint);

@@ -94,9 +94,9 @@ const ConfigEditor = ({ onChange } : { onChange: () => void }): JSX.Element => {
         wording={tamagotchiSceneWording}
         template={templates}
         hide={tamagotchiSceneHideKey}
-        value={config.tamagotchi.tamagotchi_afk.idleness}
+        value={config.tamagotchi.tamagotchi_afk.idleActions}
         onChange={data => {
-          config.tamagotchi.tamagotchi_afk.idleness = data;
+          config.tamagotchi.tamagotchi_afk.idleActions = data;
           setConfig({...config});
         }}
       /> */}

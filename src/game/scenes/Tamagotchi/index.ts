@@ -19,21 +19,20 @@ import { Task } from './services/types';
 import { ConfigManager } from '@/game/managers/ConfigManagers';
 import { StatusHandler } from './handlers/StatusHandler';
 import { AutoActionHandler } from './handlers/AutoActionHandler';
-import { ResourceHandler } from './handlers/ResourceHandler';
+import { ResourcesHandler } from './handlers/ResourceHandler';
 import { Property } from './elements/Property';
-
-const HEADER_DISPLAY_DURATION = 5000;
 
 export default class TamagotchiScene extends Scene {
   private header?: Header;
   private property?: Property;
   private character?: TamagotchiCharacter;
+  private resources?: ResourcesHandler;
   private dialogue?: TamagotchiDialogue;
   private keyboardHandler?: KeyboardHandler;
 
   private taskQueueService?: TaskQueueService;
   // private coinHandler?: CoinHandler;
-  private resourceHandlerGroup: ResourceHandler[] = [];
+  // private resourceHandlerGroup: ResourceHandler[] = [];
   private statusHandler?: StatusHandler;
   private autoActionHandler?: AutoActionHandler;
 
@@ -60,18 +59,10 @@ export default class TamagotchiScene extends Scene {
     this.dialogue = new TamagotchiDialogue(this);
 
     // Resources Handler
-    const resources = ConfigManager.getInstance().get('tamagotchi.resources');
-    
-    resources.forEach(({ key, min, max, value }) => {
-      // initStore(`tamagotchi.${key}`, value || 0);
-      const handler = new ResourceHandler(this, `tamagotchi.${key}`, min, max);
-      handler.init();
-      this.resourceHandlerGroup.push(handler);
-    });
+    this.resources = new ResourcesHandler(this);
 
     // Status handler
     this.statusHandler = new StatusHandler();
-    // this.statusHandler.init();
 
     // queue init
     this.taskQueueService = new TaskQueueService(this);
@@ -127,6 +118,7 @@ export default class TamagotchiScene extends Scene {
     if (!this.isTamagotchiReady) return false;
     let success = false;
     const { action, user, params, effect, dialogs, move } = task;
+    console.log(task)
     try {
       await this.character?.runFuntionalActionAsync(action);
       this.statusHandler?.runEffect(effect);
@@ -144,9 +136,7 @@ export default class TamagotchiScene extends Scene {
         await this.dialogue.runDialogue2(dialogs, replacement);
       }
 
-      this.resourceHandlerGroup.forEach((handler) => handler.runEffect(effect));
-      
-      // this.header?.showHeader(HEADER_DISPLAY_DURATION);
+      this.resources?.runEffect(effect);
 
       if (move) {
         setStoreState('global.transmit', params);
@@ -179,14 +169,14 @@ export default class TamagotchiScene extends Scene {
 
   shutdown = () => {
     this.isTamagotchiReady = false;
+
     this.character?.destroy();
     this.header?.destroy();
     this.property?.destroy();
     this.dialogue?.destroy();
     this.autoActionHandler?.destroy();
     this.taskQueueService?.destroy();
-
-    this.resourceHandlerGroup.forEach((handler) => handler.destroy());
+    this.resources?.destroy();
 
     EventBus.off('game-left-keydown');
     EventBus.off('game-right-keydown');

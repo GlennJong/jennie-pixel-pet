@@ -118,9 +118,9 @@ export class PrimaryDialogue extends Phaser.GameObjects.Container {
   private resolvePromise: ((value?: unknown) => void) | null = null;
 
   private setPortrait = (portrait: string) => {
-    console.log(portrait)
+    // TODO: get portrait with key
     if (this.portrait && portrait) {
-      this.portrait.play(portrait);
+      this.portrait.play(`mycharacter_${portrait}`);
     }
   }
 
@@ -340,8 +340,7 @@ export class PrimaryDialogue extends Phaser.GameObjects.Container {
       .setDisplaySize(PORTRAIT_SIZE, PORTRAIT_SIZE)
       .setOrigin(0)
       .setDepth(999)
-      .setVisible(false)
-      .play('idle');
+      .setVisible(false);
 
     this.textbox = this.scene.add.text(TEXTBOX_X, TEXTBOX_Y, '', {
       ...TEXTBOX_CONFIT,

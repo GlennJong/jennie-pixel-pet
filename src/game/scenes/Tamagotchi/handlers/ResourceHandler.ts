@@ -4,6 +4,32 @@ import { store, getStoreState, setStoreState } from '@/game/store';
 import { ConfigManager } from '@/game/managers/ConfigManagers';
 
 
+export class ResourcesHandler {
+  private group: ResourceHandler[] = [];
+  constructor(scene: Phaser.Scene) {
+    const resources = ConfigManager.getInstance().get('tamagotchi.resources');
+
+    resources.forEach(({ key, min, max }) => {
+      const handler = new ResourceHandler(scene, `tamagotchi.${key}`, min, max);
+      handler.init();
+      this.group.push(handler);
+    })
+  }
+
+  runEffect(effect) {
+    if (!effect) return;
+    this.group.forEach((handler) => {
+      handler.runEffect(effect);
+    });
+  }
+  
+  destroy () {
+    this.group.forEach((handler) => {
+      handler.destroy();
+    });
+  }
+}
+
 export class ResourceHandler {
   private timer?: Phaser.Time.TimerEvent;
   private scene: Phaser.Scene;
@@ -31,13 +57,13 @@ export class ResourceHandler {
       this.timer.remove();
       this.timer = undefined;
     }
-    const statuses = ConfigManager.getInstance().get('tamagotchi.mycharacter.statuses') as Record<string, any>;
+    const statuses = ConfigManager.getInstance().get('tamagotchi.statuses') as Record<string, any>;
     const status = this.statusState?.get();
     
     if (!status || !statuses || typeof statuses !== 'object') return;
     const statusObj = statuses[status];
     if (!statusObj || typeof statusObj !== 'object') return;
-    const rules = statusObj.rules as Record<string, any>;
+    const rules = statusObj as Record<string, any>;
     if (!rules || !rules[this.getResourceKey()]) return;
     const rule = rules[this.getResourceKey()];
 

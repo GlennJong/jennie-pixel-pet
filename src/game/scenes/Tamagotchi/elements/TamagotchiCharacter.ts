@@ -4,21 +4,20 @@ import Phaser from 'phaser';
 import { Character } from '@/game/components/Character';
 
 // utils
-import { selectFromPiority } from '@/game/utils/selectFromPiority';
+import { selectFromPriority } from '@/game/utils/selectFromPriority';
 import { ConfigManager } from '@/game/managers/ConfigManagers';
-import { StatusHandler } from '../handlers/StatusHandler';
 import { getValueFromColonStoreState } from '@/game/store/helper';
 
 type TDirection = 'none' | 'left' | 'right';
 
 type TAction = {
   animation: string;
-  is_move?: boolean;
+  isMove?: boolean;
   has_direction?: boolean;
 };
 
-type TIdleness = {
-  piority: number;
+type TIdleActions = {
+  priority: number;
 } & TAction;
 
 const DEFAULT_CHARACTER_KEY = 'mycharacter';
@@ -37,7 +36,7 @@ export class TamagotchiCharacter extends Character {
   private isActing: boolean = false;
   private isReady: boolean = false;
 
-  private idleness: { [key: string]: TIdleness };
+  private idleActions: { [key: string]: TIdleActions };
   private spaceEdge: { from: number; to: number };
   private direction: TDirection = 'left';
 
@@ -55,7 +54,7 @@ export class TamagotchiCharacter extends Character {
     this.character.setDepth(2);
 
     // actions
-    this.idleness = config.idleness;
+    this.idleActions = config.idleActions;
     this.activities = config.activities;
 
     // define moving limitation
@@ -65,52 +64,38 @@ export class TamagotchiCharacter extends Character {
     this.handleAutomaticAction();
   }
 
-  private getBehavior() {
-    const { idle, play } = new StatusHandler().getConfig();
-    return { idle, play };
-  }
-  
-  private getIsUnavaliableAll() {
-    const { idle } = this.getBehavior();
-    return this.isActing || !idle;
-  }
-
   private handleDefaultIdleAction() {
-    if (this.getIsUnavaliableAll()) return;
+    if (this.isActing) return;
     this.playAnimation(`${DEFAULT_IDLE_PREFEX}-${this.direction}`);
   }
 
   private async handleAutomaticAction() {
     if (this.isActing) return;
 
-    // Special move
-    const { idle, play } = this.getBehavior();
-    if (!idle && !!play) {
-      this.playAnimation(play);
-      return;
-    }
     // Idle
-    const currentAction = selectFromPiority<TIdleness>(this.idleness);
-    const currentplay = getValueFromColonStoreState(currentAction.plays);
+    const currentAction = selectFromPriority<TIdleActions>(this.idleActions);
+    const currentAnimation = getValueFromColonStoreState(currentAction.animationSet);
 
-    if (typeof currentAction.is_move !== 'undefined') {
-      if (currentAction.direction) {
-        this.direction = currentAction.direction;
-      }
-      
-      this.handleMoveDirection(currentplay);
-    } else {
-      this.playAllAnimations(currentplay)
+    this.direction = currentAction.direction;
+
+    let isMove = false;
+    if (typeof currentAction.isMove !== 'undefined') {
+      isMove = getValueFromColonStoreState(currentAction.isMove);
+    }
+
+    if (isMove) {
+        this.handleMoveDirection(currentAnimation);
+    }
+    else {
+      this.playAnimationSet(currentAnimation, true)
       this.handleDefaultIdleAction();
     }
+
   }
 
   public handleMoveDirection(animation: string) {
-    const { idle } = this.getBehavior();
-    if (!idle) return;
-
     this.isActing = true;
-    this.playAllAnimations(animation)
+    this.playAnimationSet(animation)
 
     let isMoveDistanceOverEdge = false;
     if (this.direction === 'right') {
@@ -158,36 +143,26 @@ export class TamagotchiCharacter extends Character {
 
     const actions = ConfigManager.getInstance().get('tamagotchi.mycharacter.actions');
 
-    const { plays } = actions[action];
+    const { animationSet } = actions[action];
 
-    const currentPlays = getValueFromColonStoreState(plays);
+    const currentAnimationSet = getValueFromColonStoreState(animationSet);
     
-    this.playAllAnimations(currentPlays);
-    // const runAnimation = async (func: () => Promise<void>) => {
-    //   this.isActing = true;
-    //   await func();
-    //   this.isActing = false;
-    // };
-    
-    // runAnimation(async () => {
-    //   for (let i = 0; i < currentPlays.length; i++) {
-    //     await this.playAnimation(currentPlays[i]);
-    //   }
-    // });
+    this.playAnimationSet(currentAnimationSet);
     
   }
 
-  private playAllAnimations(plays) {
+  private playAnimationSet(animationSet, canInterrupt = false) {
     
     const runAnimation = async (func: () => Promise<void>) => {
-      this.isActing = true;
+      if (!canInterrupt) this.isActing = true;
       await func();
-      this.isActing = false;
+      if (!canInterrupt) this.isActing = false;
+      
     };
     
     runAnimation(async () => {
-      for (let i = 0; i < plays.length; i++) {
-        await this.playAnimation(plays[i]);
+      for (let i = 0; i < animationSet.length; i++) {
+        await this.playAnimation(animationSet[i]);
       }
     });
   }
