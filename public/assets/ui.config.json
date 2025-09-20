@@ -7,15 +7,15 @@
         "json": "dialogue/frame.json"
       }
     },
-    "tamagotchi_header_icons": {
-      "key": "tamagotchi_header_icons",
+    "pet_header_icons": {
+      "key": "pet_header_icons",
       "preload": {
         "png": "tamagotchi/header/icons.png",
         "json": "tamagotchi/header/icons.json"
       }
     },
-    "tamagotchi_header_frame": {
-      "key": "tamagotchi_header_frame",
+    "pet_header_frame": {
+      "key": "pet_header_frame",
       "preload": {
         "png": "tamagotchi/header/frame.png",
         "json": "tamagotchi/header/frame.json"

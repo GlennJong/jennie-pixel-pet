@@ -118,7 +118,7 @@ export function setStoreState<T>(key: string, value: T): void {
 }
 
 // 儲存所有 global store 到 localStorage
-export function saveAllStoresToLocalStorage(storageKey: string = 'tamagotchi_store') {
+export function saveAllStoresToLocalStorage(storageKey: string = 'pet_store') {
   const data: Record<string, any> = {};
   for (const [key, store] of globalStoreMap.entries()) {
     data[key] = store.get();
@@ -127,7 +127,7 @@ export function saveAllStoresToLocalStorage(storageKey: string = 'tamagotchi_sto
 }
 
 // 從 localStorage 還原所有 global store (async 版本)
-export function loadAllStoresFromLocalStorage(storageKey: string = 'tamagotchi_store'): Promise<void> {
+export function loadAllStoresFromLocalStorage(storageKey: string = 'pet_store'): Promise<void> {
   return new Promise((resolve) => {
     const raw = localStorage.getItem(storageKey);
     if (!raw) return resolve();

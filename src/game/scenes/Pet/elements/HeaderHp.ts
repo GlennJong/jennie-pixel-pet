@@ -24,7 +24,7 @@ export class IconHp extends Phaser.GameObjects.Container {
 
     // Icon
     this.icon = scene.make.sprite({
-      key: 'tamagotchi_header_icons',
+      key: 'pet_header_icons',
       frame: 'hp-empty',
       x: x,
       y: y,
@@ -33,7 +33,7 @@ export class IconHp extends Phaser.GameObjects.Container {
     if (!scene.anims.exists('hp-100')) {
       scene.anims.create({
         key: 'hp-100',
-        frames: scene.anims.generateFrameNames('tamagotchi_header_icons', {
+        frames: scene.anims.generateFrameNames('pet_header_icons', {
           prefix: `hp-100-`,
           start: 1,
           end: 5,
@@ -46,7 +46,7 @@ export class IconHp extends Phaser.GameObjects.Container {
     if (!scene.anims.exists('hp-75')) {
       scene.anims.create({
         key: 'hp-75',
-        frames: scene.anims.generateFrameNames('tamagotchi_header_icons', {
+        frames: scene.anims.generateFrameNames('pet_header_icons', {
           prefix: `hp-75-`,
           start: 1,
           end: 5,
@@ -59,7 +59,7 @@ export class IconHp extends Phaser.GameObjects.Container {
     if (!scene.anims.exists('hp-50')) {
       scene.anims.create({
         key: 'hp-50',
-        frames: scene.anims.generateFrameNames('tamagotchi_header_icons', {
+        frames: scene.anims.generateFrameNames('pet_header_icons', {
           prefix: `hp-50-`,
           start: 1,
           end: 5,
@@ -72,7 +72,7 @@ export class IconHp extends Phaser.GameObjects.Container {
     if (!scene.anims.exists('hp-25')) {
       scene.anims.create({
         key: 'hp-25',
-        frames: scene.anims.generateFrameNames('tamagotchi_header_icons', {
+        frames: scene.anims.generateFrameNames('pet_header_icons', {
           prefix: `hp-25-`,
           start: 1,
           end: 5,

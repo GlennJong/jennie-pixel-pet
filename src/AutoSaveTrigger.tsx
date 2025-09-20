@@ -6,7 +6,7 @@ function AutoSaveTrigger() {
     const saved = localStorage.getItem('isEnableAutoSave');
     return saved === 'true';
   });
-  const isSavedExisted = !!localStorage.getItem('tamagotchi_store');
+  const isSavedExisted = !!localStorage.getItem('pet_store');
 
   const handleAutoSaveChange = () => {
     const next = !isAutoSaved;
@@ -15,7 +15,7 @@ function AutoSaveTrigger() {
   };
 
   const handleClickClearLocalStorage = () => {
-    localStorage.removeItem('tamagotchi_store');
+    localStorage.removeItem('pet_store');
   }
 
   return (

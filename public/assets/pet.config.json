@@ -1,11 +1,11 @@
 {
   "pet": {
     "assets": {
-      "tamagotchi_room": {
+      "pet_room": {
         "png": "tamagotchi/room.png",
         "json": "tamagotchi/room.json"
       },
-      "tamagotchi_header": {
+      "pet_header": {
         "png": "tamagotchi/header/icons.png",
         "json": "tamagotchi/header/icons.json"
       },
@@ -39,7 +39,7 @@
       }
     ],
     "header": {
-      "key": "tamagotchi_header",
+      "key": "pet_header",
       "preload": {
         "png": "tamagotchi/header/icons.png",
         "json": "tamagotchi/header/icons.json"
@@ -628,7 +628,7 @@
     },
     "room": {
       "watch": "level",
-      "key": "tamagotchi_room",
+      "key": "pet_room",
       "preload": {
         "png": "tamagotchi/room.png",
         "json": "tamagotchi/room.json"

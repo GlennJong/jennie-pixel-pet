@@ -334,7 +334,7 @@ export class PrimaryDialogue extends Phaser.GameObjects.Container {
 
     this.portrait = this.scene.make.sprite({
       ...PORTRAIT_CONFIG,
-      // key: 'tamagotchi_room',
+      // key: 'pet_room',
       // frame: 'room',
     })
       .setDisplaySize(PORTRAIT_SIZE, PORTRAIT_SIZE)

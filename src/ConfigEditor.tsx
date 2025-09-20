@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import JsonEditor from './JsonEditor';
-import { battleSceneHideKey, battleSceneWording, mappingHideKey, mappingWording, tamagotchiSceneHideKey, tamagotchiSceneWording, templates } from "./config.constants";
+import { battleSceneHideKey, battleSceneWording, mappingHideKey, mappingWording } from "./config.constants";
 
 const CONFIG_PATH = `${window.location.href}assets/config.json`; // TODO
 const LOCAL_KEY = "custom_config";
@@ -78,59 +78,6 @@ const ConfigEditor = ({ onChange } : { onChange: () => void }): JSX.Element => {
           setConfig({...config});
         }}
       />
-      {/* <JsonEditor
-        title="放置遊戲角色：基本設定"
-        wording={tamagotchiSceneWording}
-        template={templates}
-        hide={tamagotchiSceneHideKey}
-        value={config.pet.tamagotchi_afk.base}
-        onChange={data => {
-          config.pet.tamagotchi_afk.base = data;
-          setConfig({...config});
-        }}
-      /> */}
-      {/* <JsonEditor
-        title="放置遊戲角色：角色靜止設定"
-        wording={tamagotchiSceneWording}
-        template={templates}
-        hide={tamagotchiSceneHideKey}
-        value={config.pet.tamagotchi_afk.idleActions}
-        onChange={data => {
-          config.pet.tamagotchi_afk.idleActions = data;
-          setConfig({...config});
-        }}
-      /> */}
-      {/* <JsonEditor
-        title="放置遊戲角色：角色活動設定"
-        wording={tamagotchiSceneWording}
-        template={templates}
-        hide={tamagotchiSceneHideKey}
-        value={config.pet.tamagotchi_afk.activities}
-        hintPic={{
-          hp: 'https://placehold.co/600x400/EEE/31343C?text=[hint]',
-          dialogs: 'https://placehold.co/600x400/EEE/31343C?text=[hint]',
-          sentences: 'https://placehold.co/600x400/EEE/31343C?text=[hint]'
-        }}
-        onChange={data => {
-          config.pet.tamagotchi_afk.activities = data;
-          setConfig({...config});
-        }}
-      /> */}
-      {/* <JsonEditor
-        title="放置遊戲房間"
-        wording={{
-          decoration: '房間裝飾',
-          cost: '花費',
-          level: '等級'
-        }}
-        template={templates}
-        hide={[ 'key', 'preload', 'frame', 'recorder', 'window' ]}
-        value={config.pet.tamagotchi_room}
-        onChange={data => {
-          config.pet.tamagotchi_room = data;
-          setConfig({...config});
-        }}
-      /> */}
       <JsonEditor
         title="戰鬥角色設定"
         wording={battleSceneWording}

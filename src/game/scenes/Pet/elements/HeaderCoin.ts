@@ -21,7 +21,7 @@ export class IconCoin extends Phaser.GameObjects.Container {
 
     // Icon
     const coin = scene.make.sprite({
-      key: 'tamagotchi_header_icons',
+      key: 'pet_header_icons',
       frame: 'coin-1',
       x: x,
       y: y,
@@ -29,7 +29,7 @@ export class IconCoin extends Phaser.GameObjects.Container {
     if (!scene.anims.exists('coin')) {
       scene.anims.create({
         key: 'coin',
-        frames: scene.anims.generateFrameNames('tamagotchi_header_icons', {
+        frames: scene.anims.generateFrameNames('pet_header_icons', {
           prefix: `coin-`,
           start: 1,
           end: 16,

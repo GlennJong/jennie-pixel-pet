@@ -14,7 +14,7 @@ export class MainScene extends Scene {
 
     async create() {
         const isAutoSave = localStorage.getItem('isEnableAutoSave') === 'true';
-        const isSavedStoreExisted = !!localStorage.getItem('tamagotchi_store');
+        const isSavedStoreExisted = !!localStorage.getItem('pet_store');
 
         if (isAutoSave && isSavedStoreExisted) {
             await loadAllStoresFromLocalStorage();

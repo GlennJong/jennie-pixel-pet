@@ -66,7 +66,7 @@ export class Header extends Phaser.GameObjects.Container {
   private initBackground() {
     this.background = this.scene.make
       .nineslice({
-        key: 'tamagotchi_header_frame',
+        key: 'pet_header_frame',
         frame: 'frame',
         x: 0,
         y: 0,

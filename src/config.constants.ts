@@ -60,7 +60,7 @@ export const tamagotchiSceneHideKey = [
   'animations',
   'animation',
   'has_direction',
-  'tamagotchi_room',
+  'pet_room',
   'is_move'
 ]
 
@@ -98,7 +98,7 @@ export const tamagotchiSceneWording = {
 export const templates = {
   sentencs: {
     face: {
-      key: 'tamagotchi_afk',
+      key: 'pet_afk',
       frame: 'face_normal'
     },
     text: '對話文字'

@@ -55,7 +55,7 @@ export class HeaderSelector extends Phaser.GameObjects.Container {
 
     // Arrow
     // this.arrow = scene.make.sprite({
-    //   key: 'tamagotchi_header_icons',
+    //   key: 'pet_header_icons',
     //   frame: 'arrow',
     //   x: x - 12,
     //   y: y,
