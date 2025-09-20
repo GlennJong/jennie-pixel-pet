@@ -7,7 +7,7 @@ import { canvas } from '@/game/constants';
 
 // Scenes
 import Battle from '@/game/scenes/Battle';
-import Tamagotchi from '@/game/scenes/Tamagotchi';
+import Pet from '@/game/scenes/Pet';
 import TestScene from '@/game/scenes/Test';
 import { MainScene } from '@/game/scenes/MainScene';
 
@@ -23,7 +23,7 @@ const config: Phaser.Types.Core.GameConfig = {
     Preloader,
     MainScene,
     TestScene,
-    Tamagotchi,
+    Pet,
     Battle
   ],
 };
