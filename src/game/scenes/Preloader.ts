@@ -9,7 +9,7 @@ export class Preloader extends Scene {
   private configsFiles = [
     // {key: 'config', filename: 'config.json'},
     {key: 'battle', filename: 'battle.config.json'},
-    {key: 'tamagotchi', filename: 'tamagotchi.config.json'},
+    {key: 'tamagotchi', filename: 'pet.config.json'},
     {key: 'ui', filename: 'ui.config.json'},
     {key: 'mapping', filename: 'mapping.config.json'},
   ]
