@@ -10,15 +10,15 @@
     "pet_header_icons": {
       "key": "pet_header_icons",
       "preload": {
-        "png": "tamagotchi/header/icons.png",
-        "json": "tamagotchi/header/icons.json"
+        "png": "pet/header/icons.png",
+        "json": "pet/header/icons.json"
       }
     },
     "pet_header_frame": {
       "key": "pet_header_frame",
       "preload": {
-        "png": "tamagotchi/header/frame.png",
-        "json": "tamagotchi/header/frame.json"
+        "png": "pet/header/frame.png",
+        "json": "pet/header/frame.json"
       }
     },
     "battle_board": {

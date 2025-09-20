@@ -76,10 +76,8 @@ export class Preloader extends Scene {
       });
     }
     // Preload pet assets
-    console.log({pet});
     if (pet) {
       for (const [ key, {png, json} ] of Object.entries(pet.assets)) {
-        console.log(key, png, json);
         this.load.atlas( key, png, json);
       }
     }

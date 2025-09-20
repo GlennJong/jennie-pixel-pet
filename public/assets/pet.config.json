@@ -2,16 +2,16 @@
   "pet": {
     "assets": {
       "pet_room": {
-        "png": "tamagotchi/room.png",
-        "json": "tamagotchi/room.json"
+        "png": "pet/room.png",
+        "json": "pet/room.json"
       },
       "pet_header": {
-        "png": "tamagotchi/header/icons.png",
-        "json": "tamagotchi/header/icons.json"
+        "png": "pet/header/icons.png",
+        "json": "pet/header/icons.json"
       },
       "mycharacter": {
-        "png": "tamagotchi/afk.png",
-        "json": "tamagotchi/afk.json"
+        "png": "pet/afk.png",
+        "json": "pet/afk.json"
       }
     },
     "resources": [
@@ -41,8 +41,8 @@
     "header": {
       "key": "pet_header",
       "preload": {
-        "png": "tamagotchi/header/icons.png",
-        "json": "tamagotchi/header/icons.json"
+        "png": "pet/header/icons.png",
+        "json": "pet/header/icons.json"
       },
       "animations": [
         { "prefix": "arrow", "qty": 1, "freq": 1, "repeat": 0 },
@@ -630,8 +630,8 @@
       "watch": "level",
       "key": "pet_room",
       "preload": {
-        "png": "tamagotchi/room.png",
-        "json": "tamagotchi/room.json"
+        "png": "pet/room.png",
+        "json": "pet/room.json"
       },
       "animations": [
         { "prefix": "background", "qty": 1, "freq": 1, "repeat": 0 },
