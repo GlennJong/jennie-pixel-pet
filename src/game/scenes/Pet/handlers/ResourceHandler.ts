@@ -7,10 +7,10 @@ import { ConfigManager } from '@/game/managers/ConfigManagers';
 export class ResourcesHandler {
   private group: ResourceHandler[] = [];
   constructor(scene: Phaser.Scene) {
-    const resources = ConfigManager.getInstance().get('tamagotchi.resources');
+    const resources = ConfigManager.getInstance().get('pet.resources');
 
     resources.forEach(({ key, min, max }) => {
-      const handler = new ResourceHandler(scene, `tamagotchi.${key}`, min, max);
+      const handler = new ResourceHandler(scene, `pet.${key}`, min, max);
       handler.init();
       this.group.push(handler);
     })
@@ -33,7 +33,7 @@ export class ResourcesHandler {
 export class ResourceHandler {
   private timer?: Phaser.Time.TimerEvent;
   private scene: Phaser.Scene;
-  private statusState = store<string>('tamagotchi.status');
+  private statusState = store<string>('pet.status');
   private resourceState: ReturnType<typeof store<number>>;
   private storeKey: string;
   private min: number;
@@ -57,7 +57,7 @@ export class ResourceHandler {
       this.timer.remove();
       this.timer = undefined;
     }
-    const statuses = ConfigManager.getInstance().get('tamagotchi.statuses') as Record<string, any>;
+    const statuses = ConfigManager.getInstance().get('pet.statuses') as Record<string, any>;
     const status = this.statusState?.get();
     
     if (!status || !statuses || typeof statuses !== 'object') return;

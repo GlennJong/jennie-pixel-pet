@@ -44,7 +44,7 @@ export class TamagotchiCharacter extends Character {
 
   constructor(scene: Phaser.Scene) {
 
-    const config = ConfigManager.getInstance().get(`tamagotchi.${DEFAULT_CHARACTER_KEY}`);
+    const config = ConfigManager.getInstance().get(`pet.${DEFAULT_CHARACTER_KEY}`);
 
     super(scene, DEFAULT_CHARACTER_KEY, {
       ...DEFAULT_TAMAGOTCHI_POSITION,
@@ -141,7 +141,7 @@ export class TamagotchiCharacter extends Character {
   public runFuntionalAction(action: string) {
     if (this.isActing) return;
 
-    const actions = ConfigManager.getInstance().get('tamagotchi.mycharacter.actions');
+    const actions = ConfigManager.getInstance().get('pet.mycharacter.actions');
 
     const { animationSet } = actions[action];
 

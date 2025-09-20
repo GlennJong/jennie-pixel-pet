@@ -17,7 +17,7 @@ export class AutoActionHandler {
   private lastTriggeredAction: string | null = null;
 
   constructor() {
-    const actions = ConfigManager.getInstance().get('tamagotchi.mycharacter.actions');
+    const actions = ConfigManager.getInstance().get('pet.mycharacter.actions');
     this.autoActions = Object.values(actions).filter(a => a.auto && a.condition);
   }
 
@@ -38,9 +38,9 @@ export class AutoActionHandler {
     // 監聽 store
     const watchedKeys = new Set(this.autoActions.flatMap(a => Object.keys(a.condition)));
     watchedKeys.forEach(key => {
-      this.cache[key] = store<string>(`tamagotchi.${key}`)?.get();
+      this.cache[key] = store<string>(`pet.${key}`)?.get();
       const handler = this.makeHandler(key);
-      store<string>(`tamagotchi.${key}`)?.watch(handler);
+      store<string>(`pet.${key}`)?.watch(handler);
       this._autoWatchers.push({ key, handler });
     });
   }
@@ -80,14 +80,14 @@ export class AutoActionHandler {
 
   clearWatchers() {
     for (const { key, handler } of this._autoWatchers) {
-      store<string>(`tamagotchi.${key}`)?.unwatch(handler);
+      store<string>(`pet.${key}`)?.unwatch(handler);
     }
     this._autoWatchers = [];
   }
 
   destroy() {
     for (const { key, handler } of this._autoWatchers) {
-      store<string>(`tamagotchi.${key}`)?.unwatch(handler);
+      store<string>(`pet.${key}`)?.unwatch(handler);
     }
     this._autoWatchers = [];
   }

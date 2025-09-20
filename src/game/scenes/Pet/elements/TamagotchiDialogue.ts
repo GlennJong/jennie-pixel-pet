@@ -1,6 +1,7 @@
 import { setStoreState } from '@/game/store';
 import { PrimaryDialogue, TDialogData } from '@/game/components/PrimaryDialogue';
 import { selectFromPriority } from '@/game/utils/selectFromPriority';
+import { ConfigManager } from '@/game/managers/ConfigManagers';
 
 
 type TDialogItem = {
@@ -17,7 +18,7 @@ export class TamagotchiDialogue extends Phaser.GameObjects.Container {
   constructor(scene: Phaser.Scene) {
     super(scene);
     
-    this.config = scene.cache.json.get('config').tamagotchi[DEFAULT_CHARACTER_KEY].activities || {};
+    this.config = ConfigManager.getInstance().get(`pet.${DEFAULT_CHARACTER_KEY}.actions`);
     
     // Window
     this.dialogue = new PrimaryDialogue(scene);

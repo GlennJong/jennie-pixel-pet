@@ -83,9 +83,9 @@ const ConfigEditor = ({ onChange } : { onChange: () => void }): JSX.Element => {
         wording={tamagotchiSceneWording}
         template={templates}
         hide={tamagotchiSceneHideKey}
-        value={config.tamagotchi.tamagotchi_afk.base}
+        value={config.pet.tamagotchi_afk.base}
         onChange={data => {
-          config.tamagotchi.tamagotchi_afk.base = data;
+          config.pet.tamagotchi_afk.base = data;
           setConfig({...config});
         }}
       /> */}
@@ -94,9 +94,9 @@ const ConfigEditor = ({ onChange } : { onChange: () => void }): JSX.Element => {
         wording={tamagotchiSceneWording}
         template={templates}
         hide={tamagotchiSceneHideKey}
-        value={config.tamagotchi.tamagotchi_afk.idleActions}
+        value={config.pet.tamagotchi_afk.idleActions}
         onChange={data => {
-          config.tamagotchi.tamagotchi_afk.idleActions = data;
+          config.pet.tamagotchi_afk.idleActions = data;
           setConfig({...config});
         }}
       /> */}
@@ -105,14 +105,14 @@ const ConfigEditor = ({ onChange } : { onChange: () => void }): JSX.Element => {
         wording={tamagotchiSceneWording}
         template={templates}
         hide={tamagotchiSceneHideKey}
-        value={config.tamagotchi.tamagotchi_afk.activities}
+        value={config.pet.tamagotchi_afk.activities}
         hintPic={{
           hp: 'https://placehold.co/600x400/EEE/31343C?text=[hint]',
           dialogs: 'https://placehold.co/600x400/EEE/31343C?text=[hint]',
           sentences: 'https://placehold.co/600x400/EEE/31343C?text=[hint]'
         }}
         onChange={data => {
-          config.tamagotchi.tamagotchi_afk.activities = data;
+          config.pet.tamagotchi_afk.activities = data;
           setConfig({...config});
         }}
       /> */}
@@ -125,9 +125,9 @@ const ConfigEditor = ({ onChange } : { onChange: () => void }): JSX.Element => {
         }}
         template={templates}
         hide={[ 'key', 'preload', 'frame', 'recorder', 'window' ]}
-        value={config.tamagotchi.tamagotchi_room}
+        value={config.pet.tamagotchi_room}
         onChange={data => {
-          config.tamagotchi.tamagotchi_room = data;
+          config.pet.tamagotchi_room = data;
           setConfig({...config});
         }}
       /> */}

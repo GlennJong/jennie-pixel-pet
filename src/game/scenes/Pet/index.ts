@@ -108,7 +108,7 @@ export default class TamagotchiScene extends Scene {
     } else if (key === 'space') {
       const action = this.header!.select();
       
-      const task = ConfigManager.getInstance().get(`tamagotchi.mycharacter.actions.${action}`);
+      const task = ConfigManager.getInstance().get(`pet.mycharacter.actions.${action}`);
       this.taskQueueService?.addTask(task);
     }
   }

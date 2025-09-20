@@ -4,7 +4,7 @@ import { store } from '@/game/store';
 const DEFAULT_COIN = 888;
 
 export class IconCoin extends Phaser.GameObjects.Container {
-  private coinState = store<number>('tamagotchi.coin');
+  private coinState = store<number>('pet.coin');
   
   private text: Phaser.GameObjects.Text;
   private value: number;

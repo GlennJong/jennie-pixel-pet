@@ -9,7 +9,7 @@ export class Preloader extends Scene {
   private configsFiles = [
     // {key: 'config', filename: 'config.json'},
     {key: 'battle', filename: 'battle.config.json'},
-    {key: 'tamagotchi', filename: 'pet.config.json'},
+    {key: 'pet', filename: 'pet.config.json'},
     {key: 'ui', filename: 'ui.config.json'},
     {key: 'mapping', filename: 'mapping.config.json'},
   ]
@@ -64,7 +64,7 @@ export class Preloader extends Scene {
   }
 
   _preloadAssetsFromConfig(data: any) {
-    const { ui, battle, tamagotchi } = data;
+    const { ui, battle, pet } = data;
     // Preload ui assets
     if (ui) {
       Object.keys(ui).map((key) => {
@@ -75,9 +75,11 @@ export class Preloader extends Scene {
         );
       });
     }
-    // Preload tamagotchi assets
-    if (tamagotchi) {
-      for (const [ key, {png, json} ] of Object.entries(tamagotchi.assets)) {
+    // Preload pet assets
+    console.log({pet});
+    if (pet) {
+      for (const [ key, {png, json} ] of Object.entries(pet.assets)) {
+        console.log(key, png, json);
         this.load.atlas( key, png, json);
       }
     }

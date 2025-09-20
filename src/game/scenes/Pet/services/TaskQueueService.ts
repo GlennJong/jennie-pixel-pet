@@ -39,7 +39,7 @@ export class TaskQueueService {
     let updated = false;
     messages.forEach(msg => {
       const result = filterFromMatchList(msg, this.mappingList);
-      const config = ConfigManager.getInstance().get('tamagotchi.mycharacter.actions');
+      const config = ConfigManager.getInstance().get('pet.mycharacter.actions');
       if (result) {
         console.log({result})
 

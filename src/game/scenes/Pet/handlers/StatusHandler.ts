@@ -1,8 +1,8 @@
 import { ConfigManager } from '@/game/managers/ConfigManagers';
 import { getStoreState, store } from '@/game/store';
 
-const STORE_KEY = 'tamagotchi.status';
-const CONFIG_KEY = 'tamagotchi.mycharacter.statuses'
+const STORE_KEY = 'pet.status';
+const CONFIG_KEY = 'pet.mycharacter.statuses'
 
 export class StatusHandler {
   private config = ConfigManager.getInstance().get(CONFIG_KEY) || undefined;
@@ -11,7 +11,7 @@ export class StatusHandler {
   constructor() {}
 
   public getStatus(): string {
-    return getStoreState('tamagotchi.status');
+    return getStoreState('pet.status');
   }
 
   public getConfig(): string {

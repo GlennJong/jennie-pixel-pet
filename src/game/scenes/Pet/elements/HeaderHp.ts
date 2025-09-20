@@ -6,7 +6,7 @@ const FONT_FAMILY = 'Tiny5';
 const FONT_SIZE = 8;
 
 export class IconHp extends Phaser.GameObjects.Container {
-  private hpState = store<number>('tamagotchi.hp');
+  private hpState = store<number>('pet.hp');
   private icon: Phaser.GameObjects.Sprite;
   private text: Phaser.GameObjects.Text;
   private value: number;

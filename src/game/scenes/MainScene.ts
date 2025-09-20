@@ -23,20 +23,19 @@ export class MainScene extends Scene {
             initStore('global.transmit', DEFAULT_GLOBAL_TRANSMIT);
             initStore('global.messageQueue', []);
 
-
-            const resources = ConfigManager.getInstance().get('tamagotchi.resources');
-            // console.log({ resources })
+            const resources = ConfigManager.getInstance().get('pet.resources');
+            console.log({ resources })
             resources.forEach(({key, value}) => {
-                initStore(`tamagotchi.${key}`, value || 0);
+                initStore(`pet.${key}`, value || 0);
             })
-            initStore('tamagotchi.hp', DEFAULT_HP);
-            initStore('tamagotchi.coin', DEFAULT_COIN);
-            initStore('tamagotchi.level', DEFAULT_LEVEL);
-            initStore('tamagotchi.win', 0);
+            initStore('pet.hp', DEFAULT_HP);
+            initStore('pet.coin', DEFAULT_COIN);
+            initStore('pet.level', DEFAULT_LEVEL);
+            initStore('pet.win', 0);
             
-            initStore('tamagotchi.status', 'normal');
-            initStore('tamagotchi.taskQueue', []);
-            // initStore('tamagotchi.battleResult', 'win');
+            initStore('pet.status', 'normal');
+            initStore('pet.taskQueue', []);
+            // initStore('pet.battleResult', 'win');
         }
         this.scene.start('Tamagotchi');
 

@@ -21,7 +21,7 @@ export class HeaderSelector extends Phaser.GameObjects.Container {
     // Inherite from scene
     super(scene);
 
-    this.config = ConfigManager.getInstance().get(`tamagotchi.header`);
+    this.config = ConfigManager.getInstance().get(`pet.header`);
 
     this.initAnimations();
     

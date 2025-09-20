@@ -1,8 +1,8 @@
 import { ConfigManager } from '@/game/managers/ConfigManagers';
 import { store } from '@/game/store';
 
-const STORE_KEY = 'tamagotchi.status';
-const CONFIG_KEY = 'tamagotchi.room';
+const STORE_KEY = 'pet.status';
+const CONFIG_KEY = 'pet.room';
 
 type TAnimation = {
   prefix: string;
@@ -33,7 +33,7 @@ export class Property {
     const { watch } = this.config;
 
     // set watch state
-    this.watchState = store<number>(`tamagotchi.${watch}`);
+    this.watchState = store<number>(`pet.${watch}`);
     this.watchState?.watch(this.handleRenderPropertyByWatchedState);
 
     // init animations

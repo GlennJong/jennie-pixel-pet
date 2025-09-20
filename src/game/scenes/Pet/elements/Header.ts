@@ -22,8 +22,7 @@ export class Header extends Phaser.GameObjects.Container {
   constructor(scene: Phaser.Scene) {
     super(scene);
 
-    // this.config = scene.cache.json.get('config').tamagotchi[DEFAULT_CHARACTER_KEY].activities || {};
-    this.config = ConfigManager.getInstance().get(`tamagotchi.header`);
+    this.config = ConfigManager.getInstance().get(`pet.header`);
 
     this.initAnimations();
     
@@ -130,7 +129,7 @@ export class Header extends Phaser.GameObjects.Container {
       const icon = new ResourceIcon(this.scene, {
         x: startFrom + (gap*i),
         y,
-        key: `tamagotchi.${resource}`,
+        key: `pet.${resource}`,
         animation: `${this.config.key}_${animation}`,
       });
       this.add(icon);

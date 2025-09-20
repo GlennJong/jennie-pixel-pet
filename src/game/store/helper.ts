@@ -15,7 +15,7 @@ export function getValueFromColonStoreState(data: { [key: string]: any; default?
   for (const [key, value] of Object.entries(data)) {
     if (key !== 'default') {
       const [stateKey, stateValue] = key.split(':');
-      if (getStoreState(`tamagotchi.${stateKey}`) === stateValue) {
+      if (getStoreState(`pet.${stateKey}`) === stateValue) {
         result = value;
       }
     }

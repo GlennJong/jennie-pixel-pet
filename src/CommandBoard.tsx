@@ -6,13 +6,13 @@ function CommandBoard() {
   const [ selectedStateOptionIndex, setSelectedStateOptionIndex ] = useState(0);
   const [ selectedCommandOptionIndex, setSelectedCommandOptionIndex ] = useState(0);
   const stateOptions = [
-    { label: '裝潢等級 = 1', key: 'tamagotchi.level', value: () => 1 },
-    { label: '裝潢等級 = 2', key: 'tamagotchi.level', value: () => 2 },
-    { label: '裝潢等級 = 3', key: 'tamagotchi.level', value: () => 3 },
-    { label: '角色血量 = 5', key: 'tamagotchi.hp', value: () => 5 },
-    { label: '角色血量 + 5', key: 'tamagotchi.hp', value: () => getStoreState('tamagotchi.hp') + 5 },
-    { label: '角色金錢 = 0', key: 'tamagotchi.coin', value: () => 0 },
-    { label: '角色金錢 + 20', key: 'tamagotchi.coin', value: () => getStoreState('tamagotchi.coin') + 20 },
+    { label: '裝潢等級 = 1', key: 'pet.level', value: () => 1 },
+    { label: '裝潢等級 = 2', key: 'pet.level', value: () => 2 },
+    { label: '裝潢等級 = 3', key: 'pet.level', value: () => 3 },
+    { label: '角色血量 = 5', key: 'pet.hp', value: () => 5 },
+    { label: '角色血量 + 5', key: 'pet.hp', value: () => getStoreState('pet.hp') + 5 },
+    { label: '角色金錢 = 0', key: 'pet.coin', value: () => 0 },
+    { label: '角色金錢 + 20', key: 'pet.coin', value: () => getStoreState('pet.coin') + 20 },
   ]
   const commandOptions = [
     { label: '補充水分', value: () => handlePushMessage('test', '補充水分') },
