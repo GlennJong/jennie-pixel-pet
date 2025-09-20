@@ -6,7 +6,7 @@ export const canvas = {
   height: 144,
 };
 
-export const tamagotchi = {
+export const pet = {
   character: {
     width: 32,
     height: 32,

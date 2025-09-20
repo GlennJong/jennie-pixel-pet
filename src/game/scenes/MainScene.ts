@@ -24,7 +24,6 @@ export class MainScene extends Scene {
             initStore('global.messageQueue', []);
 
             const resources = ConfigManager.getInstance().get('pet.resources');
-            console.log({ resources })
             resources.forEach(({key, value}) => {
                 initStore(`pet.${key}`, value || 0);
             })
@@ -37,7 +36,7 @@ export class MainScene extends Scene {
             initStore('pet.taskQueue', []);
             // initStore('pet.battleResult', 'win');
         }
-        this.scene.start('Tamagotchi');
+        this.scene.start('Pet');
 
     }
 

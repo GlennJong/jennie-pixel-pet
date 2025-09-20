@@ -11,7 +11,7 @@ type TDialogItem = {
 
 const DEFAULT_CHARACTER_KEY = 'mycharacter';
 
-export class TamagotchiDialogue extends Phaser.GameObjects.Container {
+export class PetDialogue extends Phaser.GameObjects.Container {
   private dialogue: PrimaryDialogue;
   private config;
   

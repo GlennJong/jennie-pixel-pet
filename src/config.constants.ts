@@ -54,7 +54,7 @@ export const battleSceneHideKey = [
   'animations',
   'animation'
 ]
-export const tamagotchiSceneHideKey = [
+export const petSceneHideKey = [
   'key',
   'preload',
   'animations',
@@ -64,7 +64,7 @@ export const tamagotchiSceneHideKey = [
   'is_move'
 ]
 
-export const tamagotchiSceneWording = {
+export const petSceneWording = {
   consume: '扣血',
   recover: '回血',
   interval: '發生時間(ms)',

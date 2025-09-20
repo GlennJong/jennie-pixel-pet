@@ -141,7 +141,7 @@ export default class Battle extends Scene {
     const selfFinishDialog = this.self!.runFinish();
     await this.dialogue!.runDialogue(selfFinishDialog);
     setStoreState('pet.win', this.self!.hp.current > 0 ? 1 : -1);
-    sceneConverter(this, 'Tamagotchi');
+    sceneConverter(this, 'Pet');
   }
 
   private async openingCharacterMovement() {

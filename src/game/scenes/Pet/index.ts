@@ -7,8 +7,8 @@ import { EventBus } from '@/game/EventBus';
 
 // partial elements
 import { Header } from './elements/Header';
-import { TamagotchiCharacter } from './elements/TamagotchiCharacter';
-import { TamagotchiDialogue } from './elements/TamagotchiDialogue';
+import { PetCharacter } from './elements/PetCharacter';
+import { PetDialogue } from './elements/PetDialogue';
 
 // services
 import { TaskQueueService } from './services/TaskQueueService';
@@ -22,12 +22,12 @@ import { AutoActionHandler } from './handlers/AutoActionHandler';
 import { ResourcesHandler } from './handlers/ResourceHandler';
 import { Property } from './elements/Property';
 
-export default class TamagotchiScene extends Scene {
+export default class PetScene extends Scene {
   private header?: Header;
   private property?: Property;
-  private character?: TamagotchiCharacter;
+  private character?: PetCharacter;
   private resources?: ResourcesHandler;
-  private dialogue?: TamagotchiDialogue;
+  private dialogue?: PetDialogue;
   private keyboardHandler?: KeyboardHandler;
 
   private taskQueueService?: TaskQueueService;
@@ -36,17 +36,17 @@ export default class TamagotchiScene extends Scene {
   private statusHandler?: StatusHandler;
   private autoActionHandler?: AutoActionHandler;
 
-  private isTamagotchiReady: boolean = false;
+  private isPetReady: boolean = false;
 
   constructor() {
-    super('Tamagotchi');
+    super('Pet');
   }
   create() {
     // ============= Mechanism =============
     setStoreState('global.is_paused', true);
 
     // charactor
-    this.character = new TamagotchiCharacter(this);
+    this.character = new PetCharacter(this);
 
     // property
     this.property = new Property(this);
@@ -56,7 +56,7 @@ export default class TamagotchiScene extends Scene {
     this.header = new Header(this);
     
     // dialogue
-    this.dialogue = new TamagotchiDialogue(this);
+    this.dialogue = new PetDialogue(this);
 
     // Resources Handler
     this.resources = new ResourcesHandler(this);
@@ -88,12 +88,12 @@ export default class TamagotchiScene extends Scene {
     EventBus.on('game-select-keydown', () => this.handleControlButton('space')),
 
     
-    // Run opening scene and start tamagotchi
+    // Run opening scene and start pet
     (async() => {
       await sceneStarter(this);
       // this.handleBattleAward(this.taskQueueService);
-      this.character?.startTamagotchi();
-      this.isTamagotchiReady = true;
+      this.character?.startPet();
+      this.isPetReady = true;
       setStoreState('global.is_paused', false);
     })();
 
@@ -115,7 +115,7 @@ export default class TamagotchiScene extends Scene {
 
   async handleActionQueueTask(task: Task) {
     
-    if (!this.isTamagotchiReady) return false;
+    if (!this.isPetReady) return false;
     let success = false;
     const { action, user, params, effect, dialogs, move } = task;
     console.log(task)
@@ -156,7 +156,7 @@ export default class TamagotchiScene extends Scene {
   }
 
   async handleUpgrade(taskQueueService: any, params: any) {
-    if (!this.isTamagotchiReady) return false;
+    if (!this.isPetReady) return false;
     taskQueueService?.addTask({ action: 'buy', user: 'system', params });
     return true;
   }
@@ -168,7 +168,7 @@ export default class TamagotchiScene extends Scene {
   }
 
   shutdown = () => {
-    this.isTamagotchiReady = false;
+    this.isPetReady = false;
 
     this.character?.destroy();
     this.header?.destroy();

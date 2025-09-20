@@ -23,7 +23,7 @@ type TIdleActions = {
 const DEFAULT_CHARACTER_KEY = 'mycharacter';
 const DEFAULT_EDGE = { from: 0, to: 160 };
 
-const DEFAULT_TAMAGOTCHI_POSITION = {
+const DEFAULT_PET_POSITION = {
   x: 60, y: 68,
   edge: DEFAULT_EDGE
 }
@@ -32,7 +32,7 @@ const DEFAULT_AUTO_ACTIOIN_DURATION = 3000;
 const DEFAULT_IDLE_PREFEX = 'idle';
 const DEFAULT_MOVE_DISTANCE = 24;
 
-export class TamagotchiCharacter extends Character {
+export class PetCharacter extends Character {
   private isActing: boolean = false;
   private isReady: boolean = false;
 
@@ -47,7 +47,7 @@ export class TamagotchiCharacter extends Character {
     const config = ConfigManager.getInstance().get(`pet.${DEFAULT_CHARACTER_KEY}`);
 
     super(scene, DEFAULT_CHARACTER_KEY, {
-      ...DEFAULT_TAMAGOTCHI_POSITION,
+      ...DEFAULT_PET_POSITION,
       animations: config.animations
     });
 
@@ -58,7 +58,7 @@ export class TamagotchiCharacter extends Character {
     this.activities = config.activities;
 
     // define moving limitation
-    this.spaceEdge = DEFAULT_TAMAGOTCHI_POSITION.edge;
+    this.spaceEdge = DEFAULT_PET_POSITION.edge;
 
     // default animation
     this.handleAutomaticAction();
@@ -120,7 +120,7 @@ export class TamagotchiCharacter extends Character {
 
   private autoActionTimer?: Phaser.Time.TimerEvent;
 
-  public startTamagotchi() {
+  public startPet() {
     this.isReady = true;
     if (!this.autoActionTimer) {
       this.autoActionTimer = this.scene.time.addEvent({
@@ -130,7 +130,7 @@ export class TamagotchiCharacter extends Character {
       });
     }
   }
-  public stopTamagotchi() {
+  public stopPet() {
     this.isReady = false;
     if (this.autoActionTimer) {
       this.autoActionTimer.remove();
