@@ -21,7 +21,7 @@ type TIdleActions = {
 } & TAction;
 
 const DEFAULT_CHARACTER_KEY = 'mycharacter';
-const DEFAULT_EDGE = { from: 0, to: 160 };
+const DEFAULT_EDGE = { from: 20, to: 140 };
 
 const DEFAULT_PET_POSITION = {
   x: 60, y: 68,

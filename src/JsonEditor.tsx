@@ -70,7 +70,7 @@ const JsonEditor: React.FC<Props> = ({ value, onChange, prefixName, keyName, tem
           {isNaN(Number(labelText)) ? <span>{labelText}: </span> : <span>{prefixName}{Number(labelText)+1} </span>}
           <input
             type={typeof value === "number" ? "number" : "text"}
-            value={value === null ? "" : value}
+            value={value === null ? "" : typeof value === "boolean" ? String(value) : value}
             onChange={e => {
               if (typeof value === 'number') {
                 let v = e.target.value;

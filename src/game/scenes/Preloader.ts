@@ -35,7 +35,7 @@ export class Preloader extends Scene {
       }
     }
 
-    customConfig = null; // TODO
+    // customConfig = null; // TODO
     if (customConfig) {
       this.cache.json.add('config', customConfig);
       this._preloadAssetsFromConfig(customConfig);
@@ -48,7 +48,10 @@ export class Preloader extends Scene {
         this.load.json(key, filename);
         this.load.on(`filecomplete-json-${key}`, (_key: unknown, _type: unknown, data: any) => {
           num += 1;
-          result = {...result, ...data};
+          result = {
+            ...result,
+            [key]:data
+          };
           if (num === this.configsFiles.length) {
             this.cache.json.add('config', result);
             this._preloadAssetsFromConfig(result);

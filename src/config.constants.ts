@@ -1,3 +1,13 @@
+export const petStatusWording = {
+  "normal": "普通狀態",
+  "sleep": "睡覺狀態",
+  "death": "等待復活狀態",
+  "method": "增加(add)/減少(sub)",
+  "interval": "間隔(毫秒)",
+  "value": "值",
+  "hp": "生命值",
+}
+
 export const mappingWording = {
   drink: '讓角色喝水',
   write: '讓角色寫字',
@@ -10,6 +20,34 @@ export const mappingWording = {
   matches: '觸發條件',
   content: '忠誠點數名稱',
   user: '兌換人'
+}
+
+export const idleActionsWording = {
+  "idle-left": "靜止(左邊)",
+  "idle-right": "靜止(右邊)",
+  "stare-left": "偷看(右邊)",
+  "stare-right": "偷看(右邊)",
+  "walk-left": "走路(左邊)",
+  "walk-right": "偷看(右邊)",
+  "wink-left": "眨眼(左邊)",
+  "wink-right": "眨眼(右邊)",
+  priority: "優先度(越高越容易觸發)",
+}
+
+export const actionsWording = {
+  "auto": "是否自動觸發",
+  "condition": "觸發條件",
+  "dialogues": "對話集",
+  "sentences": "句子",
+  "text": "對話文字",
+  "effect": "動作效果",
+  "priority": "優先度(越高越容易觸發)",
+  "drink": "喝水動作",
+  "method": "增加(add)/減少(sub)",
+  "value": "值",
+  "op": "比較符號(==,>,<,>=,<=)",
+  "coin": "金錢",
+  "hp": "生命值",
 }
 
 export const mappingHideKey = [
@@ -96,11 +134,17 @@ export const petSceneWording = {
 }
 
 export const templates = {
-  sentencs: {
-    face: {
-      key: 'pet_afk',
-      frame: 'face_normal'
-    },
+  dialogues: {
+    "sentences": [
+      {
+        "portrait": "face-normal",
+        "text": "對話文字"
+      }
+    ],
+    "priority": 2
+  },
+  sentences: {
+    portrait: 'face_normal',
     text: '對話文字'
   }
 }
