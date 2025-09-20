@@ -7,7 +7,8 @@
         "json": "battle/default.json"
       },
       "animations": [
-        { "prefix": "idle", "qty": 1, "freq": 1, "repeat": -1 }
+        { "prefix": "idle", "qty": 1, "freq": 1, "repeat": -1 },
+        { "prefix": "face_normal", "qty": 1, "freq": 1, "repeat": 0 }
       ],
       "base": {
         "max_hp": 2,
@@ -21,10 +22,7 @@
             {
               "dialog": [
                 {
-                  "face": {
-                    "key": "battle_default_opponent",
-                    "frame": "face_normal"
-                  },
+                  "portrait": "battle_default_opponent_face_normal",
                   "text": "！！！！！！！！"
                 }
               ],
@@ -33,10 +31,7 @@
             {
               "dialog": [
                 {
-                  "face": {
-                    "key": "battle_default_opponent",
-                    "frame": "face_normal"
-                  },
+                  "portrait": "battle_default_opponent_face_normal",
                   "text": "！！！"
                 }
               ],
@@ -57,10 +52,7 @@
             {
               "dialog": [
                 {
-                  "face": {
-                    "key": "battle_default_opponent",
-                    "frame": "face_normal"
-                  },
+                  "portrait": "battle_default_opponent_face_normal",
                   "text": "！？！？！？！？！？！？"
                 }
               ],
@@ -74,10 +66,7 @@
             {
               "dialog": [
                 {
-                  "face": {
-                    "key": "battle_default_opponent",
-                    "frame": "face_normal"
-                  },
+                  "portrait": "battle_default_opponent_face_normal",
                   "text": "＾＿＾！"
                 }
               ],
@@ -91,10 +80,7 @@
           {
             "dialog": [
               {
-                "face": {
-                  "key": "battle_default_opponent",
-                  "frame": "face_normal"
-                },
+                "portrait": "battle_default_opponent_face_normal",
                 "text": "：）））））"
               }
             ],
@@ -105,10 +91,7 @@
           {
             "dialog": [
               {
-                "face": {
-                  "key": "battle_default_opponent",
-                  "frame": "face_normal"
-                },
+                "portrait": "battle_default_opponent_face_normal",
                 "text": "ZzZzZzZzZz"
               }
             ],
@@ -122,10 +105,7 @@
             {
               "dialog": [
                 {
-                  "face": {
-                    "key": "battle_default_opponent",
-                    "frame": "face_normal"
-                  },
+                  "portrait": "battle_default_opponent_face_normal",
                   "text": "：ＤＤＤＤＤ"
                 }
               ],
@@ -138,10 +118,7 @@
             {
               "dialog": [
                 {
-                  "face": {
-                    "key": "battle_default_opponent",
-                    "frame": "face_normal"
-                  },
+                  "portrait": "battle_default_opponent_face_normal",
                   "text": "：（（（（"
                 }
               ],
@@ -159,7 +136,10 @@
       },
       "animations": [
         { "prefix": "idle", "qty": 1, "freq": 1, "repeat": -1 },
-        { "prefix": "sp", "qty": 17, "freq": 8, "repeat": 0 }
+        { "prefix": "sp", "qty": 17, "freq": 8, "repeat": 0 },
+        { "prefix": "face_normal", "qty": 1, "freq": 1, "repeat": 0 },
+        { "prefix": "face_sad", "qty": 1, "freq": 1, "repeat": 0 },
+        { "prefix": "face_angry", "qty": 1, "freq": 1, "repeat": 0 }
       ],
       "base": {
         "max_hp": 100,
@@ -173,10 +153,7 @@
             {
               "dialog": [
                 {
-                  "face": {
-                    "key": "battle_currycat_opponent",
-                    "frame": "face_normal"
-                  },
+                  "portrait": "battle_currycat_opponent_face_normal",
                   "text": "咖哩攻擊!"
                 }
               ],
@@ -196,17 +173,11 @@
             {
               "dialog": [
                 {
-                  "face": {
-                    "key": "battle_currycat_opponent",
-                    "frame": "face_normal"
-                  },
+                  "portrait": "battle_currycat_opponent_face_normal",
                   "text": "咖哩就是要・・・"
                 },
                 {
-                  "face": {
-                    "key": "battle_currycat_opponent",
-                    "frame": "face_angry"
-                  },
+                  "portrait": "battle_currycat_opponent_face_angry",
                   "text": "拌起來！"
                 }
               ],
@@ -226,10 +197,7 @@
             {
               "dialog": [
                 {
-                  "face": {
-                    "key": "battle_currycat_opponent",
-                    "frame": "face_angry"
-                  },
+                  "portrait": "battle_currycat_opponent_face_angry",
                   "text": "咖哩吃起來！"
                 }
               ],
@@ -250,10 +218,7 @@
             {
               "dialog": [
                 {
-                  "face": {
-                    "key": "battle_currycat_opponent",
-                    "frame": "face_sad"
-                  },
+                  "portrait": "battle_currycat_opponent_face_sad",
                   "text": "喵喵喵喵喵!"
                 }
               ],
@@ -267,10 +232,7 @@
             {
               "dialog": [
                 {
-                  "face": {
-                    "key": "battle_currycat_opponent",
-                    "frame": "face_normal"
-                  },
+                  "portrait": "battle_currycat_opponent_face_normal",
                   "text": "喵～"
                 }
               ],
@@ -284,10 +246,7 @@
           {
             "dialog": [
               {
-                "face": {
-                  "key": "battle_currycat_opponent",
-                  "frame": "face_normal"
-                },
+                "portrait": "battle_currycat_opponent_face_normal",
                 "text": "喵！！"
               }
             ],
@@ -298,10 +257,7 @@
           {
             "dialog": [
               {
-                "face": {
-                  "key": "battle_currycat_opponent",
-                  "frame": "face_normal"
-                },
+                "portrait": "battle_currycat_opponent_face_normal",
                 "text": "喵"
               }
             ],
@@ -315,10 +271,7 @@
             {
               "dialog": [
                 {
-                  "face": {
-                    "key": "battle_currycat_opponent",
-                    "frame": "face_normal"
-                  },
+                  "portrait": "battle_currycat_opponent_face_normal",
                   "text": "從今以後咖哩都要拌起來！"
                 }
               ],
@@ -331,10 +284,7 @@
             {
               "dialog": [
                 {
-                  "face": {
-                    "key": "battle_currycat_opponent",
-                    "frame": "face_sad"
-                  },
+                  "portrait": "battle_currycat_opponent_face_sad",
                   "text": "今天的咖哩有點臭酸！"
                 }
               ],
@@ -351,14 +301,11 @@
         "json": "battle/beibei.json"
       },
       "animations": [
-        {
-          "prefix": "idle",
-          "qty": 9,
-          "freq": 8,
-          "repeat": -1,
-          "repeat_delay": 1000
-        },
-        { "prefix": "sp", "qty": 5, "freq": 8, "repeat": 0 }
+        { "prefix": "idle", "qty": 9, "freq": 8, "repeat": -1, "repeat_delay": 1000 },
+        { "prefix": "sp", "qty": 5, "freq": 8, "repeat": 0 },
+        { "prefix": "face_normal", "qty": 1, "freq": 1, "repeat": 0 },
+        { "prefix": "face_angry", "qty": 1, "freq": 1, "repeat": 0 },
+        { "prefix": "face_sad", "qty": 1, "freq": 1, "repeat": 0 }
       ],
       "base": {
         "max_hp": 100,
@@ -372,10 +319,7 @@
             {
               "dialog": [
                 {
-                  "face": {
-                    "key": "battle_beibei_opponent",
-                    "frame": "face_normal"
-                  },
+                  "portrait": "battle_beibei_opponent_face_normal",
                   "text": "打！"
                 }
               ],
@@ -395,10 +339,7 @@
             {
               "dialog": [
                 {
-                  "face": {
-                    "key": "battle_beibei_opponent",
-                    "frame": "face_angry"
-                  },
+                  "portrait": "battle_beibei_opponent_face_angry",
                   "text": "成熟大姐姐飛吻！！！"
                 }
               ],
@@ -419,10 +360,7 @@
             {
               "dialog": [
                 {
-                  "face": {
-                    "key": "battle_beibei_opponent",
-                    "frame": "face_sad"
-                  },
+                  "portrait": "battle_beibei_opponent_face_sad",
                   "text": "痛！！"
                 }
               ],
@@ -436,10 +374,7 @@
             {
               "dialog": [
                 {
-                  "face": {
-                    "key": "battle_beibei_opponent",
-                    "frame": "face_normal"
-                  },
+                  "portrait": "battle_beibei_opponent_face_normal",
                   "text": "蟹蟹尼！"
                 }
               ],
@@ -453,10 +388,7 @@
           {
             "dialog": [
               {
-                "face": {
-                  "key": "battle_beibei_opponent",
-                  "frame": "face_normal"
-                },
+                "portrait": "battle_beibei_opponent_face_normal",
                 "text": "貝貝登場！"
               }
             ],
@@ -467,10 +399,7 @@
           {
             "dialog": [
               {
-                "face": {
-                  "key": "battle_beibei_opponent",
-                  "frame": "face_normal"
-                },
+                "portrait": "battle_beibei_opponent_face_normal",
                 "text": "８８８８８８８"
               }
             ],
@@ -484,10 +413,7 @@
             {
               "dialog": [
                 {
-                  "face": {
-                    "key": "battle_beibei_opponent",
-                    "frame": "face_normal"
-                  },
+                  "portrait": "battle_beibei_opponent_face_normal",
                   "text": "我贏了"
                 }
               ],
@@ -500,10 +426,7 @@
             {
               "dialog": [
                 {
-                  "face": {
-                    "key": "battle_beibei_opponent",
-                    "frame": "face_sad"
-                  },
+                  "portrait": "battle_beibei_opponent_face_sad",
                   "text": "我輸了"
                 }
               ],
@@ -520,14 +443,11 @@
         "json": "battle/shangshang.json"
       },
       "animations": [
-        {
-          "prefix": "idle",
-          "qty": 6,
-          "freq": 8,
-          "repeat": -1,
-          "repeat_delay": 1000
-        },
-        { "prefix": "sp", "qty": 9, "freq": 8, "repeat": 0 }
+        { "prefix": "idle", "qty": 6, "freq": 8, "repeat": -1, "repeat_delay": 1000 },
+        { "prefix": "sp", "qty": 9, "freq": 8, "repeat": 0 },
+        { "prefix": "face_normal", "qty": 1, "freq": 1, "repeat": 0 },
+        { "prefix": "face_angry", "qty": 1, "freq": 1, "repeat": 0 },
+        { "prefix": "face_sad", "qty": 1, "freq": 1, "repeat": 0 }
       ],
       "base": {
         "max_hp": 100,
@@ -541,10 +461,7 @@
             {
               "dialog": [
                 {
-                  "face": {
-                    "key": "battle_shangshang_opponent",
-                    "frame": "face_angry"
-                  },
+                  "portrait": "battle_shangshang_opponent_face_angry",
                   "text": "喝啊！"
                 }
               ],
@@ -564,10 +481,7 @@
             {
               "dialog": [
                 {
-                  "face": {
-                    "key": "battle_shangshang_opponent",
-                    "frame": "face_angry"
-                  },
+                  "portrait": "battle_shangshang_opponent_face_angry",
                   "text": "吃我鐵拳！"
                 }
               ],
@@ -588,10 +502,7 @@
             {
               "dialog": [
                 {
-                  "face": {
-                    "key": "battle_shangshang_opponent",
-                    "frame": "face_sad"
-                  },
+                  "portrait": "battle_shangshang_opponent_face_sad",
                   "text": "好痛！"
                 }
               ],
@@ -605,10 +516,7 @@
             {
               "dialog": [
                 {
-                  "face": {
-                    "key": "battle_shangshang_opponent",
-                    "frame": "face_normal"
-                  },
+                  "portrait": "battle_shangshang_opponent_face_normal",
                   "text": "金乾蝦！"
                 }
               ],
@@ -622,10 +530,7 @@
           {
             "dialog": [
               {
-                "face": {
-                  "key": "battle_shangshang_opponent",
-                  "frame": "face_normal"
-                },
+                "portrait": "battle_shangshang_opponent_face_normal",
                 "text": "上上登場！"
               }
             ],
@@ -636,10 +541,7 @@
           {
             "dialog": [
               {
-                "face": {
-                  "key": "battle_shangshang_opponent",
-                  "frame": "face_normal"
-                },
+                "portrait": "battle_shangshang_opponent_face_normal",
                 "text": "掰掰"
               }
             ],
@@ -653,10 +555,7 @@
             {
               "dialog": [
                 {
-                  "face": {
-                    "key": "battle_shangshang_opponent",
-                    "frame": "face_angry"
-                  },
+                  "portrait": "battle_shangshang_opponent_face_angry",
                   "text": "我贏了"
                 }
               ],
@@ -669,10 +568,7 @@
             {
               "dialog": [
                 {
-                  "face": {
-                    "key": "battle_shangshang_opponent",
-                    "frame": "face_sad"
-                  },
+                  "portrait": "battle_shangshang_opponent_face_sad",
                   "text": "我輸了"
                 }
               ],
@@ -689,14 +585,11 @@
         "json": "battle/jennie.json"
       },
       "animations": [
-        {
-          "prefix": "idle",
-          "qty": 7,
-          "freq": 8,
-          "repeat": -1,
-          "repeat_delay": 1000
-        },
-        { "prefix": "sp", "qty": 16, "freq": 8, "repeat": 0 }
+        { "prefix": "idle", "qty": 7, "freq": 8, "repeat": -1, "repeat_delay": 1000 },
+        { "prefix": "sp", "qty": 16, "freq": 8, "repeat": 0 },
+        { "prefix": "face_normal", "qty": 1, "freq": 1, "repeat": 0 },
+        { "prefix": "face_angry", "qty": 1, "freq": 1, "repeat": 0 },
+        { "prefix": "face_sad", "qty": 1, "freq": 1, "repeat": 0 }
       ],
       "base": {
         "max_hp": 100,
@@ -710,10 +603,7 @@
             {
               "dialog": [
                 {
-                  "face": {
-                    "key": "battle_jennie_opponent",
-                    "frame": "face_angry"
-                  },
+                  "portrait": "battle_jennie_opponent_face_angry",
                   "text": "輕攻擊"
                 }
               ],
@@ -722,10 +612,7 @@
             {
               "dialog": [
                 {
-                  "face": {
-                    "key": "battle_jennie_opponent",
-                    "frame": "face_angry"
-                  },
+                  "portrait": "battle_jennie_opponent_face_angry",
                   "text": "重攻擊"
                 }
               ],
@@ -745,10 +632,7 @@
             {
               "dialog": [
                 {
-                  "face": {
-                    "key": "battle_jennie_opponent",
-                    "frame": "face_angry"
-                  },
+                  "portrait": "battle_jennie_opponent_face_angry",
                   "text": "我愛拉麵！"
                 }
               ],
@@ -769,10 +653,7 @@
             {
               "dialog": [
                 {
-                  "face": {
-                    "key": "battle_jennie_opponent",
-                    "frame": "face_sad"
-                  },
+                  "portrait": "battle_jennie_opponent_face_sad",
                   "text": "好痛"
                 }
               ],
@@ -786,10 +667,7 @@
             {
               "dialog": [
                 {
-                  "face": {
-                    "key": "battle_jennie_opponent",
-                    "frame": "face_normal"
-                  },
+                  "portrait": "battle_jennie_opponent_face_normal",
                   "text": "金乾蝦"
                 }
               ],
@@ -803,10 +681,7 @@
           {
             "dialog": [
               {
-                "face": {
-                  "key": "battle_jennie_opponent",
-                  "frame": "face_normal"
-                },
+                "portrait": "battle_jennie_opponent_face_normal",
                 "text": "貞尼鹹粥開台了"
               }
             ],
@@ -817,10 +692,7 @@
           {
             "dialog": [
               {
-                "face": {
-                  "key": "battle_jennie_opponent",
-                  "frame": "face_normal"
-                },
+                "portrait": "battle_jennie_opponent_face_normal",
                 "text": "貞尼鹹粥關台了"
               }
             ],
@@ -834,10 +706,7 @@
             {
               "dialog": [
                 {
-                  "face": {
-                    "key": "battle_jennie_opponent",
-                    "frame": "face_angry"
-                  },
+                  "portrait": "battle_jennie_opponent_face_angry",
                   "text": "我贏了"
                 }
               ],
@@ -850,10 +719,7 @@
             {
               "dialog": [
                 {
-                  "face": {
-                    "key": "battle_jennie_opponent",
-                    "frame": "face_sad"
-                  },
+                  "portrait": "battle_jennie_opponent_face_sad",
                   "text": "我輸了"
                 }
               ],
@@ -870,14 +736,11 @@
         "json": "battle/bbb.json"
       },
       "animations": [
-        {
-          "prefix": "idle",
-          "qty": 1,
-          "freq": 1,
-          "repeat": -1,
-          "repeat_delay": 1000
-        },
-        { "prefix": "sp", "qty": 32, "freq": 16, "repeat": 0 }
+        { "prefix": "idle", "qty": 1, "freq": 1, "repeat": -1, "repeat_delay": 1000 },
+        { "prefix": "sp", "qty": 32, "freq": 16, "repeat": 0 },
+        { "prefix": "face_normal", "qty": 1, "freq": 1, "repeat": 0 },
+        { "prefix": "face_angry", "qty": 1, "freq": 1, "repeat": 0 },
+        { "prefix": "face_sad", "qty": 1, "freq": 1, "repeat": 0 }
       ],
       "base": {
         "max_hp": 100,
@@ -891,10 +754,7 @@
             {
               "dialog": [
                 {
-                  "face": {
-                    "key": "battle_bbb_opponent",
-                    "frame": "face_normal"
-                  },
+                  "portrait": "battle_bbb_opponent_face_normal",
                   "text": "攻擊"
                 }
               ],
@@ -914,17 +774,11 @@
             {
               "dialog": [
                 {
-                  "face": {
-                    "key": "battle_bbb_opponent",
-                    "frame": "face_normal"
-                  },
+                  "portrait": "battle_bbb_opponent_face_normal",
                   "text": "BBB！"
                 },
                 {
-                  "face": {
-                    "key": "battle_bbb_opponent",
-                    "frame": "face_angry"
-                  },
+                  "portrait": "battle_bbb_opponent_face_angry",
                   "text": "究極進化！"
                 }
               ],
@@ -945,10 +799,7 @@
             {
               "dialog": [
                 {
-                  "face": {
-                    "key": "battle_bbb_opponent",
-                    "frame": "face_sad"
-                  },
+                  "portrait": "battle_bbb_opponent_face_sad",
                   "text": "好痛"
                 }
               ],
@@ -962,10 +813,7 @@
             {
               "dialog": [
                 {
-                  "face": {
-                    "key": "battle_bbb_opponent",
-                    "frame": "face_normal"
-                  },
+                  "portrait": "battle_bbb_opponent_face_normal",
                   "text": "謝謝"
                 }
               ],
@@ -979,10 +827,7 @@
           {
             "dialog": [
               {
-                "face": {
-                  "key": "battle_bbb_opponent",
-                  "frame": "face_normal"
-                },
+                "portrait": "battle_bbb_opponent_face_normal",
                 "text": "嗶嗶嗶來挑戰！"
               }
             ],
@@ -993,10 +838,7 @@
           {
             "dialog": [
               {
-                "face": {
-                  "key": "battle_bbb_opponent",
-                  "frame": "face_normal"
-                },
+                "portrait": "battle_bbb_opponent_face_normal",
                 "text": "掰掰"
               }
             ],
@@ -1010,10 +852,7 @@
             {
               "dialog": [
                 {
-                  "face": {
-                    "key": "battle_bbb_opponent",
-                    "frame": "face_angry"
-                  },
+                  "portrait": "battle_bbb_opponent_face_angry",
                   "text": "我贏了"
                 }
               ],
@@ -1026,10 +865,7 @@
             {
               "dialog": [
                 {
-                  "face": {
-                    "key": "battle_bbb_opponent",
-                    "frame": "face_sad"
-                  },
+                  "portrait": "battle_bbb_opponent_face_sad",
                   "text": "我輸了"
                 }
               ],
@@ -1046,14 +882,11 @@
         "json": "battle/touching.json"
       },
       "animations": [
-        {
-          "prefix": "idle",
-          "qty": 9,
-          "freq": 2,
-          "repeat": -1,
-          "repeat_delay": 1000
-        },
-        { "prefix": "sp", "qty": 10, "freq": 8, "repeat": 0 }
+        { "prefix": "idle", "qty": 9, "freq": 2, "repeat": -1, "repeat_delay": 1000 },
+        { "prefix": "sp", "qty": 10, "freq": 8, "repeat": 0 },
+        { "prefix": "face_normal", "qty": 1, "freq": 1, "repeat": 0 },
+        { "prefix": "face_angry", "qty": 1, "freq": 1, "repeat": 0 },
+        { "prefix": "face_sad", "qty": 1, "freq": 1, "repeat": 0 }
       ],
       "base": {
         "max_hp": 100,
@@ -1067,10 +900,7 @@
             {
               "dialog": [
                 {
-                  "face": {
-                    "key": "battle_touching_opponent",
-                    "frame": "face_normal"
-                  },
+                  "portrait": "battle_touching_opponent_face_normal",
                   "text": "攻擊"
                 }
               ],
@@ -1090,17 +920,11 @@
             {
               "dialog": [
                 {
-                  "face": {
-                    "key": "battle_touching_opponent",
-                    "frame": "face_normal"
-                  },
+                  "portrait": "battle_touching_opponent_face_normal",
                   "text": "爆橘！"
                 },
                 {
-                  "face": {
-                    "key": "battle_touching_opponent",
-                    "frame": "face_angry"
-                  },
+                  "portrait": "battle_touching_opponent_face_angry",
                   "text": "掐恰！"
                 }
               ],
@@ -1121,10 +945,7 @@
             {
               "dialog": [
                 {
-                  "face": {
-                    "key": "battle_touching_opponent",
-                    "frame": "face_sad"
-                  },
+                  "portrait": "battle_touching_opponent_face_sad",
                   "text": "好痛"
                 }
               ],
@@ -1138,10 +959,7 @@
             {
               "dialog": [
                 {
-                  "face": {
-                    "key": "battle_touching_opponent",
-                    "frame": "face_normal"
-                  },
+                  "portrait": "battle_touching_opponent_face_normal",
                   "text": "謝謝"
                 }
               ],
@@ -1155,10 +973,7 @@
           {
             "dialog": [
               {
-                "face": {
-                  "key": "battle_touching_opponent",
-                  "frame": "face_normal"
-                },
+                "portrait": "battle_touching_opponent_face_normal",
                 "text": "橙踏青來挑戰！"
               }
             ],
@@ -1169,10 +984,7 @@
           {
             "dialog": [
               {
-                "face": {
-                  "key": "battle_touching_opponent",
-                  "frame": "face_normal"
-                },
+                "portrait": "battle_touching_opponent_face_normal",
                 "text": "掰掰"
               }
             ],
@@ -1186,10 +998,7 @@
             {
               "dialog": [
                 {
-                  "face": {
-                    "key": "battle_touching_opponent",
-                    "frame": "face_angry"
-                  },
+                  "portrait": "battle_touching_opponent_face_angry",
                   "text": "我贏了"
                 }
               ],
@@ -1202,10 +1011,7 @@
             {
               "dialog": [
                 {
-                  "face": {
-                    "key": "battle_touching_opponent",
-                    "frame": "face_sad"
-                  },
+                  "portrait": "battle_touching_opponent_face_sad",
                   "text": "我輸了"
                 }
               ],
@@ -1222,13 +1028,10 @@
         "json": "battle/afk.json"
       },
       "animations": [
-        {
-          "prefix": "idle",
-          "qty": 1,
-          "freq": 1,
-          "repeat": -1,
-          "repeat_delay": 1000
-        }
+        { "prefix": "idle", "qty": 1, "freq": 1, "repeat": 0 },
+        { "prefix": "face_normal", "qty": 1, "freq": 1, "repeat": 0 },
+        { "prefix": "face_sad", "qty": 1, "freq": 1, "repeat": 0 },
+        { "prefix": "face_angry", "qty": 1, "freq": 1, "repeat": 0 }
       ],
       "base": {
         "max_hp": 100,
@@ -1242,10 +1045,7 @@
             {
               "dialog": [
                 {
-                  "face": {
-                    "key": "battle_afk_self",
-                    "frame": "face_angry"
-                  },
+                  "portrait": "battle_afk_self_face_angry",
                   "text": "攻擊！"
                 }
               ],
@@ -1265,10 +1065,7 @@
             {
               "dialog": [
                 {
-                  "face": {
-                    "key": "battle_afk_self",
-                    "frame": "face_angry"
-                  },
+                  "portrait": "battle_afk_self_face_angry",
                   "text": "重攻擊！"
                 }
               ],
@@ -1289,10 +1086,7 @@
             {
               "dialog": [
                 {
-                  "face": {
-                    "key": "battle_afk_self",
-                    "frame": "face_sad"
-                  },
+                  "portrait": "battle_afk_self_face_sad",
                   "text": "嗚哇嗚哇"
                 }
               ],
@@ -1306,10 +1100,7 @@
             {
               "dialog": [
                 {
-                  "face": {
-                    "key": "battle_afk_self",
-                    "frame": "face_normal"
-                  },
+                  "portrait": "battle_afk_self_face_normal",
                   "text": "謝謝尼"
                 }
               ],
@@ -1323,10 +1114,7 @@
           {
             "dialog": [
               {
-                "face": {
-                  "key": "battle_afk_self",
-                  "frame": "face_normal"
-                },
+                "portrait": "battle_afk_self_face_normal",
                 "text": "戰鬥開始！"
               }
             ],
@@ -1337,10 +1125,7 @@
           {
             "dialog": [
               {
-                "face": {
-                  "key": "battle_afk_self",
-                  "frame": "face_normal"
-                },
+                "portrait": "battle_afk_self_face_normal",
                 "text": "回到我的小房間"
               }
             ],
@@ -1354,10 +1139,7 @@
             {
               "dialog": [
                 {
-                  "face": {
-                    "key": "battle_afk_self",
-                    "frame": "face_angry"
-                  },
+                  "portrait": "battle_afk_self_face_angry",
                   "text": "我贏了"
                 }
               ],
@@ -1370,10 +1152,7 @@
             {
               "dialog": [
                 {
-                  "face": {
-                    "key": "battle_afk_self",
-                    "frame": "face_sad"
-                  },
+                  "portrait": "battle_afk_self_face_sad",
                   "text": "我輸了"
                 }
               ],

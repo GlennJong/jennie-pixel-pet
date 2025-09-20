@@ -154,6 +154,7 @@ export default class Battle extends Scene {
 
     // run battle introduce
     const selfStartDialog = this.self!.runStart();
+
     await this.dialogue!.runDialogue(selfStartDialog);
 
     // run opponent opening animation

@@ -28,14 +28,11 @@ export class PetDialogue extends Phaser.GameObjects.Container {
     });
   }
 
-  public async runDialogue(action: string, params?: { [key: string]: string | number }) {
-    const result = this.config[action];
-    const { dialogues, hp, coin } = result;
-    const replacement = {...{ hp, coin }, ...params};
-
+  public async runDialogue(dialogues: TDialogItem[], replacement?: { [key: string]: string | number }) {
     if (dialogues && replacement) {
       const selectedDialog = selectFromPriority<TDialogItem>(dialogues);
       const selectedSentences = selectedDialog.sentences.map((_sentence) => {
+        let portrait = `${DEFAULT_CHARACTER_KEY}_${_sentence.portrait}`;
         let text = _sentence.text;
         if (replacement) {
           Object.entries(replacement).forEach(([key, value]) => {
@@ -46,28 +43,7 @@ export class PetDialogue extends Phaser.GameObjects.Container {
         }
         return {
           ..._sentence,
-          text,
-        };
-      });
-      await this.dialogue.runDialogue(selectedSentences);
-    }
-    
-  }
-
-  public async runDialogue2(dialogues: TDialogItem[], replacement?: { [key: string]: string | number }) {
-    if (dialogues && replacement) {
-      const selectedDialog = selectFromPriority<TDialogItem>(dialogues);
-      const selectedSentences = selectedDialog.sentences.map((_sentence) => {
-        let text = _sentence.text;
-        if (replacement) {
-          Object.entries(replacement).forEach(([key, value]) => {
-            let displayValue = value;
-            if (typeof value === 'number') displayValue = Math.abs(value);
-            text = text.replaceAll(`{{${key}}}`, String(displayValue));
-          });
-        }
-        return {
-          ..._sentence,
+          portrait,
           text,
         };
       });

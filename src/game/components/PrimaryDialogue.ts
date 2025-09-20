@@ -120,7 +120,7 @@ export class PrimaryDialogue extends Phaser.GameObjects.Container {
   private setPortrait = (portrait: string) => {
     // TODO: get portrait with key
     if (this.portrait && portrait) {
-      this.portrait.play(`mycharacter_${portrait}`);
+      this.portrait.play(portrait);
     }
   }
 
