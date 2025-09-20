@@ -301,9 +301,9 @@ export class PrimaryDialogue extends Phaser.GameObjects.Container {
   }
 
   // Public
-  public runDialogue(dialogs: TDialogData[]) {
+  public runDialogue(dialogues: TDialogData[]) {
     if (this.onDialogueStart) this.onDialogueStart();
-    this.dialogueData = dialogs;
+    this.dialogueData = dialogues;
     this.currentDialogueEntryIndex = 0;
     this.setShowDialogueBox();
 

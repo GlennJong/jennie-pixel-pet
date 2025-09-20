@@ -30,11 +30,11 @@ export class PetDialogue extends Phaser.GameObjects.Container {
 
   public async runDialogue(action: string, params?: { [key: string]: string | number }) {
     const result = this.config[action];
-    const { dialogs, hp, coin } = result;
+    const { dialogues, hp, coin } = result;
     const replacement = {...{ hp, coin }, ...params};
 
-    if (dialogs && replacement) {
-      const selectedDialog = selectFromPriority<TDialogItem>(dialogs);
+    if (dialogues && replacement) {
+      const selectedDialog = selectFromPriority<TDialogItem>(dialogues);
       const selectedSentences = selectedDialog.sentences.map((_sentence) => {
         let text = _sentence.text;
         if (replacement) {
@@ -54,9 +54,9 @@ export class PetDialogue extends Phaser.GameObjects.Container {
     
   }
 
-  public async runDialogue2(dialogs: TDialogItem[], replacement?: { [key: string]: string | number }) {
-    if (dialogs && replacement) {
-      const selectedDialog = selectFromPriority<TDialogItem>(dialogs);
+  public async runDialogue2(dialogues: TDialogItem[], replacement?: { [key: string]: string | number }) {
+    if (dialogues && replacement) {
+      const selectedDialog = selectFromPriority<TDialogItem>(dialogues);
       const selectedSentences = selectedDialog.sentences.map((_sentence) => {
         let text = _sentence.text;
         if (replacement) {

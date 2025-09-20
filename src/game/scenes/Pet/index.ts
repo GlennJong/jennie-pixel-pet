@@ -117,7 +117,7 @@ export default class PetScene extends Scene {
     
     if (!this.isPetReady) return false;
     let success = false;
-    const { action, user, params, effect, dialogs, move } = task;
+    const { action, user, params, effect, dialogues, move } = task;
     console.log(task)
     try {
       await this.character?.runFuntionalActionAsync(action);
@@ -133,7 +133,7 @@ export default class PetScene extends Scene {
           );
         }
         const replacement = {user, ...effectReplacement, ...params};
-        await this.dialogue.runDialogue2(dialogs, replacement);
+        await this.dialogue.runDialogue2(dialogues, replacement);
       }
 
       this.resources?.runEffect(effect);

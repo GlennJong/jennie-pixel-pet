@@ -19,19 +19,19 @@ export type TEffect = {
 
 type TReaction = {
   animation: 'damage' | 'recover' | string | { key: string };
-  dialogs: TDialogItem[];
+  dialogues: TDialogItem[];
 };
 
 type TAction = {
   animation: 'attack' | string;
-  dialogs: TDialogItem[];
+  dialogues: TDialogItem[];
   priority: number;
   effect: TEffect;
 };
 
 type TResult = {
   icon: { key: string; frame: string };
-  dialogs: TDialogItem[];
+  dialogues: TDialogItem[];
 };
 
 export type TRunAction = {
@@ -161,7 +161,7 @@ export default class BattleCharacter extends Character {
 
     if (!currentAction) return;
 
-    const { animation, dialogs } = currentAction;
+    const { animation, dialogues } = currentAction;
 
     // Run key frame animation
     if (animation === 'attack') {
@@ -172,7 +172,7 @@ export default class BattleCharacter extends Character {
 
     return {
       ...currentAction,
-      dialog: selectFromPriority(dialogs).dialog,
+      dialog: selectFromPriority(dialogues).dialog,
     };
   }
 
@@ -214,7 +214,7 @@ export default class BattleCharacter extends Character {
 
     if (!currentReaction) return;
 
-    const { animation, dialogs } = currentReaction;
+    const { animation, dialogues } = currentReaction;
 
     // Run key frame animation
     if (typeof animation !== 'string' && animation.key) {
@@ -228,7 +228,7 @@ export default class BattleCharacter extends Character {
 
     return {
       ...currentReaction,
-      dialog: selectFromPriority(dialogs).dialog,
+      dialog: selectFromPriority(dialogues).dialog,
       isDead: this.hp.current <= 0,
     };
   }
@@ -242,11 +242,11 @@ export default class BattleCharacter extends Character {
     }
     this.board!.setAlpha(0);
 
-    const { dialogs } = currentResult;
+    const { dialogues } = currentResult;
 
     return {
       ...currentResult,
-      dialog: selectFromPriority(dialogs).dialog,
+      dialog: selectFromPriority(dialogues).dialog,
     };
   }
 

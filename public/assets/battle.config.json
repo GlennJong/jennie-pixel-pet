@@ -17,7 +17,7 @@
         "attack": {
           "animation": "attack",
           "priority": 1,
-          "dialogs": [
+          "dialogues": [
             {
               "dialog": [
                 {
@@ -53,7 +53,7 @@
       "reactions": {
         "damage": {
           "animation": "damage",
-          "dialogs": [
+          "dialogues": [
             {
               "dialog": [
                 {
@@ -70,7 +70,7 @@
         },
         "recover": {
           "animation": "recover",
-          "dialogs": [
+          "dialogues": [
             {
               "dialog": [
                 {
@@ -118,7 +118,7 @@
       },
       "results": {
         "win": {
-          "dialogs": [
+          "dialogues": [
             {
               "dialog": [
                 {
@@ -134,7 +134,7 @@
           ]
         },
         "lose": {
-          "dialogs": [
+          "dialogues": [
             {
               "dialog": [
                 {
@@ -169,7 +169,7 @@
         "attack": {
           "animation": "attack",
           "priority": 10,
-          "dialogs": [
+          "dialogues": [
             {
               "dialog": [
                 {
@@ -192,7 +192,7 @@
         "sp1": {
           "animation": "sp",
           "priority": 2,
-          "dialogs": [
+          "dialogues": [
             {
               "dialog": [
                 {
@@ -222,7 +222,7 @@
         "sp2": {
           "animation": "sp",
           "priority": 20,
-          "dialogs": [
+          "dialogues": [
             {
               "dialog": [
                 {
@@ -246,7 +246,7 @@
       "reactions": {
         "damage": {
           "animation": "damage",
-          "dialogs": [
+          "dialogues": [
             {
               "dialog": [
                 {
@@ -263,7 +263,7 @@
         },
         "recover": {
           "animation": "recover",
-          "dialogs": [
+          "dialogues": [
             {
               "dialog": [
                 {
@@ -311,7 +311,7 @@
       },
       "results": {
         "win": {
-          "dialogs": [
+          "dialogues": [
             {
               "dialog": [
                 {
@@ -327,7 +327,7 @@
           ]
         },
         "lose": {
-          "dialogs": [
+          "dialogues": [
             {
               "dialog": [
                 {
@@ -368,7 +368,7 @@
         "attack": {
           "animation": "attack",
           "priority": 40,
-          "dialogs": [
+          "dialogues": [
             {
               "dialog": [
                 {
@@ -391,7 +391,7 @@
         "sp1": {
           "animation": "sp",
           "priority": 60,
-          "dialogs": [
+          "dialogues": [
             {
               "dialog": [
                 {
@@ -415,7 +415,7 @@
       "reactions": {
         "damage": {
           "animation": "damage",
-          "dialogs": [
+          "dialogues": [
             {
               "dialog": [
                 {
@@ -432,7 +432,7 @@
         },
         "recover": {
           "animation": "recover",
-          "dialogs": [
+          "dialogues": [
             {
               "dialog": [
                 {
@@ -480,7 +480,7 @@
       },
       "results": {
         "win": {
-          "dialogs": [
+          "dialogues": [
             {
               "dialog": [
                 {
@@ -496,7 +496,7 @@
           ]
         },
         "lose": {
-          "dialogs": [
+          "dialogues": [
             {
               "dialog": [
                 {
@@ -537,7 +537,7 @@
         "attack": {
           "animation": "attack",
           "priority": 60,
-          "dialogs": [
+          "dialogues": [
             {
               "dialog": [
                 {
@@ -560,7 +560,7 @@
         "sp1": {
           "animation": "sp",
           "priority": 40,
-          "dialogs": [
+          "dialogues": [
             {
               "dialog": [
                 {
@@ -584,7 +584,7 @@
       "reactions": {
         "damage": {
           "animation": "damage",
-          "dialogs": [
+          "dialogues": [
             {
               "dialog": [
                 {
@@ -601,7 +601,7 @@
         },
         "recover": {
           "animation": "recover",
-          "dialogs": [
+          "dialogues": [
             {
               "dialog": [
                 {
@@ -649,7 +649,7 @@
       },
       "results": {
         "win": {
-          "dialogs": [
+          "dialogues": [
             {
               "dialog": [
                 {
@@ -665,7 +665,7 @@
           ]
         },
         "lose": {
-          "dialogs": [
+          "dialogues": [
             {
               "dialog": [
                 {
@@ -706,7 +706,7 @@
         "attack": {
           "animation": "attack",
           "priority": 60,
-          "dialogs": [
+          "dialogues": [
             {
               "dialog": [
                 {
@@ -741,7 +741,7 @@
         "sp1": {
           "animation": "sp",
           "priority": 40,
-          "dialogs": [
+          "dialogues": [
             {
               "dialog": [
                 {
@@ -765,7 +765,7 @@
       "reactions": {
         "damage": {
           "animation": "damage",
-          "dialogs": [
+          "dialogues": [
             {
               "dialog": [
                 {
@@ -782,7 +782,7 @@
         },
         "recover": {
           "animation": "recover",
-          "dialogs": [
+          "dialogues": [
             {
               "dialog": [
                 {
@@ -830,7 +830,7 @@
       },
       "results": {
         "win": {
-          "dialogs": [
+          "dialogues": [
             {
               "dialog": [
                 {
@@ -846,7 +846,7 @@
           ]
         },
         "lose": {
-          "dialogs": [
+          "dialogues": [
             {
               "dialog": [
                 {
@@ -887,7 +887,7 @@
         "attack": {
           "animation": "attack",
           "priority": 70,
-          "dialogs": [
+          "dialogues": [
             {
               "dialog": [
                 {
@@ -910,7 +910,7 @@
         "sp1": {
           "animation": "sp",
           "priority": 30,
-          "dialogs": [
+          "dialogues": [
             {
               "dialog": [
                 {
@@ -941,7 +941,7 @@
       "reactions": {
         "damage": {
           "animation": "damage",
-          "dialogs": [
+          "dialogues": [
             {
               "dialog": [
                 {
@@ -958,7 +958,7 @@
         },
         "recover": {
           "animation": "recover",
-          "dialogs": [
+          "dialogues": [
             {
               "dialog": [
                 {
@@ -1006,7 +1006,7 @@
       },
       "results": {
         "win": {
-          "dialogs": [
+          "dialogues": [
             {
               "dialog": [
                 {
@@ -1022,7 +1022,7 @@
           ]
         },
         "lose": {
-          "dialogs": [
+          "dialogues": [
             {
               "dialog": [
                 {
@@ -1063,7 +1063,7 @@
         "attack": {
           "animation": "attack",
           "priority": 55,
-          "dialogs": [
+          "dialogues": [
             {
               "dialog": [
                 {
@@ -1086,7 +1086,7 @@
         "sp1": {
           "animation": "sp",
           "priority": 45,
-          "dialogs": [
+          "dialogues": [
             {
               "dialog": [
                 {
@@ -1117,7 +1117,7 @@
       "reactions": {
         "damage": {
           "animation": "damage",
-          "dialogs": [
+          "dialogues": [
             {
               "dialog": [
                 {
@@ -1134,7 +1134,7 @@
         },
         "recover": {
           "animation": "recover",
-          "dialogs": [
+          "dialogues": [
             {
               "dialog": [
                 {
@@ -1182,7 +1182,7 @@
       },
       "results": {
         "win": {
-          "dialogs": [
+          "dialogues": [
             {
               "dialog": [
                 {
@@ -1198,7 +1198,7 @@
           ]
         },
         "lose": {
-          "dialogs": [
+          "dialogues": [
             {
               "dialog": [
                 {
@@ -1238,7 +1238,7 @@
         "attack": {
           "animation": "attack",
           "priority": 60,
-          "dialogs": [
+          "dialogues": [
             {
               "dialog": [
                 {
@@ -1261,7 +1261,7 @@
         "attack2": {
           "animation": "attack",
           "priority": 40,
-          "dialogs": [
+          "dialogues": [
             {
               "dialog": [
                 {
@@ -1285,7 +1285,7 @@
       "reactions": {
         "damage": {
           "animation": "damage",
-          "dialogs": [
+          "dialogues": [
             {
               "dialog": [
                 {
@@ -1302,7 +1302,7 @@
         },
         "recover": {
           "animation": "recover",
-          "dialogs": [
+          "dialogues": [
             {
               "dialog": [
                 {
@@ -1350,7 +1350,7 @@
       },
       "results": {
         "win": {
-          "dialogs": [
+          "dialogues": [
             {
               "dialog": [
                 {
@@ -1366,7 +1366,7 @@
           ]
         },
         "lose": {
-          "dialogs": [
+          "dialogues": [
             {
               "dialog": [
                 {

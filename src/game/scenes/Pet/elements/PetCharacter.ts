@@ -12,7 +12,7 @@ type TDirection = 'none' | 'left' | 'right';
 
 type TAction = {
   animation: string;
-  isMove?: boolean;
+  isMoving?: boolean;
   has_direction?: boolean;
 };
 
@@ -78,12 +78,12 @@ export class PetCharacter extends Character {
 
     this.direction = currentAction.direction;
 
-    let isMove = false;
-    if (typeof currentAction.isMove !== 'undefined') {
-      isMove = getValueFromColonStoreState(currentAction.isMove);
+    let isMoving = false;
+    if (typeof currentAction.isMoving !== 'undefined') {
+      isMoving = getValueFromColonStoreState(currentAction.isMoving);
     }
 
-    if (isMove) {
+    if (isMoving) {
         this.handleMoveDirection(currentAnimation);
     }
     else {
@@ -97,15 +97,15 @@ export class PetCharacter extends Character {
     this.isActing = true;
     this.playAnimationSet(animation)
 
-    let isMoveDistanceOverEdge = false;
+    let isMovingDistanceOverEdge = false;
     if (this.direction === 'right') {
-      isMoveDistanceOverEdge = this.character.x + DEFAULT_MOVE_DISTANCE > this.spaceEdge.to;
+      isMovingDistanceOverEdge = this.character.x + DEFAULT_MOVE_DISTANCE > this.spaceEdge.to;
     }
     else if (this.direction === 'left') {
-      isMoveDistanceOverEdge = this.character.x - DEFAULT_MOVE_DISTANCE < this.spaceEdge.from;
+      isMovingDistanceOverEdge = this.character.x - DEFAULT_MOVE_DISTANCE < this.spaceEdge.from;
     }
 
-    if (isMoveDistanceOverEdge) {
+    if (isMovingDistanceOverEdge) {
       this.isActing = false;
       this.handleDefaultIdleAction();
     }

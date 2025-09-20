@@ -203,7 +203,7 @@
             "status:death": ["egg"]
           },
           "priority": 5,
-          "isMove": {
+          "isMoving": {
             "default": true,
             "status:normal": true,
             "status:sleep": false,
@@ -219,7 +219,7 @@
             "status:death": ["egg"]
           },
           "priority": 5,
-          "isMove": {
+          "isMoving": {
             "default": true,
             "status:normal": true,
             "status:sleep": false,
@@ -263,7 +263,7 @@
             "hp": { "method": "add", "value": 10 },
             "coin": { "method": "add", "value": 10 }
           },
-          "dialogs": [
+          "dialogues": [
             {
               "sentences": [
                 {
@@ -287,7 +287,7 @@
             "coin": { "method": "add", "value": 10 }
           },
           "move": "Battle",
-          "dialogs": [
+          "dialogues": [
             {
               "sentences": [
                 {
@@ -310,7 +310,7 @@
             "hp": { "method": "add", "value": 10 },
             "coin": { "method": "add", "value": 1 }
           },
-          "dialogs": [
+          "dialogues": [
             {
               "sentences": [
                 {
@@ -334,7 +334,7 @@
           "effect": {
             "status": { "method": "set", "value": "sleep" }
           },
-          "dialogs": [
+          "dialogues": [
             {
               "sentences": [
                 {
@@ -358,7 +358,7 @@
           "effect": {
             "status": { "method": "set", "value": "normal" }
           },
-          "dialogs": [
+          "dialogues": [
             {
               "sentences": [
                 {
@@ -384,7 +384,7 @@
             "coin": { "method": "add", "value": 50 },
             "win": { "method": "set", "value": 0 }
           },
-          "dialogs": [
+          "dialogues": [
             {
               "sentences": [
                 {
@@ -396,8 +396,8 @@
             }
           ]
         },
-        "lost": {
-          "action": "lost",
+        "lose": {
+          "action": "lose",
           "animationSet": {
             "default": ["idle-left", "idle-right"]
           },
@@ -409,7 +409,7 @@
             "coin": { "method": "sub", "value": 20 },
             "win": { "method": "set", "value": 0 }
           },
-          "dialogs": [
+          "dialogues": [
             {
               "sentences": [
                 {
@@ -435,7 +435,7 @@
             "coin": { "method": "sub", "value": 10 },
             "status": { "method": "set", "value": "death" }
           },
-          "dialogs": [
+          "dialogues": [
             {
               "sentences": [
                 {
@@ -460,7 +460,7 @@
           "effect": {
             "status": { "method": "set", "value": "normal" }
           },
-          "dialogs": [
+          "dialogues": [
             {
               "sentences": [
                 {
@@ -477,7 +477,7 @@
           "animationSet": {
             "default": ["egg"]
           },
-          "dialogs": [
+          "dialogues": [
             {
               "sentences": [
                 {
@@ -489,8 +489,8 @@
             }
           ]
         },
-        "buy1": {
-          "action": "buy1",
+        "buyLv1": {
+          "action": "buyLv1",
           "animationSet": {
             "default": ["idle-left", "idle-right"]
           },
@@ -504,7 +504,7 @@
             "level": { "method": "set", "value": 1 },
             "coin": { "method": "sub", "value": 100 }
           },
-          "dialogs": [
+          "dialogues": [
             {
               "sentences": [
                 {
@@ -516,8 +516,8 @@
             }
           ]
         },
-        "buy2": {
-          "action": "buy2",
+        "buyLv2": {
+          "action": "buyLv2",
           "animationSet": {
             "default": ["idle-left", "idle-right"]
           },
@@ -531,7 +531,7 @@
             "level": { "method": "set", "value": 2 },
             "coin": { "method": "sub", "value": 150 }
           },
-          "dialogs": [
+          "dialogues": [
             {
               "sentences": [
                 {
@@ -543,8 +543,8 @@
             }
           ]
         },
-        "buy3": {
-          "action": "buy3",
+        "buyLv3": {
+          "action": "buyLv3",
           "animationSet": {
             "default": ["idle-left", "idle-right"]
           },
@@ -558,7 +558,7 @@
             "level": { "method": "set", "value": 3 },
             "coin": { "method": "sub", "value": 200 }
           },
-          "dialogs": [
+          "dialogues": [
             {
               "sentences": [
                 {
@@ -570,8 +570,8 @@
             }
           ]
         },
-        "buy4": {
-          "action": "buy4",
+        "buyLv4": {
+          "action": "buyLv4",
           "animationSet": {
             "default": ["idle-left", "idle-right"]
           },
@@ -585,7 +585,7 @@
             "level": { "method": "set", "value": 4 },
             "coin": { "method": "sub", "value": 250 }
           },
-          "dialogs": [
+          "dialogues": [
             {
               "sentences": [
                 {
@@ -597,8 +597,8 @@
             }
           ]
         },
-        "buy5": {
-          "action": "buy5",
+        "buyLv5": {
+          "action": "buyLv5",
           "animationSet": {
             "default": ["idle-left", "idle-right"]
           },
@@ -612,7 +612,7 @@
             "level": { "method": "set", "value": 5 },
             "coin": { "method": "sub", "value": 300 }
           },
-          "dialogs": [
+          "dialogues": [
             {
               "sentences": [
                 {
